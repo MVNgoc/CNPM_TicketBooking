@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-sm bg-dark flex justify-content-between">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link text-light active" href="/flight-lookup">Fly Now!</a>
+            </li>
+            {% for c in categories %}
+            <li class="nav-item">
+                <a class="nav-link text-light {{'active' if c.link==path }}" href="{{ c.link }}">{{ c.name }}</a>
+            </li>
+            {% endfor %}
+            <li class="nav-item">
+               <p class="nav-link text-light mb-0">Đăng xuất</p>
+            </li>
+        </ul>
+    </div>
+    <a class="navbar-brand" href="#">
+        <img src="../../static/images/avatar.png" alt="Avatar Logo" style="width:40px;" class="rounded-pill">
+    </a>
+</nav>

@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Trang chủ",
+    "link": "/"
+  },
+  {
+    "id": 2,
+    "name": "Tra cứu chuyến bay",
+    "link": "/flight-lookup"
+  },
+  {
+    "id": 3,
+    "name": "Vé đã đặt",
+    "link": "/tickets-booked"
+  }
+]
