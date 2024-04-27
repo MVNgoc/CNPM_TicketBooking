@@ -15,7 +15,16 @@ def index():
 def flight_lookup():
     path = request.path
     categories = dao.load_categories()
-    return render_template('flight_lookup.html', categories=categories, path=path)
+    return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path)
+
+
+@app.route('/flight-lookup/select-flight')
+def select_flight():
+    path = request.path
+    categories = dao.load_categories()
+    bookticketstep = dao.load_book_ticket_step()
+    return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
 
 
 @app.route('/tickets-booked')

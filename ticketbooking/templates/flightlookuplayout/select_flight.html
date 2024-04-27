@@ -1,0 +1,136 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Chọn chuyến bay{% endblock %}
+
+{% block content %}
+<div class="session-style" style="background: lightblue">
+    <div class="" style="background:linear-gradient(28.91deg, #F9A51A 2.24%, #FBB612 31.03%, #FBF300 97.21%)">
+        <div class="container py-3">
+            <div class="d-flex justify-content-between">
+                <div style="display: flex; font-size: 18px; font-weight: 700; max-height: 27px; gap: 2px">
+                    <p>CHUYẾN BAY KHỨ HỒI</p>
+                    <p>|</p>
+                    <p>2 Người (Chuyến đi)</p>
+                </div>
+
+                <div style="display: flex; font-size: 18px; font-weight: 700; max-height: 27px; gap: 2px">
+                    <p>CHUYẾN BAY KHỨ HỒI</p>
+                    <p>|</p>
+                    <p>2 Người (Chuyến về)</p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mt-1">
+                <div class="mt-2 d-flex gap-5" style="font-size: 18px; font-weight: 300; line-height: 24px;">
+                    <div>
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="https://www.vietjetair.com/static/media/departure-icon.25d3557e.svg" alt=""
+                                 style="height: fit-content;">
+                            <div>
+                                Điềm khởi hành
+                            </div>
+                            <div class="active">
+                                Tp. Hồ Chí Minh ( SGN )
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="https://www.vietjetair.com/static/media/arrival-icon.a05c5d78.svg" alt=""
+                                 style="height: fit-content;">
+                            <div>
+                                Điềm đến
+                            </div>
+                            <div class="active">
+                                Hà Nội ( HAN )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 d-flex gap-5" style="font-size: 18px; font-weight: 300; line-height: 24px;">
+                    <div>
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="https://www.vietjetair.com/static/media/departure-icon.25d3557e.svg" alt=""
+                                 style="height: fit-content;">
+                            <div>
+                                Điềm khởi hành
+                            </div>
+                            <div class="active">
+                                Hà Nội ( HAN )
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="https://www.vietjetair.com/static/media/arrival-icon.a05c5d78.svg" alt=""
+                                 style="height: fit-content;">
+                            <div>
+                                Điềm đến
+                            </div>
+                            <div class="active">
+                                Tp. Hồ Chí Minh ( SGN )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="d-flex justify-content-center align-items-center mt-4">
+                {% for b in bookticketstep %}
+                <div class="step-box">
+                    <div class="dot_border {{'dot_border_active' if b.link_step_1==path or b.link_step_2==path or b.link_step_3==path }}">
+                        <div class="dot_step {{'dot_step_active' if b.link_step_1==path or b.link_step_2==path or b.link_step_3==path }}">
+
+                        </div>
+                    </div>
+                    <div>
+                        {{ b.name }}
+                    </div>
+                </div>
+                <div class="dot_line {{'dot_line_active' if b.link_step_1==path or b.link_step_2==path or b.link_step_3==path }}">
+
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <div class="place_info_card">
+                <div style="text-align: center;">
+                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">SGN</p>
+                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">Hồ Chí Minh</p>
+                </div>
+                <svg width="57" height="55" viewBox="0 0 57 55" fill="none" xmlns="http://www.w3.org/2000/svg"
+                     style="height: 100%;">
+                    <path d="M8 18H41L45.8182 21H8V18Z" fill="#DA2128"></path>
+                    <path d="M36.8835 21H48.5C39 16 40 17 33 11V18L36.8835 21Z" fill="#DA2128"></path>
+                    <path d="M48 37L15 37L10.1818 34L48 34V37Z" fill="#D3D3D3"></path>
+                    <path d="M19.1165 34L7.5 34C17 39 16 38 23 44V37L19.1165 34Z" fill="#D3D3D3"></path>
+                </svg>
+                <div style="text-align: center;">
+                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">HAN</p>
+                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">Hà Nội</p>
+                </div>
+            </div>
+            <div class="place_info_card">
+                <div style="text-align: center;">
+                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">HAN</p>
+                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">Hà Nội</p>
+                </div>
+                <svg width="57" height="55" viewBox="0 0 57 55" fill="none" xmlns="http://www.w3.org/2000/svg"
+                     style="height: 100%;">
+                    <path d="M8 18H41L45.8182 21H8V18Z" fill="#D3D3D3"></path>
+                    <path d="M36.8835 21H48.5C39 16 40 17 33 11V18L36.8835 21Z" fill="#D3D3D3"></path>
+                    <path d="M48 37L15 37L10.1818 34L48 34V37Z" fill="#DA2128"></path>
+                    <path d="M19.1165 34L7.5 34C17 39 16 38 23 44V37L19.1165 34Z" fill="#DA2128"></path>
+                </svg>
+                <div style="text-align: center;">
+                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">SGN</p>
+                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">Hồ Chí Minh</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

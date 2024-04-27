@@ -2,16 +2,25 @@
   {
     "id": 1,
     "name": "Trang chủ",
-    "link": "/"
+    "link": "/",
+    "sub_link_1": "",
+    "sub_link_2": "",
+    "sub_link_3": ""
   },
   {
     "id": 2,
     "name": "Tra cứu chuyến bay",
-    "link": "/flight-lookup"
+    "link": "/flight-lookup",
+    "sub_link_1": "/flight-lookup/select-flight",
+    "sub_link_2": "/flight-lookup/passengers",
+    "sub_link_3": "/flight-lookup/pay-ticket"
   },
   {
     "id": 3,
     "name": "Vé đã đặt",
-    "link": "/tickets-booked"
+    "link": "/tickets-booked",
+    "sub_link_1": "",
+    "sub_link_2": "",
+    "sub_link_3": ""
   }
 ]

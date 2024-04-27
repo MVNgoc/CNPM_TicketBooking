@@ -1,21 +1,30 @@
 * {
     font-family: Tahoma;
+    box-sizing: border-box;
+    font-family: "KoHo", sans-serif !important;
 }
 
 body {
     background-color: #fff;
     margin-top: 70px;
+    background: url(../images/bg_public.png)
+}
+
+p {
+    margin-bottom: 0px;
 }
 
 .container {
     max-width: 1600px;
     margin-right: auto;
     margin-left: auto;
+    padding-right: 0px;
+    padding-left: 0px;
 }
 
 .active {
     font-weight: 700;
-    color: #e86020 !important;
+    color: #d45806 !important;
 }
 
 .header {
@@ -26,8 +35,8 @@ body {
     max-height: 70px;
 }
 
-.flight-lookup-bg {
-    min-height: 78vh;
+.session-style {
+    min-height: 86vh;
 }
 
 .form-label {
@@ -36,4 +45,62 @@ body {
 
 .card {
     position: static;
+}
+
+.place_info_card {
+    background: #fff;
+    width: 48%;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.dot_border {
+    border: 1px solid #919491;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.dot_step {
+    width: 18px;
+    height: 18px;
+    background: #919491;
+    margin: 2px;
+    border-radius: 50%;
+}
+
+.dot_step_active {
+    background: #3ad435;
+}
+
+.dot_border_active {
+    border: 1px solid #3ad435;
+}
+
+.dot_line {
+    width: 200px;
+    height: 3px;
+    background: #919491;
+}
+
+.dot_line:last-child {
+   display: none;
+}
+
+.dot_line_active {
+    background: #3ad435;
+}
+
+.step-box {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     padding: 16px;
 }
