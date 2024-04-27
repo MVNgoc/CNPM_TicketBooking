@@ -22,6 +22,9 @@ p {
     margin-left: auto;
     padding-right: 0px;
     padding-left: 0px;
+}
+
+.center-item-style{
     display: flex;
     justify-content: center;
     align-items: center;
