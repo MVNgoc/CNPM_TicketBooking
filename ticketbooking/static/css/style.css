@@ -22,9 +22,6 @@ p {
     margin-left: auto;
     padding-right: 0px;
     padding-left: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .active {
@@ -50,6 +47,7 @@ p {
 
 .card {
     position: static;
+    border-radius: 12px;
 }
 
 .place_info_card {
