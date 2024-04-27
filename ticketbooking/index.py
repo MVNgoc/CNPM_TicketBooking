@@ -48,12 +48,12 @@ def signin():
     return render_template('signin.html', categories=categories, path=path)
 
 
-@app.route('/pay-bill')
+@app.route('/flight-lookup/pay-ticket')
 def pay_bill():
     path = request.path
     categories = dao.load_categories()
-    return render_template('pay_bill.html', categories=categories, path=path)
-
+    bookticketstep = dao.load_book_ticket_step()
+    return render_template('flightlookuplayout/pay_bill.html', categories=categories, path=path, bookticketstep=bookticketstep)
 
 
 if __name__ == '__main__':
