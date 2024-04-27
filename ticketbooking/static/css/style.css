@@ -7,7 +7,9 @@
 body {
     background-color: #fff;
     margin-top: 70px;
-    background: url(../images/bg_public.png)
+    background: url(../images/bg_public.png);
+    background-repeat:no-repeat;
+    background-size: cover;
 }
 
 p {
@@ -20,6 +22,9 @@ p {
     margin-left: auto;
     padding-right: 0px;
     padding-left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .active {

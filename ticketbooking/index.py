@@ -34,6 +34,20 @@ def tickets_booked():
     return render_template('tickets_booked.html', categories=categories, path=path)
 
 
+@app.route('/login')
+def login():
+    path = request.path
+    categories = dao.load_categories()
+    return render_template('login.html', categories=categories, path=path)
+
+
+@app.route('/signin')
+def signin():
+    path = request.path
+    categories = dao.load_categories()
+    return render_template('signin.html', categories=categories, path=path)
+
+
 if __name__ == '__main__':
     with app.app_context():
         app.run(debug=True)
