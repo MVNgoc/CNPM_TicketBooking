@@ -112,3 +112,13 @@ p {
      align-items: center;
      padding: 16px;
 }
+
+.total_price_box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: #fff;
+    width: 100%;
+}
