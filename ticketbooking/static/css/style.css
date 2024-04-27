@@ -24,6 +24,12 @@ p {
     padding-left: 0px;
 }
 
+.center-item-style{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .active {
     font-weight: 700;
     color: #d45806 !important;

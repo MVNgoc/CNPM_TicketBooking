@@ -48,6 +48,14 @@ def signin():
     return render_template('signin.html', categories=categories, path=path)
 
 
+@app.route('/pay-bill')
+def pay_bill():
+    path = request.path
+    categories = dao.load_categories()
+    return render_template('pay_bill.html', categories=categories, path=path)
+
+
+
 if __name__ == '__main__':
     with app.app_context():
         app.run(debug=True)
