@@ -31,7 +31,7 @@ def select_flight():
 def tickets_booked():
     path = request.path
     categories = dao.load_categories()
-    return render_template('ticketorder/tickets_booked.html', categories=categories, path=path)
+    return render_template('listofticket/tickets_booked.html', categories=categories, path=path)
 
 
 @app.route('/tickets-booked/tickets-booked-details')
@@ -39,7 +39,7 @@ def tickets_booked_details():
     path = request.path
     categories = dao.load_categories()
     listofticketstep = dao.load_list_of_ticket_step()
-    return render_template('ticketorder/tickets_booked_details.html', categories=categories, path=path,
+    return render_template('listofticket/tickets_booked_details.html', categories=categories, path=path,
                            listofticketstep=listofticketstep)
 
 
