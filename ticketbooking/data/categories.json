@@ -19,7 +19,7 @@
     "id": 3,
     "name": "Vé đã đặt",
     "link": "/tickets-booked",
-    "sub_link_1": "",
+    "sub_link_1": "/tickets-booked/tickets-booked-details",
     "sub_link_2": "",
     "sub_link_3": ""
   }

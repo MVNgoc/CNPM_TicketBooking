@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Danh sách vé đã đặt",
+    "link_step_1": "/tickets-booked",
+    "link_step_2": "/tickets-booked/tickets-booked-details"
+  },
+  {
+    "id": 2,
+    "name": "Chi tiết vé đã đặt",
+    "link_step_1": "",
+    "link_step_2": "/tickets-booked/tickets-booked-details"
+  }
+]
