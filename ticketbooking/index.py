@@ -49,11 +49,11 @@ def signin():
 
 
 @app.route('/flight-lookup/pay-ticket')
-def pay_bill():
+def pay_ticket():
     path = request.path
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
-    return render_template('flightlookuplayout/pay_bill.html', categories=categories, path=path, bookticketstep=bookticketstep)
+    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path, bookticketstep=bookticketstep)
 
 
 if __name__ == '__main__':
