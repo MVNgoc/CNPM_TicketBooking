@@ -216,3 +216,56 @@ p {
 .hidden {
     display: none;
 }
+
+.ticket-title-box {
+   width: 33.33%;
+   height: 50px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 24px;
+   font-weight: 700;
+   line-height: 29px;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.ticket-title-box:last-child {
+    margin-left: 3px;
+}
+
+.ticket-info-box {
+    width: 33.33%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: linear-gradient(26.73deg, #F9A51A 13.7%, #FBB612 29.8%, #FFDD00 66.81%);
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 14px;
+}
+
+.time-style {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 28px;
+}
+
+.ticket-price-select {
+    width: 33.33%;
+    background: #F8F8F8;
+    color: #333333;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ticket-price-select:last-child {
+    border-left: 1px solid #C4C4C4;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
