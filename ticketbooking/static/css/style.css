@@ -131,9 +131,11 @@ p {
     font-weight: 500;
     line-height: 18px;
     padding: 14px 0px;
+    position: relative;
 }
 
 .total_price_box .select_flight_header {
+    position: relative;
     background: linear-gradient(359.2deg, #D91A21 53.08%, #6F0000 206.46%);
     padding: 20px 0px;
     text-align: center;
@@ -155,4 +157,62 @@ p {
     font-weight: 600;
     line-height: 18px;
     width: 100%;
+}
+
+.collapse_button {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    cursor: pointer;
+    width: 60px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.collapse_button:hover {
+    background: linear-gradient(359.2deg, #D91A21 0%, #6F0000 206.46%);
+}
+
+#flightInfo {
+    overflow: hidden; /* Ẩn nội dung tràn ra ngoài */
+}
+
+@keyframes heightDecrease {
+  from {
+    height: 157px;
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes heightIncrease {
+  from {
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    height: 157px;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.animation_hidden {
+    animation: heightDecrease 0.5s forwards;
+}
+
+.animation_show {
+    animation: heightIncrease 0.5s forwards;
+}
+
+.hidden {
+    display: none;
 }
