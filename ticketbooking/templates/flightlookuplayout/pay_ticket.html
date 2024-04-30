@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}Trang chủ{% endblock %}
+{% block title %}Thanh toán{% endblock %}
 
 {% block content %}
 <div class="session-style">
@@ -99,16 +99,91 @@
                 <div class="border border-dashed"></div>
                 <h5 class="card-title mt-3">Quý khách vui lòng thanh toán theo hướng dẫn sau:</h5>
                 <p class="card-text">Quý khách vui lòng chuyển khoản đến số tài khoản:
-                <a style="font-weight: 700;">Ngân hàng AAA, số tài khoản: 0XXX</a></p>
+                    <a style="font-weight: 700;">Ngân hàng AAA, số tài khoản: 0XXX</a></p>
                 <p class="card-text">Sau khi chuyển khoản, quý khách vui lòng chụp màn hình và đăng tải ở phía dưới</p>
                 <div class="mb-3 mt-3">
                     <label for="imageUpload" class="form-label" style="font-weight: 700;">Chọn hình ảnh</label>
                     <input class="form-control" type="file" id="imageUpload" accept=".jpg, .jpeg, .png" required>
                     <div class="valid-feedback"></div>
                 </div>
-                <p class="card-text">Quý khách vui lòng đợi 15 phút để nhân viên kiểm tra chuyển khoản. Trạng thái thanh toán quý khách vui lòng kiểm tra ở "Vé đã đặt"</p>
+                <p class="card-text">Quý khách vui lòng đợi 15 phút để nhân viên kiểm tra chuyển khoản. Trạng thái thanh
+                    toán quý khách vui lòng kiểm tra ở "Vé đã đặt"</p>
             </div>
         </div>
     </div>
+    <form action="/flight-lookup/pay-ticket" class="total_price_box">
+        <div class="mb-4">
+            <div class="select_flight_header">
+                <p>THÔNG TIN CHUYẾN BAY KHỨ HỒI</p>
+                <div class="collapse_button" id="collapseButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" id="iconUp"
+                         class="bi bi-caret-down hidden" viewBox="0 0 16 16">
+                        <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" id="iconDown"
+                         class="bi bi-caret-down" viewBox="0 0 16 16">
+                        <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"/>
+                    </svg>
+                </div>
+            </div>
+            <div id="flightInfo">
+                <div style="background: linear-gradient(90deg, rgba(201,239,255,1) 40%, rgba(255,251,179,1) 100%);">
+                    <div class="d-flex container">
+                        <div style="width: 50%;">
+                            <div class="select_flight_info" style="padding-right: 10px; background: #C9EFFF;">
+                                <p>Chuyến đi</p>
+                            </div>
+                        </div>
+                        <div style="width: 50%;">
+                            <div class="select_flight_info"
+                                 style="padding-left: 10px; background: #FFFBB3; text-align: end;">
+                                <p>Chuyến về</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex container"
+                     style="padding: 14px 0px; font-size: 16px; font-weight: 700; line-height: 21px;">
+                    <div style="width: 50%; padding-right: 10px;">
+                        <div class="d-flex align-items-center gap-3">
+                            <p>Tp. Hồ Chí Minh (SGN)</p>
+                            <img src="https://www.vietjetair.com/static/media/thai-vietjet.535af1a2.svg" alt="">
+                            <p>Hà Nội (HAN)</p>
+                        </div>
+                        <div class="ticket-price-box">
+                            <p>Giá vé</p>
+                            <div class="d-flex gap-2" style="font-weight: 700">
+                                <p>5.001.600</p>
+                                <p>VND</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 50%; padding-left: 10px; display: flex; flex-direction: column; align-items: end;">
+                        <div class="d-flex align-items-center gap-3">
+                            <p>Hà Nội (HAN)</p>
+                            <img src="https://www.vietjetair.com/static/media/thai-vietjet.535af1a2.svg" alt="">
+                            <p>Tp. Hồ Chí Minh (SGN)</p>
+                        </div>
+                        <div class="ticket-price-box">
+                            <div class="d-flex gap-2" style="font-weight: 700">
+                                <p>5.001.600</p>
+                                <p>VND</p>
+                            </div>
+                            <p>Giá vé</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container d-flex justify-content-between align-items-center" style="height: 100%;">
+            <a href="/flight-lookup/passengers" type="submit" class="btn btn-secondary"
+               style="width: 150px; font-weight: 700;">Quay lại
+            </a>
+            <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span type="text"
+                                                                                              style="font-size: 24px; font-weight: 700;">10,000,000 VND</span>
+            </p>
+            <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
+        </div>
+    </form>
 </div>
 {% endblock %}

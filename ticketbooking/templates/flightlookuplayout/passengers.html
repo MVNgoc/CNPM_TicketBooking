@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}Chọn chuyến bay{% endblock %}
+{% block title %}Thông tin khách hàng{% endblock %}
 
 {% block content %}
 <div class="session-style">
@@ -90,146 +90,14 @@
 
                 </div>
                 {% endfor %}
+
             </div>
         </div>
     </div>
     <div class="container">
-        <div class="d-flex justify-content-between">
-            <div class="place_info_card">
-                <div style="text-align: center;">
-                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">SGN</p>
-                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">Hồ Chí Minh</p>
-                </div>
-                <svg width="57" height="55" viewBox="0 0 57 55" fill="none" xmlns="http://www.w3.org/2000/svg"
-                     style="height: 100%;">
-                    <path d="M8 18H41L45.8182 21H8V18Z" fill="#DA2128"></path>
-                    <path d="M36.8835 21H48.5C39 16 40 17 33 11V18L36.8835 21Z" fill="#DA2128"></path>
-                    <path d="M48 37L15 37L10.1818 34L48 34V37Z" fill="#D3D3D3"></path>
-                    <path d="M19.1165 34L7.5 34C17 39 16 38 23 44V37L19.1165 34Z" fill="#D3D3D3"></path>
-                </svg>
-                <div style="text-align: center;">
-                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">HAN</p>
-                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">Hà Nội</p>
-                </div>
-            </div>
-            <div class="place_info_card">
-                <div style="text-align: center;">
-                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">HAN</p>
-                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">Hà Nội</p>
-                </div>
-                <svg width="57" height="55" viewBox="0 0 57 55" fill="none" xmlns="http://www.w3.org/2000/svg"
-                     style="height: 100%;">
-                    <path d="M8 18H41L45.8182 21H8V18Z" fill="#D3D3D3"></path>
-                    <path d="M36.8835 21H48.5C39 16 40 17 33 11V18L36.8835 21Z" fill="#D3D3D3"></path>
-                    <path d="M48 37L15 37L10.1818 34L48 34V37Z" fill="#DA2128"></path>
-                    <path d="M19.1165 34L7.5 34C17 39 16 38 23 44V37L19.1165 34Z" fill="#DA2128"></path>
-                </svg>
-                <div style="text-align: center;">
-                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">SGN</p>
-                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">Hồ Chí Minh</p>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-between mt-3">
-            <div style="width: 48%;">
-                <div class="d-flex">
-                    <div class="ticket-title-box"></div>
-                    <div class="ticket-title-box"
-                         style="background: linear-gradient(90deg, rgba(166,229,255,1) 50%, rgba(0,177,255,1) 100%);">
-                        <p>Hạng vé 1</p>
-                    </div>
-                    <div class="ticket-title-box"
-                         style="background: linear-gradient(90deg, rgba(255,208,142,1) 50%, rgba(255,162,0,1) 100%);">
-                        <p>Hạng vé 2</p>
-                    </div>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div class="d-flex">
-                        <div class="ticket-info-box">
-                            <p>VJ150</p>
-                            <p><span class="time-style">04:55</span> Đến <span class="time-style">07:10</span></p>
-                            <p>Airbus A320 - <span class="active">Bay thẳng</span></p>
-                        </div>
-                        <div class="ticket-price-select">
-                            <div class="sold-out-ticket">
-                                <img src="https://www.vietjetair.com/static/media/noflight.cee84207.svg">
-                                <p>Hết chỗ</p>
-                            </div>
-                        </div>
-                        <div class="ticket-price-select">
-                            <p>5.900.000 VND</p>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="ticket-info-box">
-                            <p>VJ150</p>
-                            <p><span class="time-style">05:25</span> Đến <span class="time-style">07:35</span></p>
-                            <p>Airbus A320 - <span class="active">Bay thẳng</span></p>
-                        </div>
-                        <div class="ticket-price-select">
-                            <div class="sold-out-ticket">
-                                <img src="https://www.vietjetair.com/static/media/noflight.cee84207.svg">
-                                <p>Hết chỗ</p>
-                            </div>
-                        </div>
-                        <div class="ticket-price-select">
-                            <p>5.900.000 VND</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="width: 48%;">
-                <div class="d-flex">
-                    <div class="ticket-title-box"></div>
-                    <div class="ticket-title-box"
-                         style="background: linear-gradient(90deg, rgba(166,229,255,1) 50%, rgba(0,177,255,1) 100%);">
-                        <p>Hạng vé 1</p>
-                    </div>
-                    <div class="ticket-title-box"
-                         style="background: linear-gradient(90deg, rgba(255,208,142,1) 50%, rgba(255,162,0,1) 100%);">
-                        <p>Hạng vé 2</p>
-                    </div>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div class="d-flex">
-                        <div class="ticket-info-box">
-                            <p>VJ150</p>
-                            <p><span class="time-style">04:55</span> Đến <span class="time-style">07:10</span></p>
-                            <p>Airbus A320 - <span class="active">Bay thẳng</span></p>
-                        </div>
-                        <div class="ticket-price-select">
-                            <div style="text-align: center;">
-                                <img src="https://www.vietjetair.com/static/media/noflight.cee84207.svg">
-                                <p style="font-size: 14px; font-weight: 600; line-height: 19px; color: #939598;">Hết
-                                    chỗ</p>
-                            </div>
-                        </div>
-                        <div class="ticket-price-select">
-                            <p>5.900.000 VND</p>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="ticket-info-box">
-                            <p>VJ150</p>
-                            <p><span class="time-style">05:25</span> Đến <span class="time-style">07:35</span></p>
-                            <p>Airbus A320 - <span class="active">Bay thẳng</span></p>
-                        </div>
-                        <div class="ticket-price-select">
-                            <div style="text-align: center;">
-                                <img src="https://www.vietjetair.com/static/media/noflight.cee84207.svg">
-                                <p style="font-size: 14px; font-weight: 600; line-height: 19px; color: #939598;">Hết
-                                    chỗ</p>
-                            </div>
-                        </div>
-                        <div class="ticket-price-select">
-                            <p>5.900.000 VND</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h1>Bé làm dô đây nha</h1>
     </div>
-    <form action="/flight-lookup/passengers" class="total_price_box">
+    <form action="/flight-lookup/pay-ticket" class="total_price_box">
         <div class="mb-4">
             <div class="select_flight_header">
                 <p>THÔNG TIN CHUYẾN BAY KHỨ HỒI</p>
@@ -294,9 +162,8 @@
             </div>
         </div>
         <div class="container d-flex justify-content-between align-items-center" style="height: 100%;">
-            <button type="submit" class="btn btn-secondary" style="width: 150px; font-weight: 700; display: none;">Quay
-                lại
-            </button>
+            <a href="/flight-lookup/select-flight" type="submit" class="btn btn-secondary" style="width: 150px; font-weight: 700;">Quay lại
+            </a>
             <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span type="text"
                                                                                               style="font-size: 24px; font-weight: 700;">10,000,000 VND</span>
             </p>

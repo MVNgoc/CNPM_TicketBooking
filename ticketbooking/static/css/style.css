@@ -269,3 +269,11 @@ p {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
+
+.sold-out-ticket {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 19px;
+    color: #939598;
+}
