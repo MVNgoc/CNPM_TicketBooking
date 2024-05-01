@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}Thanh toán{% endblock %}
+{% block title %}Thông tin khách hàng{% endblock %}
 
 {% block content %}
 <div class="session-style">
@@ -86,31 +86,64 @@
                         {{ b.name }}
                     </div>
                 </div>
-                <div class="dot_line {{'dot_line_active' if b.link_step_1==path or b.link_step_2==path or b.link_step_3==path }}"></div>
+                <div class="dot_line {{'dot_line_active' if b.link_step_1==path or b.link_step_2==path or b.link_step_3==path }}">
+
+                </div>
                 {% endfor %}
 
             </div>
         </div>
     </div>
+
     <div class="session-style container d-flex justify-content-between align-items-center">
         <form action="/action_page.php" class="card p-4 shadow was-validated mt-3" style="width: 800px;">
-            <h2 class="card-title">Hướng dẫn thanh toán</h2>
-            <div class="tab-content p-3 border bg-light" id="nav-tabContent">
-                <h5 class="card-title">Quý khách vui lòng thanh toán theo hướng dẫn sau:</h5>
-                <p class="card-text">Quý khách vui lòng chuyển khoản đến số tài khoản:
-                    <a style="font-weight: 700;">Ngân hàng AAA, số tài khoản: 0XXX</a></p>
-                <p class="card-text">Sau khi chuyển khoản, quý khách vui lòng chụp màn hình và đăng tải ở phía dưới</p>
-                <div class="mb-3 mt-3">
-                    <label for="imageUpload" class="form-label" style="font-weight: 700;">Chọn hình ảnh</label>
-                    <input class="form-control" type="file" id="imageUpload" accept=".jpg, .jpeg, .png" required>
+            <h2>Thông tin khách hàng</h2>
+            <div class="tab-content p-3 border bg-light" id="nav-tabContent mt-3">
+                <div>
+                    <label for="username" class="form-label" style="font-weight: 700;">Họ và tên:</label>
+                    <input type="text" class="form-control" style="width:600px;" id="username"
+                           placeholder="Nhập họ và tên"
+                           name="username" required>
                     <div class="valid-feedback"></div>
                 </div>
-                <p class="card-text">Quý khách vui lòng đợi 15 phút để nhân viên kiểm tra chuyển khoản. Trạng thái
-                    thanh toán quý khách vui lòng kiểm tra ở "Vé đã đặt"</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <label for="sex" class="form-label" style="font-weight: 700;">Giới tính:</label>
+                        <input class="form-control" style="width: 300px;" list="sex_list" name="sex" id="sex" required>
+                        <datalist id="sex_list">
+                            <option value="Nam" label="Nam">
+                            <option value="Nữ" label="Nữ">
+                        </datalist>
+                    </div>
+                    <div class="mt-3">
+                        <label for="Date_of_birth" class="form-label" style="font-weight: 700;">Ngày sinh:</label>
+                        <input id="Date_of_birth" width="300" required/>
+                        <script>
+                            $('#Date_of_birth').datepicker({
+                                uiLibrary: 'bootstrap5'
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="">
+                        <label for="username" class="form-label" style="font-weight: 700;">CMND/CCCD:</label>
+                        <input type="text" class="form-control" style="width:300px;" id="cccd"
+                               placeholder="Nhập CMND/CCCD" name="cccd" required>
+                        <div class="valid-feedback"></div>
+                    </div>
+                    <div class="">
+                        <label for="username" class="form-label" style="font-weight: 700;">Số điện thoại:</label>
+                        <input type="text" class="form-control" style="width:300px;" id="phonenumber"
+                               placeholder="Nhập số điện thoại" name="phonenumber" required>
+                        <div class="valid-feedback"></div>
+                    </div>
+                </div>
             </div>
         </form>
-        <img src="../static/images/pay_tickets.png" alt="pay_tickets" style="height: 500px;">
+        <img src="../static/images/personal_information.png" alt="personal_information" style="height: 500px;">
     </div>
+
     <form action="/flight-lookup/pay-ticket" class="total_price_box">
         <div class="mb-4">
             <div class="select_flight_header">
@@ -176,7 +209,7 @@
             </div>
         </div>
         <div class="container d-flex justify-content-between align-items-center" style="height: 100%;">
-            <a href="/flight-lookup/passengers" type="submit" class="btn btn-secondary"
+            <a href="/flight-lookup/select-flight" type="submit" class="btn btn-secondary"
                style="width: 150px; font-weight: 700;">Quay lại
             </a>
             <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span type="text"

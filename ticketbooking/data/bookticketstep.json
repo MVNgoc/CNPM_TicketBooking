@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "Thông tin chuyến bay",
+    "name": "Chọn chuyến bay",
     "link_step_1": "/flight-lookup/select-flight",
     "link_step_2": "/flight-lookup/passengers",
     "link_step_3": "/flight-lookup/pay-ticket"

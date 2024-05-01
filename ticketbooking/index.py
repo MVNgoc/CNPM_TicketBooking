@@ -27,6 +27,15 @@ def select_flight():
                            bookticketstep=bookticketstep)
 
 
+@app.route('/flight-lookup/passengers')
+def passengers():
+    path = request.path
+    categories = dao.load_categories()
+    bookticketstep = dao.load_book_ticket_step()
+    return render_template('flightlookuplayout/passengers.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
+
+
 @app.route('/tickets-booked')
 def tickets_booked():
     path = request.path
