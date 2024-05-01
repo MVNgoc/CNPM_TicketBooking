@@ -108,6 +108,4 @@ class Account(db.Model):
     password = Column(String(20))
     userRole = Column(Enum('Customer','Employee','Admin', name='userrole_enum'))
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
+
