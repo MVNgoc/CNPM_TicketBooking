@@ -92,12 +92,11 @@
             </div>
         </div>
     </div>
-    <div class="container center-item-style">
-        <div class="card mt-3 shadow was-validated" style="width: 800px;">
-            <div class="card-body">
-                <h4 class="card-title">Hướng dẫn thanh toán</h4>
-                <div class="border border-dashed"></div>
-                <h5 class="card-title mt-3">Quý khách vui lòng thanh toán theo hướng dẫn sau:</h5>
+    <div class="session-style container d-flex justify-content-between align-items-center">
+        <form action="/action_page.php" class="card p-4 shadow was-validated mt-3" style="width: 800px;">
+            <h2 class="card-title">Hướng dẫn thanh toán</h2>
+            <div class="tab-content p-3 border bg-light" id="nav-tabContent">
+                <h5 class="card-title">Quý khách vui lòng thanh toán theo hướng dẫn sau:</h5>
                 <p class="card-text">Quý khách vui lòng chuyển khoản đến số tài khoản:
                     <a style="font-weight: 700;">Ngân hàng AAA, số tài khoản: 0XXX</a></p>
                 <p class="card-text">Sau khi chuyển khoản, quý khách vui lòng chụp màn hình và đăng tải ở phía dưới</p>
@@ -106,10 +105,11 @@
                     <input class="form-control" type="file" id="imageUpload" accept=".jpg, .jpeg, .png" required>
                     <div class="valid-feedback"></div>
                 </div>
-                <p class="card-text">Quý khách vui lòng đợi 15 phút để nhân viên kiểm tra chuyển khoản. Trạng thái thanh
-                    toán quý khách vui lòng kiểm tra ở "Vé đã đặt"</p>
+                <p class="card-text">Quý khách vui lòng đợi 15 phút để nhân viên kiểm tra chuyển khoản. Trạng thái
+                    thanh toán quý khách vui lòng kiểm tra ở "Vé đã đặt"</p>
             </div>
-        </div>
+        </form>
+        <img src="../static/images/pay_tickets.png" alt="pay_tickets" style="height: 500px;">
     </div>
     <form action="/flight-lookup/pay-ticket" class="total_price_box">
         <div class="mb-4">
