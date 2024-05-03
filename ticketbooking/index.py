@@ -59,11 +59,11 @@ def login():
     return render_template('login.html', categories=categories, path=path)
 
 
-@app.route('/signin')
+@app.route('/register')
 def signin():
     path = request.path
     categories = dao.load_categories()
-    return render_template('signin.html', categories=categories, path=path)
+    return render_template('register.html', categories=categories, path=path)
 
 
 @app.route('/flight-lookup/pay-ticket')
