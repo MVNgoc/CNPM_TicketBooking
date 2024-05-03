@@ -107,5 +107,3 @@ class Account(db.Model):
     userName = Column(String(50), primary_key=True)
     password = Column(String(20))
     userRole = Column(Enum('Customer','Employee','Admin', name='userrole_enum'))
-
-
