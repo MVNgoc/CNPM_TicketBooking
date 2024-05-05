@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect
 from flask import Flask
 from ticketbooking import app, dao, login
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 
 @app.route('/')
@@ -26,6 +26,12 @@ def process_login():
 @login.user_loader
 def load_user(user_name):
     return dao.get_user_by_username(user_name)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/')
 
 
 @app.route('/flight-lookup')
