@@ -17,7 +17,6 @@ def process_login():
     password = request.form.get('pswd')
     u = dao.auth_user(username=username, password=password)
     if u:
-        print(u)
         login_user(user=u)
         return redirect('/flight-lookup')
     else:
@@ -29,12 +28,15 @@ def process_register():
     username = request.form.get('username')
     password = request.form.get('passwordInput')
     u = dao.register_user(user_name=username, password=password)
-    print(u)
-    if u:
+    if u == 'account_already_exists':
+        print('Tài khoản đã tồn tại')
+        return redirect('/')
+    elif u == 'create_account_false':
+        print('Tạo tài khoản không thành công')
+        return redirect('/')
+    else:
         login_user(user=u)
         return redirect('/flight-lookup')
-    else:
-        return redirect('/')
 
 
 @login.user_loader

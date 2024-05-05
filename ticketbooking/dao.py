@@ -2,7 +2,7 @@ import json
 from ticketbooking import app, login, db
 from models import Account
 import hashlib
-from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
 
 
 def load_categories():
@@ -22,8 +22,6 @@ def load_list_of_ticket_step():
 
 def auth_user(username, password):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    temp = Account.query.filter_by(userName=username.strip(), password=password).first()
-    print(temp)
     return Account.query.filter_by(userName=username.strip(), password=password).first()
 
 
@@ -32,11 +30,21 @@ def get_user_by_username(id):
 
 
 def register_user(user_name, password):
-    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    account = Account(userName=user_name, password=password,userRole='Customer')
-    temp = db.session.add(account)
-    if(temp):
+    try:
+        if Account.query.filter_by(userName=user_name).first() is not None:
+            return 'account_already_exists'
+
+        password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+        account = Account(userName=user_name, password=password, userRole='Customer')
+        db.session.add(account)
         db.session.commit()
-        return account
-    else:
-        return 'false'
+
+        account = Account.query.filter_by(userName=user_name).first()
+        if account:
+            return account
+        else:
+            return 'create_account_false'
+
+    except IntegrityError as e:
+        db.session.rollback()
+        return 'create_account_false'
