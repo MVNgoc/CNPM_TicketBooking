@@ -1,7 +1,7 @@
-from flask import render_template, request
+from flask import render_template, request, redirect
 from flask import Flask
-from ticketbooking import dao
-from ticketbooking import app
+from ticketbooking import app, dao, login
+from flask_login import login_user
 
 
 @app.route('/')
@@ -9,6 +9,23 @@ def index():
     path = request.path
     categories = dao.load_categories()
     return render_template('index.html', categories=categories, path=path)
+
+
+@app.route('/', methods=['post'])
+def process_login():
+    username = request.form.get('username')
+    password = request.form.get('pswd')
+    u = dao.auth_user(username=username, password=password)
+    if u:
+        login_user(user=u)
+        return redirect('/flight-lookup')
+    else:
+        return redirect('/')
+
+
+@login.user_loader
+def load_user(user_name):
+    return dao.get_user_by_username(user_name)
 
 
 @app.route('/flight-lookup')

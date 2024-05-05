@@ -1,9 +1,12 @@
 from ticketbooking import db,app
-from models import Airport, Route, Flight, SeatClass, Price, Customer, Ticket, Invoice, Employee, Account
+from models import Account, Airport, SeatClass, Price, Route, Flight, Customer, Invoice, Ticket, Employee
 from datetime import datetime
+import hashlib
+
 
 def create_database():
     db.create_all()
+
 
 def add_sample_data():
     airport1 = Airport(airportID='TSN', airportName='Tan Son Nhat International Airport')
@@ -28,14 +31,13 @@ def add_sample_data():
     employee1 = Employee(employeeID='E001', employeeName='Jane Smith', birthDate=datetime.strptime('1996-7-17 00:00:00','%Y-%m-%d %H:%M:%S'), employeeRole='Admin')
     employee2 = Employee(employeeID='E002', employeeName='Jesscica Huynh', birthDate=datetime.strptime('2000-1-1 00:00:00','%Y-%m-%d %H:%M:%S'), employeeRole='Employee')
 
+    account1 = Account(userName='JohnDoe64', password=str(hashlib.md5("johndoe64@@".encode('utf-8')).hexdigest()), userRole='Customer')
+    account2 = Account(userName='E001', password=str(hashlib.md5("admine001.,".encode('utf-8')).hexdigest()), userRole='Admin')
+    account3 = Account(userName='E002', password=str(hashlib.md5("employeeE002..".encode('utf-8')).hexdigest()), userRole='Employee')
 
-    account1 = Account(userName='JohnDoe64', password='johndoe64@@', userRole='Customer')
-    account2 = Account(userName= 'E001', password='admine001.,', userRole='Admin')
-    account3 = Account(userName= 'E002', password='employeeE002..', userRole='Employee')
-
-
-    db.session.add_all([airport1, airport2, route1, flight1, seat_class1, seat_class2, price1, price2, customer1, ticket1, invoice1, employee1, employee2, account1, account2, account3])
+    db.session.add_all([account1, account2, account3])
     db.session.commit()
+
 
 if __name__ == '__main__':
     with app.app_context():
