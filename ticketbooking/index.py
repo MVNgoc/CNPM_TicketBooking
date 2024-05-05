@@ -24,6 +24,19 @@ def process_login():
         return redirect('/')
 
 
+@app.route('/register', methods=['post'])
+def process_register():
+    username = request.form.get('username')
+    password = request.form.get('passwordInput')
+    u = dao.register_user(user_name=username, password=password)
+    print(u)
+    if u:
+        login_user(user=u)
+        return redirect('/flight-lookup')
+    else:
+        return redirect('/')
+
+
 @login.user_loader
 def load_user(id):
     return dao.get_user_by_username(id)
