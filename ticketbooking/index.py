@@ -17,6 +17,7 @@ def process_login():
     password = request.form.get('pswd')
     u = dao.auth_user(username=username, password=password)
     if u:
+        print(u)
         login_user(user=u)
         return redirect('/flight-lookup')
     else:
@@ -24,8 +25,8 @@ def process_login():
 
 
 @login.user_loader
-def load_user(user_name):
-    return dao.get_user_by_username(user_name)
+def load_user(id):
+    return dao.get_user_by_username(id)
 
 
 @app.route('/logout')

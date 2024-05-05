@@ -2,6 +2,7 @@ import json
 from ticketbooking import app, login
 from models import Account
 import hashlib
+from sqlalchemy import create_engine
 
 
 def load_categories():
@@ -24,5 +25,5 @@ def auth_user(username, password):
     return Account.query.filter_by(userName=username.strip(), password=password).first()
 
 
-def get_user_by_username(user_name):
-    return Account.query.filter_by(userName=user_name).first()
+def get_user_by_username(id):
+    return Account.query.filter_by(id=id).first()

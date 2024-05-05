@@ -114,7 +114,8 @@ class Employee(db.Model):
 
 class Account(db.Model, UserMixin):
     __tablename__ = 'account'
-    userName = Column(String(50), primary_key=True)
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    userName = Column(String(50), unique=True)
     password = Column(String(1000))
     userRole = Column(Enum('Customer', 'Employee', 'Admin', name='userrole_enum'))
 
