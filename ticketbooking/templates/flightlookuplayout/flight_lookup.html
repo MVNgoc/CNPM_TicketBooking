@@ -8,7 +8,7 @@
          alt="flight_lookup_banner" style="height: 720px;">
     <div class="d-flex justify-content-center align-items-center">
         <div class="card p-4 shadow"
-             style="max-width: 800px; margin-top: 40px; margin-bottom: 40px;">
+             style="width: 800px; margin-top: 40px; margin-bottom: 40px;">
             <h2 class="text-center p-3">Tra cứu chuyến bay</h2>
             <nav>
                 <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
@@ -23,10 +23,10 @@
             <div class="tab-content p-3 border bg-light" id="nav-tabContent">
                 <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                     <form action="/flight-lookup/select-flight">
-                        <div class="mb-3 mt-3">
+                        <div class="mb-3 mt-3 was-validated" style="width = 800px;">
                             <label for="departure_point" class="form-label">Điểm đi</label>
                             <input class="form-control" list="departure_point_list_one_way" name="departure_point"
-                                   id="departure_point_one_way">
+                                   id="departure_point_one_way" required>
                             <datalist id="departure_point_list_one_way">
                                 <option value="Tp. Hồ Chí Minh" label="Sân bay Tân Sơn Nhất">
                                 <option value="Hà Nội" label="Sân bay Nội bài">
@@ -35,10 +35,10 @@
                                 <option value="Chu lai" label="Sân bay Chu lai">
                             </datalist>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 was-validated">
                             <label for="destination" class="form-label">Điểm đến</label>
                             <input class="form-control" list="destination_list_one_way" name="destination"
-                                   id="destination_one_way">
+                                   id="destination_one_way" required>
                             <datalist id="destination_list_one_way">
                                 <option value="Tp. Hồ Chí Minh" label="Sân bay Tân Sơn Nhất">
                                 <option value="Hà Nội" label="Sân bay Nội bài">
@@ -47,35 +47,51 @@
                                 <option value="Chu lai" label="Sân bay Chu lai">
                             </datalist>
                         </div>
-                        <div class="mb-3">
-                            <label for="Date_of_department_one_way" class="form-label">Ngày đi</label>
-                            <input id="Date_of_department" width="602"/>
+                        <div class="mb-3 was-validated">
+                            <label for="Date_of_department" class="form-label">Ngày đi</label>
+                            <div class="input-group mb-3">
+                                <input type="date" class="form-control" id="Date_of_department" required>
+                            </div>
+                            <!-- JavaScript Bundle with Popper -->
+                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
                             <script>
-                                $('#Date_of_department').datepicker({
-                                    uiLibrary: 'bootstrap5'
+                                    // Lấy ngày hiện tại
+                                var today = new Date();
+                                    // Lấy ngày hiện tại dưới dạng chuỗi YYYY-MM-DD
+                                var todayStr = today.toISOString().split('T')[0];
+                                    // Chọn element của input date
+                                var datePicker = document.getElementById('Date_of_department');
+                                    // Đặt thuộc tính min của input date là ngày hiện tại
+                                datePicker.setAttribute('min', todayStr);
+
+                                    // Ẩn những ngày nhỏ hơn ngày hiện tại
+                                datePicker.addEventListener('input', function() {
+                                  var selectedDate = new Date(datePicker.value);
+                                  if (selectedDate < today) {
+                                    datePicker.value = todayStr;
+                                  }
                                 });
                             </script>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 was-validated">
                             <label for="quantity_one_way" class="form-label">Số lượng</label>
                             <input class="form-control" style="width: 50%;" name="quantity" id="quantity_one_way"
-                                   type="number">
+                                   type="number" min="1" required>
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">Vui lòng nhập số.</div>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <p class="text-danger">Vui lòng điền đủ thông tin!</p>
-                            <button type="submit" class="btn btn-success"
-                                    style="border-radius: 10px; font-weight: 600;">Tìm
-                                kiếm
-                            </button>
-                        </div>
+                        <button type="submit" class="btn btn-success"
+                                style="border-radius: 10px; font-weight: 600;">Tìm kiếm
+                        </button>
                     </form>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <form action="/flight-lookup">
-                        <div class="mb-3 mt-3">
+                        <div class="mb-3 mt-3 was-validated">
                             <label for="departure_point" class="form-label">Điểm đi</label>
                             <input class="form-control" list="departure_point_list" name="departure_point"
-                                   id="departure_point">
+                                   id="departure_point" required>
                             <datalist id="departure_point_list">
                                 <option value="Tp. Hồ Chí Minh" label="Sân bay Tân Sơn Nhất">
                                 <option value="Hà Nội" label="Sân bay Nội bài">
@@ -84,10 +100,10 @@
                                 <option value="Chu lai" label="Sân bay Chu lai">
                             </datalist>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 was-validated">
                             <label for="destination" class="form-label">Điểm đến</label>
                             <input class="form-control" list="destination_list" name="destination"
-                                   id="destination">
+                                   id="destination" required>
                             <datalist id="destination_list">
                                 <option value="Tp. Hồ Chí Minh" label="Sân bay Tân Sơn Nhất">
                                 <option value="Hà Nội" label="Sân bay Nội bài">
@@ -96,35 +112,70 @@
                                 <option value="Chu lai" label="Sân bay Chu lai">
                             </datalist>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 was-validated">
                             <label for="Date_of_department_one_way" class="form-label">Ngày đi</label>
-                            <input id="Date_of_department_one_way" width="602"/>
+                            <div class="input-group mb-3">
+                                <input type="date" class="form-control" id="Date_of_department_one_way" required>
+                            </div>
+                            <!-- JavaScript Bundle with Popper -->
+                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
                             <script>
-                                $('#Date_of_department_one_way').datepicker({
-                                    uiLibrary: 'bootstrap5'
+                                // Lấy ngày hiện tại
+                                var today = new Date();
+                                // Lấy ngày hiện tại dưới dạng chuỗi YYYY-MM-DD
+                                var todayStr = today.toISOString().split('T')[0];
+                                // Chọn element của input date
+                                var datePicker = document.getElementById('Date_of_department_one_way');
+                                // Đặt thuộc tính min của input date là ngày hiện tại
+                                datePicker.setAttribute('min', todayStr);
+
+                                // Ẩn những ngày nhỏ hơn ngày hiện tại
+                                datePicker.addEventListener('input', function() {
+                                  var selectedDate = new Date(datePicker.value);
+                                  if (selectedDate < today) {
+                                    datePicker.value = todayStr;
+                                  }
                                 });
                             </script>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 was-validated">
                             <label for="return_day_one_way" class="form-label">Ngày về</label>
-                            <input id="return_day_one_way" width="602"/>
+                            <div class="input-group mb-3">
+                                <input type="date" class="form-control" id="return_day_one_way" required>
+                            </div>
+                            <!-- JavaScript Bundle with Popper -->
+                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
                             <script>
-                                $('#return_day_one_way').datepicker({
-                                    uiLibrary: 'bootstrap5'
+                                // Lấy ngày hiện tại
+                                var today = new Date();
+                                // Lấy ngày hiện tại dưới dạng chuỗi YYYY-MM-DD
+                                var todayStr = today.toISOString().split('T')[0];
+                                // Chọn element của input date
+                                var datePicker = document.getElementById('return_day_one_way');
+                                // Đặt thuộc tính min của input date là ngày hiện tại
+                                datePicker.setAttribute('min', todayStr);
+
+                                // Ẩn những ngày nhỏ hơn ngày hiện tại
+                                datePicker.addEventListener('input', function() {
+                                  var selectedDate = new Date(datePicker.value);
+                                  if (selectedDate < today) {
+                                    datePicker.value = todayStr;
+                                  }
                                 });
                             </script>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 was-validated">
                             <label for="quantity" class="form-label">Số lượng</label>
-                            <input class="form-control" style="width: 50%;" name="quantity" id="quantity" type="number">
+                            <input class="form-control" style="width: 50%;" name="quantity" id="quantity" type="number" min="1"
+                                   required>
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">Vui lòng nhập số.</div>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <p class="text-danger">Vui lòng điền đủ thông tin!</p>
-                            <button type="submit" class="btn btn-success"
-                                    style="border-radius: 10px; font-weight: 600;">Tìm
-                                kiếm
-                            </button>
-                        </div>
+                        <button type="submit" class="btn btn-success"
+                                style="border-radius: 10px; font-weight: 600;">Tìm kiếm
+                        </button>
                     </form>
                 </div>
             </div>
