@@ -1,6 +1,6 @@
 from ticketbooking import db,app
-from models import Account, Airport, Route, Flight, SeatClass, Price, Customer, Invoice, Ticket, Employee
-from datetime import datetime
+from models import Account, Airport, Route, Flight, SeatClass, Price, Customer, Invoice, Ticket, Employee, SystemRule
+from datetime import datetime, time
 import hashlib
 
 
@@ -26,7 +26,7 @@ def add_sample_data():
 
     invoice1 = Invoice(invoiceID=1, customerID='C001', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash', paymentTime=datetime.strptime('2024-4-18 16:30:00','%Y-%m-%d %H:%M:%S'))
 
-    ticket1 = Ticket(invoiceID=1, customerID='C001', flightID='F001', classID='SC001', priceID='P001', bookingTime=datetime.strptime('2024-4-18 16:30:00','%Y-%m-%d %H:%M:%S'), paid=True)
+    ticket1 = Ticket(invoiceID=1, customerID='C001', accountID='1', flightID='F001', classID='SC001', priceID='P001', bookingTime=datetime.strptime('2024-4-18 16:30:00','%Y-%m-%d %H:%M:%S'), paid=True)
 
     employee1 = Employee(employeeID='E001', employeeName='Jane Smith', birthDate=datetime.strptime('1996-7-17 00:00:00','%Y-%m-%d %H:%M:%S'), employeeRole='Admin')
     employee2 = Employee(employeeID='E002', employeeName='Jesscica Huynh', birthDate=datetime.strptime('2000-1-1 00:00:00','%Y-%m-%d %H:%M:%S'), employeeRole='Employee')
@@ -35,7 +35,9 @@ def add_sample_data():
     account2 = Account(id=2, userName='E001', password=str(hashlib.md5("admine001.,".encode('utf-8')).hexdigest()), userRole='Admin')
     account3 = Account(id=3, userName='E002', password=str(hashlib.md5("employeeE002..".encode('utf-8')).hexdigest()), userRole='Employee')
 
-    db.session.add_all([account1, account2, account3])
+    system_rule = SystemRule(numAirports=2, minFlightTime=3.5,maxIntermediatedAirports=1,minStopoverTime=1.5, maxStopoverTime=4.0, ticketSaleTime=time(hour=8), ticketBookingTime=time(hour=8)) # Thời gian bắt đầu bán vé từ 8 giờ sáng   # Thời gian bắt đầu đặt vé từ 8 giờ sáng
+
+    db.session.add_all([airport1,airport2,route1,flight1,seat_class1,seat_class2,price1,price2,customer1,invoice1, ticket1, employee1, employee2, system_rule, account1, account2, account3])
     db.session.commit()
 
 

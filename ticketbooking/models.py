@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey, Float, DateTime, Enum
+from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey, Float, DateTime, Enum, Time
 from sqlalchemy.orm import relationship
 from ticketbooking import db, app
 from enum import Enum as UserEnum
@@ -41,13 +41,14 @@ class Flight(db.Model):
     arrivalTime = Column(DateTime)
     numOf1stClassSeat = Column(Integer)
     numOf2ndClassSeat = Column(Integer)
-    flightStatus = Column(Enum('Scheduled', 'Dalayed', 'Cancelled', 'Completed', name='flight_status'))
+    flightStatus = Column(Enum('Scheduled', 'Delayed', 'Cancelled', 'Completed', name='flight_status'))
     availableSeats = Column(Integer)
 
     route = relationship(Route)
 
 
 class SeatClass(db.Model):
+    __tablename__ = 'seat_class'
     classID = Column(String(10), primary_key=True)
     className = Column(String(50))
     maxCheckedWeight = Column(Integer)
@@ -55,6 +56,7 @@ class SeatClass(db.Model):
 
 
 class Price(db.Model):
+    __tablename__ = 'price'
     priceID = Column(String(10), primary_key=True)
     flightID = Column(String(15), ForeignKey(Flight.flightID), nullable=False)
     classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)
@@ -79,6 +81,7 @@ class Ticket(db.Model):
     ticketID = Column(Integer, primary_key=True, autoincrement=True)
     invoiceID = Column(Integer, ForeignKey('invoice.invoiceID'), nullable=False)
     customerID = Column(String(10), ForeignKey(Customer.customerID), nullable=False)
+    accountID = Column(Integer, ForeignKey('account.id'), nullable=False)
     flightID = Column(String(15), ForeignKey(Flight.flightID), nullable=False)
     classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)
     priceID = Column(String(10), ForeignKey(Price.priceID), nullable=False)
@@ -89,6 +92,7 @@ class Ticket(db.Model):
     flight = relationship(Flight)
     seat_class = relationship(SeatClass)
     price = relationship(Price)
+    account = relationship("Account")
 
 
 class Invoice(db.Model):
@@ -118,6 +122,19 @@ class Account(db.Model, UserMixin):
     userName = Column(String(50), unique=True)
     password = Column(String(1000))
     userRole = Column(Enum('Customer', 'Employee', 'Admin', name='userrole_enum'))
+    def __str__(self):
+        return self.userName
+
+class SystemRule(db.Model):
+    __tablename__ = 'system_rule'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    numAirports = Column(Integer, nullable=False)  # Số lượng sân bay
+    minFlightTime = Column(Float, nullable=False)  # Thời gian bay tối thiểu
+    maxIntermediatedAirports = Column(Integer, nullable=False)  # Số sân bay trung gian tối đa
+    minStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối thiểu tại các sân bay trung gian
+    maxStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối đa tại các sân bay trung gian
+    ticketSaleTime = Column(Time, nullable=False)  # Thời gian bắt đầu bán vé
+    ticketBookingTime = Column(Time, nullable=False)  # Thời gian bắt đầu đặt vé
 
     def __str__(self):
         return self.userName

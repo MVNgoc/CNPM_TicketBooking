@@ -22,11 +22,7 @@ def load_list_of_ticket_step():
 
 def auth_user(username, password):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    user = Account.query.filter_by(userName=username.strip(), password=password).first()
-    if user:
-        return user
-    else:
-        return 'login_failed'
+    return Account.query.filter_by(userName=username.strip(), password=password).first()
 
 
 def get_user_by_username(id):
