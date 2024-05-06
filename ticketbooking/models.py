@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey, Float, DateTime, Enum, Time
+from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey, Float, DateTime, Enum, Time, LargeBinary
 from sqlalchemy.orm import relationship
 from ticketbooking import db, app
 from enum import Enum as UserEnum
@@ -102,6 +102,7 @@ class Invoice(db.Model):
     paymentAmount = Column(Float, nullable=False)
     paymentStatus = Column(Enum('Pending', 'Paid', 'Cancelled', name='payment_status'))
     paymentMethod = Column(Enum('BankTransfer', 'Cash', name='payment_method'))
+    transferImage = Column(LargeBinary)
     paymentTime = Column(DateTime)
 
     customer = relationship(Customer)
