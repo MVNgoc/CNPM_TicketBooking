@@ -4,160 +4,132 @@
 
 {% block content %}
 
-{% if current_user.is_authenticated %}
-<div>
-    <h1 class="mt-5" style="text-align: center;">Welcome {{ current_user.userName }}</h1>
-</div>
-
-<div class="d-flex container justify-content-around session-style">
-    <img src="../static/images/home.png" alt="home" style="height: 800px;">
-</div>
-
-
-{% else %}
-
-<div class="d-flex container justify-content-around session-style">
+    {% if current_user.is_authenticated %}
     <div>
+        <h1 class="mt-5" style="text-align: center;">Welcome {{ current_user.userName }}</h1>
+    </div>
+
+    <div class="d-flex container justify-content-around session-style">
         <img src="../static/images/home.png" alt="home" style="height: 800px;">
     </div>
+    {% else %}
+    <div class="d-flex container justify-content-around session-style">
+        <div>
+            <img src="../static/images/home.png" alt="home" style="height: 800px;">
+        </div>
 
-    <div class="center-item-style gap-4">
-        <button type="button" class="btn-custom" style="width: auto; font-weight: 700; min-width: 160px;" data-bs-toggle="modal" data-bs-target="#popupFormModal1">
-            <p>Đăng nhập</p>
-            <div class="arrow-wrapper">
-                <div class="arrow"></div>
-            </div>
-        </button>
+        <div class="center-item-style gap-4">
+            <button type="button" class="btn-custom" style="width: auto; font-weight: 700; min-width: 160px;"
+                    data-bs-toggle="modal" data-bs-target="#popupFormModal1">
+                <p>Đăng nhập</p>
+                <div class="arrow-wrapper">
+                    <div class="arrow"></div>
+                </div>
+            </button>
 
-        <button type="button" class="btn-custom" style="width: auto; font-weight: 700; min-width: 160px;" data-bs-toggle="modal" data-bs-target="#popupFormModal2">
-            <p>Đăng ký</p>
-            <div class="arrow-wrapper">
-                <div class="arrow"></div>
-            </div>
-        </button>
+            <button type="button" class="btn-custom" style="width: auto; font-weight: 700; min-width: 160px;"
+                    data-bs-toggle="modal" data-bs-target="#popupFormModal2">
+                <p>Đăng ký</p>
+                <div class="arrow-wrapper">
+                    <div class="arrow"></div>
+                </div>
+            </button>
 
-        <!-- Modal Form 1 -->
-        <div class="modal fade" id="popupFormModal1" tabindex="-1" aria-labelledby="popupFormModalLabel1"
-             aria-hidden="true">
-            <div class="modal-dialog d-flex align-items-center" style="height: 100%;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="popupFormModalLabel1" style="font-weight: 700;">Đăng nhập</h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" action="/" class="card p-4 was-validated">
-                            <div class="mb-3">
-                                <label for="username" class="form-label" style="font-weight: 700;">Tên đăng
-                                    nhập:</label>
-                                <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập"
-                                       name="username" required>
-                                <div class="valid-feedback"></div>
-                                <div class="invalid-feedback">Vui lòng điền tên đăng nhập.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="pwd" class="form-label" style="font-weight: 700;">Mật khẩu:</label>
-                                <input type="password" class="form-control" id="pwd" placeholder="Mật khẩu"
-                                       name="pswd"
-                                       required>
-                                <div class="valid-feedback"></div>
-                                <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
-                            </div>
-                            <p class="text-danger" style="font-weight: 700;">Tên đăng nhập hoặc mật khẩu không
-                                đúng!</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal"
-                                        style="width: 150px; font-weight: 700;">Đóng
-                                </button>
-                                <button type="submit" class="btn btn-success mt-3"
-                                        style="width: 150px; font-weight: 700;">
-                                    Đăng nhập
-                                </button>
-                            </div>
-                        </form>
+            <!-- Modal Form 1 -->
+            <div class="modal fade" id="popupFormModal1" tabindex="-1" aria-labelledby="popupFormModalLabel1"
+                 aria-hidden="true">
+                <div class="modal-dialog d-flex align-items-center" style="height: 100%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="popupFormModalLabel1" style="font-weight: 700;">Đăng nhập</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="/" class="card p-4 was-validated">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label" style="font-weight: 700;">Tên đăng
+                                        nhập:</label>
+                                    <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập"
+                                           name="username" required>
+                                    <div class="valid-feedback"></div>
+                                    <div class="invalid-feedback">Vui lòng điền tên đăng nhập.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pwd" class="form-label" style="font-weight: 700;">Mật khẩu:</label>
+                                    <input type="password" class="form-control" id="pwd" placeholder="Mật khẩu"
+                                           name="pswd"
+                                           required>
+                                    <div class="valid-feedback"></div>
+                                    <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+                                </div>
+                                {% if error_code %}
+                                <p class="text-danger" style="font-weight: 700;">Tên đăng nhập hoặc mật khẩu không
+                                    đúng!</p>
+                                {% endif %}
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal"
+                                            style="width: 150px; font-weight: 700;">Đóng
+                                    </button>
+                                    <button type="submit" class="btn btn-success mt-3"
+                                            style="width: 150px; font-weight: 700;">
+                                        Đăng nhập
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Modal Form 2 -->
-        <div class="modal fade" id="popupFormModal2" tabindex="-1" aria-labelledby="popupFormModalLabel2"
-             aria-hidden="true">
-            <div class="modal-dialog d-flex align-items-center" style="height: 100%;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="popupFormModalLabel2" style="font-weight: 700;">Đăng ký</h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" action="/register" class="card p-4">
-                            <div class="mb-3 was-validated">
-                                <label for="username" class="form-label" style="font-weight: 700;">Tên đăng
-                                    nhập:</label>
-                                <input type="text" class="form-control" id="username2" placeholder="Tên đăng nhập"
-                                       name="username" required>
-                                <div class="valid-feedback"></div>
-                                <div class="invalid-feedback">Vui lòng điền tên đăng nhập.</div>
-                            </div>
-                            <div class="mb-3 was-validated">
-                                <label for="passwordInput" class="form-label" style="font-weight: 700;">Mật
-                                    khẩu:</label>
-                                <input type="password" class="form-control" id="passwordInput" placeholder="Mật khẩu"
-                                       name="passwordInput"
-                                       required>
-                                <div class="valid-feedback"></div>
-                                <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirmPasswordInput" class="form-label" style="font-weight: 700;">Nhập lại
-                                    mật khẩu:</label>
-                                <input type="password" class="form-control" id="confirmPasswordInput"
-                                       placeholder="Nhập lại mật khẩu" name="confirmPasswordInput">
-                                <div id="passwordHelpBlock" class="form-text"></div>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal"
-                                        style="width: 150px; font-weight: 700;">Đóng
-                                </button>
-                                <button type="submit" class="btn btn-success mt-3"
-                                        style="width: 150px; font-weight: 700;" id="submitButton" disabled>Đăng ký
-                                </button>
-                            </div>
-
-                            <script>
-                                var passwordInput = document.getElementById('passwordInput');
-                                var confirmPasswordInput = document.getElementById('confirmPasswordInput');
-                                var passwordHelpBlock = document.getElementById('passwordHelpBlock');
-                                var submitButton = document.getElementById('submitButton');
-
-                                confirmPasswordInput.addEventListener('input', function() {
-                                    if (passwordInput.value === confirmPasswordInput.value) {
-                                        passwordHelpBlock.textContent = 'Mật khẩu trùng khớp';
-                                        passwordHelpBlock.classList.remove('text-danger');
-                                        passwordHelpBlock.classList.add('text-success');
-                                        submitButton.removeAttribute('disabled');
-                                    } else {
-                                        passwordHelpBlock.textContent = 'Mật khẩu không trùng khớp';
-                                        passwordHelpBlock.classList.remove('text-success');
-                                        passwordHelpBlock.classList.add('text-danger');
-                                            submitButton.setAttribute('disabled', 'disabled');
-                                    }
-                                });
-
-                                // Lắng nghe sự kiện khi form được submit
-                                document.getElementById('registerForm').addEventListener('submit', function(event) {
-                                // Ngăn chặn hành vi mặc định của form (tải lại trang)
-                                event.preventDefault();
-                                alert('Đăng ký thành công!');
-                                });
-                            </script>
-                        </form>
+            <!-- Modal Form 2 -->
+            <div class="modal fade" id="popupFormModal2" tabindex="-1" aria-labelledby="popupFormModalLabel2"
+                 aria-hidden="true">
+                <div class="modal-dialog d-flex align-items-center" style="height: 100%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="popupFormModalLabel2" style="font-weight: 700;">Đăng ký</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="/register" class="card p-4">
+                                <div class="mb-3 was-validated">
+                                    <label for="username" class="form-label" style="font-weight: 700;">Tên đăng
+                                        nhập:</label>
+                                    <input type="text" class="form-control" id="username2" placeholder="Tên đăng nhập"
+                                           name="username" required>
+                                    <div class="valid-feedback"></div>
+                                    <div class="invalid-feedback">Vui lòng điền tên đăng nhập.</div>
+                                </div>
+                                <div class="mb-3 was-validated">
+                                    <label for="passwordInput" class="form-label" style="font-weight: 700;">Mật
+                                        khẩu:</label>
+                                    <input type="password" class="form-control" id="passwordInput" placeholder="Mật khẩu"
+                                           name="passwordInput"
+                                           required>
+                                    <div class="valid-feedback"></div>
+                                    <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPasswordInput" class="form-label" style="font-weight: 700;">Nhập lại
+                                        mật khẩu:</label>
+                                    <input type="password" class="form-control" id="confirmPasswordInput"
+                                           placeholder="Nhập lại mật khẩu" name="confirmPasswordInput">
+                                    <div id="passwordHelpBlock" class="form-text"></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal"
+                                            style="width: 150px; font-weight: 700;">Đóng
+                                    </button>
+                                    <button type="submit" class="btn btn-success mt-3"
+                                            style="width: 150px; font-weight: 700;" id="submitButton" disabled>Đăng ký
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-{% endif %}
+    {% endif %}
 {% endblock %}
