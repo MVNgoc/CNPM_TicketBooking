@@ -5,8 +5,14 @@
 {% block content %}
 
 {% if current_user.is_authenticated %}
+<div>
+    <h1 class="mt-5" style="text-align: center;">Welcome {{ current_user.userName }}</h1>
+</div>
 
-<h1>Welcome {{ current_user.userName }}</h1>
+<div class="d-flex container justify-content-around session-style">
+    <img src="../static/images/home.png" alt="home" style="height: 800px;">
+</div>
+
 
 {% else %}
 
@@ -16,19 +22,14 @@
     </div>
 
     <div class="center-item-style gap-4">
-        <!-- Button to trigger first modal form -->
-        <button type="button" class="btn-custom" style="width: auto; font-weight: 700; min-width: 160px;"
-                data-bs-toggle="modal"
-                data-bs-target="#popupFormModal1">
+        <button type="button" class="btn-custom" style="width: auto; font-weight: 700; min-width: 160px;" data-bs-toggle="modal" data-bs-target="#popupFormModal1">
             <p>Đăng nhập</p>
             <div class="arrow-wrapper">
                 <div class="arrow"></div>
             </div>
         </button>
-        <!-- Button to trigger second modal form -->
-        <button type="button" class="btn-custom" style="width: auto; font-weight: 700; min-width: 160px;"
-                data-bs-toggle="modal"
-                data-bs-target="#popupFormModal2">
+
+        <button type="button" class="btn-custom" style="width: auto; font-weight: 700; min-width: 160px;" data-bs-toggle="modal" data-bs-target="#popupFormModal2">
             <p>Đăng ký</p>
             <div class="arrow-wrapper">
                 <div class="arrow"></div>
@@ -91,7 +92,8 @@
                     <div class="modal-body">
                         <form method="post" action="/register" class="card p-4">
                             <div class="mb-3 was-validated">
-                                <label for="username" class="form-label" style="font-weight: 700;">Tên đăng nhập:</label>
+                                <label for="username" class="form-label" style="font-weight: 700;">Tên đăng
+                                    nhập:</label>
                                 <input type="text" class="form-control" id="username2" placeholder="Tên đăng nhập"
                                        name="username" required>
                                 <div class="valid-feedback"></div>
@@ -118,38 +120,27 @@
                                         style="width: 150px; font-weight: 700;">Đóng
                                 </button>
                                 <button type="submit" class="btn btn-success mt-3"
-                                        style="width: 150px; font-weight: 700;" id="submitButton" disabled>
-                                    Đăng ký
+                                        style="width: 150px; font-weight: 700;" id="submitButton" disabled>Đăng ký
                                 </button>
                             </div>
 
-                            <!-- JavaScript Bundle with Popper -->
-                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
                             <script>
-                                // Lấy các element cần thiết
                                 var passwordInput = document.getElementById('passwordInput');
                                 var confirmPasswordInput = document.getElementById('confirmPasswordInput');
                                 var passwordHelpBlock = document.getElementById('passwordHelpBlock');
                                 var submitButton = document.getElementById('submitButton');
 
-                                // Lắng nghe sự kiện khi người dùng nhập vào trường nhập lại mật khẩu
                                 confirmPasswordInput.addEventListener('input', function() {
-                                    // So sánh giá trị của hai trường mật khẩu
                                     if (passwordInput.value === confirmPasswordInput.value) {
-                                    // Nếu trùng khớp, hiển thị thông báo mật khẩu trùng khớp và đặt lớp CSS cho phù hợp
-                                    passwordHelpBlock.textContent = 'Mật khẩu trùng khớp';
-                                    passwordHelpBlock.classList.remove('text-danger');
-                                    passwordHelpBlock.classList.add('text-success');
-                                    // Kích hoạt nút Đăng ký
-                                    submitButton.removeAttribute('disabled');
-                                } else {
-                                    // Nếu không trùng khớp, hiển thị thông báo mật khẩu không trùng khớp và đặt lớp CSS cho phù hợp
-                                    passwordHelpBlock.textContent = 'Mật khẩu không trùng khớp';
-                                    passwordHelpBlock.classList.remove('text-success');
-                                    passwordHelpBlock.classList.add('text-danger');
-                                    // Vô hiệu hóa nút Đăng ký
-                                    submitButton.setAttribute('disabled', 'disabled');
+                                        passwordHelpBlock.textContent = 'Mật khẩu trùng khớp';
+                                        passwordHelpBlock.classList.remove('text-danger');
+                                        passwordHelpBlock.classList.add('text-success');
+                                        submitButton.removeAttribute('disabled');
+                                    } else {
+                                        passwordHelpBlock.textContent = 'Mật khẩu không trùng khớp';
+                                        passwordHelpBlock.classList.remove('text-success');
+                                        passwordHelpBlock.classList.add('text-danger');
+                                            submitButton.setAttribute('disabled', 'disabled');
                                     }
                                 });
 
@@ -157,8 +148,6 @@
                                 document.getElementById('registerForm').addEventListener('submit', function(event) {
                                 // Ngăn chặn hành vi mặc định của form (tải lại trang)
                                 event.preventDefault();
-
-                                // Thực hiện xử lý form ở đây (ví dụ: gửi dữ liệu)
                                 alert('Đăng ký thành công!');
                                 });
                             </script>
@@ -167,8 +156,6 @@
                 </div>
             </div>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     </div>
 </div>
 
