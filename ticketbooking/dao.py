@@ -1,6 +1,6 @@
 import json
 from ticketbooking import app, login, db
-from models import Account
+from models import Account, Customer, Ticket, Invoice
 import hashlib
 from sqlalchemy.exc import IntegrityError
 
@@ -52,3 +52,7 @@ def register_user(user_name, password):
     except IntegrityError as e:
         db.session.rollback()
         return 'create_account_false'
+
+
+def load_list_of_ticket():
+    return Invoice.query.All()
