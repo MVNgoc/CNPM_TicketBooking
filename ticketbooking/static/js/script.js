@@ -30,19 +30,21 @@ window.onload = function() {
     var passwordHelpBlock = document.getElementById('passwordHelpBlock');
     var submitButton = document.getElementById('submitButton');
 
-    confirmPasswordInput.addEventListener('input', function() {
-        if (passwordInput.value === confirmPasswordInput.value) {
-            passwordHelpBlock.textContent = 'Mật khẩu trùng khớp';
-            passwordHelpBlock.classList.remove('text-danger');
-            passwordHelpBlock.classList.add('text-success');
-            submitButton.removeAttribute('disabled');
-        } else {
-            passwordHelpBlock.textContent = 'Mật khẩu không trùng khớp';
-            passwordHelpBlock.classList.remove('text-success');
-            passwordHelpBlock.classList.add('text-danger');
-                submitButton.setAttribute('disabled', 'disabled');
-        }
-    });
+    if(confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', function() {
+            if (passwordInput.value === confirmPasswordInput.value) {
+                passwordHelpBlock.textContent = 'Mật khẩu trùng khớp';
+                passwordHelpBlock.classList.remove('text-danger');
+                passwordHelpBlock.classList.add('text-success');
+                submitButton.removeAttribute('disabled');
+            } else {
+                passwordHelpBlock.textContent = 'Mật khẩu không trùng khớp';
+                passwordHelpBlock.classList.remove('text-success');
+                passwordHelpBlock.classList.add('text-danger');
+                    submitButton.setAttribute('disabled', 'disabled');
+            }
+        });
+    }
 
     let register_form = document.getElementById('registerForm')
     if(register_form) {
@@ -67,4 +69,44 @@ window.onload = function() {
         });
         myModal.show();
     }
+
+    // JS disabled những ngày trong quá khứ - datepicker
+    var today = new Date();
+    var todayStr = today.toISOString().split('T')[0];
+    var datePicker = document.getElementById('Date_of_department');
+
+    if(datePicker) {
+        datePicker.setAttribute('min', todayStr);
+
+        datePicker.addEventListener('input', function() {
+          var selectedDate = new Date(datePicker.value);
+          if (selectedDate < today) {
+            datePicker.value = todayStr;
+          }
+        });
+    }
+
+    // JS disabled những ngày trong quá khứ & không được chọn ngày về không được nhỏ hơn ngày đi - datepicker
+    let departure_date = document.getElementById("departureDate")
+    let return_date = document.getElementById("returnDate")
+    // Disable past dates in departureDate
+    var today = new Date().toISOString().split('T')[0];
+
+    if(departure_date) {
+        departure_date.setAttribute('min', today);
+
+        // Disable past dates in returnDate and set min date based on departureDate
+        departure_date.addEventListener('change', function() {
+            document.getElementById("returnDate").setAttribute('min', this.value);
+        });
+    }
+
+    // Validate returnDate not before departureDate
+    document.getElementById("submitBtn").addEventListener('click', function() {
+        var departureDate = new Date(document.getElementById("departureDate").value);
+        var returnDate = new Date(document.getElementById("returnDate").value);
+        if (returnDate < departureDate) {
+            return false; // Prevent form submission
+        }
+    });
 };

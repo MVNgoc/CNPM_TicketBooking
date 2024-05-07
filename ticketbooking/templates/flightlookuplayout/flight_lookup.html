@@ -22,7 +22,7 @@
             </nav>
             <div class="tab-content p-3 border bg-light" id="nav-tabContent">
                 <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <form action="/flight-lookup/select-flight">
+                    <form method="post" action="/flight-lookup/select-flight">
                         <div class="mb-3 mt-3 was-validated" style="width = 800px;">
                             <label for="departure_point" class="form-label">Điểm đi</label>
                             <input class="form-control" list="departure_point_list_one_way" name="departure_point"
@@ -49,29 +49,14 @@
                         </div>
                         <div class="mb-3 was-validated">
                             <label for="Date_of_department" class="form-label">Ngày đi</label>
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <input type="date" class="form-control" id="Date_of_department" required>
                             </div>
-                            <script>
-                                var today = new Date();
-                                var todayStr = today.toISOString().split('T')[0];
-                                var datePicker = document.getElementById('Date_of_department');
-                                datePicker.setAttribute('min', todayStr);
-
-                                datePicker.addEventListener('input', function() {
-                                  var selectedDate = new Date(datePicker.value);
-                                  if (selectedDate < today) {
-                                    datePicker.value = todayStr;
-                                  }
-                                });
-                            </script>
                         </div>
                         <div class="mb-3 was-validated">
                             <label for="quantity_one_way" class="form-label">Số lượng</label>
                             <input class="form-control" style="width: 50%;" name="quantity" id="quantity_one_way"
                                    type="number" min="1" required>
-                            <div class="valid-feedback"></div>
-                            <div class="invalid-feedback">Vui lòng nhập số.</div>
                         </div>
                         <button type="submit" class="btn btn-success"
                                 style="border-radius: 10px; font-weight: 600;">Tìm kiếm
@@ -79,7 +64,7 @@
                     </form>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <form action="/flight-lookup">
+                    <form method="post" action="/flight-lookup/select-flight">
                         <div class="mb-3 mt-3 was-validated">
                             <label for="departure_point" class="form-label">Điểm đi</label>
                             <input class="form-control" list="departure_point_list" name="departure_point"
@@ -106,46 +91,21 @@
                         </div>
                         <div class="mb-3 was-validated">
                             <label for="departureDate" class="form-label">Ngày đi</label>
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <input type="date" class="form-control" id="departureDate" required>
                             </div>
                         </div>
                         <div class="mb-3 was-validated">
                             <label for="returnDate" class="form-label">Ngày về</label>
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <input type="date" class="form-control" id="returnDate" required>
                             </div>
                         </div>
-
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                // Disable past dates in departureDate
-                                var today = new Date().toISOString().split('T')[0];
-                                document.getElementById("departureDate").setAttribute('min', today);
-
-                                // Disable past dates in returnDate and set min date based on departureDate
-                                document.getElementById("departureDate").addEventListener('change', function() {
-                                    document.getElementById("returnDate").setAttribute('min', this.value);
-                                });
-
-                                // Validate returnDate not before departureDate
-                                document.getElementById("submitBtn").addEventListener('click', function() {
-                                    var departureDate = new Date(document.getElementById("departureDate").value);
-                                    var returnDate = new Date(document.getElementById("returnDate").value);
-                                    if (returnDate < departureDate) {
-                                        return false; // Prevent form submission
-                                    }
-                                });
-                            });
-                        </script>
-
                         <div class="mb-3 was-validated">
                             <label for="quantity" class="form-label">Số lượng</label>
                             <input class="form-control" style="width: 50%;" name="quantity" id="quantity" type="number"
                                    min="1"
                                    required>
-                            <div class="valid-feedback"></div>
-                            <div class="invalid-feedback">Vui lòng nhập số.</div>
                         </div>
                         <button type="submit" class="btn btn-success"
                                 style="border-radius: 10px; font-weight: 600;">Tìm kiếm

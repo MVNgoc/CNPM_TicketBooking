@@ -64,6 +64,11 @@ def select_flight():
                            bookticketstep=bookticketstep)
 
 
+# @app.route('/flight-lookup/select-flight', methods=['post'])
+# def process_select_flight():
+#
+
+
 @app.route('/flight-lookup/passengers')
 def passengers():
     path = request.path
