@@ -54,5 +54,10 @@ def register_user(user_name, password):
         return 'create_account_false'
 
 
-def load_list_of_ticket():
-    return Invoice.query.All()
+def load_list_of_ticket(kw=None):
+    query = Invoice.query
+
+    if kw:
+        query = query.filter(Invoice.invoiceID.contains(kw))
+
+    return query.all()
