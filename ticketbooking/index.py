@@ -52,7 +52,9 @@ def logout():
 def flight_lookup():
     path = request.path
     categories = dao.load_categories()
-    return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path)
+    list_airports = dao.load_list_of_airports()
+    return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+                           list_airports=list_airports)
 
 
 @app.route('/flight-lookup/select-flight')
@@ -64,9 +66,34 @@ def select_flight():
                            bookticketstep=bookticketstep)
 
 
-# @app.route('/flight-lookup/select-flight', methods=['post'])
-# def process_select_flight():
-#
+@app.route('/flight-lookup/select-flight', methods=['post'])
+def process_select_flight():
+    path = request.path
+    categories = dao.load_categories()
+    bookticketstep = dao.load_book_ticket_step()
+
+    departure_point = request.form.get('departure_point').split('-')[0]
+    destination = request.form.get('destination').split('-')[0]
+    date_of_department = request.form['date_of_department']
+    quantity = request.form.get('quantity')
+    type_ticket = request.form.get('type_ticket')
+    returnDate = ''
+    return_flight_list = ''
+
+    route = dao.load_route_of_airports(departure_point, destination)
+    return_route = dao.load_route_of_airports(destination, departure_point)
+
+    if type_ticket == 'two-way':
+        returnDate = request.form['returnDate']
+        return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)
+
+    flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
+
+    print('flight_list:', flight_list)
+    print('return_flight_list', return_flight_list)
+
+    return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
 
 
 @app.route('/flight-lookup/passengers')

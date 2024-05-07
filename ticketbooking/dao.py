@@ -1,8 +1,9 @@
 import json
 from ticketbooking import app, login, db
-from models import Account, Customer, Ticket, Invoice
+from models import Account, Invoice, Airport, Route, Flight
 import hashlib
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import cast, Date
 
 
 def load_categories():
@@ -55,4 +56,17 @@ def register_user(user_name, password):
 
 
 def load_list_of_ticket():
-    return Invoice.query.All()
+    return Invoice.query.all()
+
+
+def load_list_of_airports():
+    return Airport.query.all()
+
+
+def load_route_of_airports(departure_point, destination):
+    return Route.query.filter_by(departureAirportID=departure_point, arrivalAirportID=destination).first()
+
+
+def load_flight_of_airports(routeID, time):
+    return Flight.query.filter_by(routeID=routeID).filter(
+        cast(Flight.departureTime, Date) == time).all()

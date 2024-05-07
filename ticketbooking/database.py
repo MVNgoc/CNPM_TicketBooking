@@ -24,28 +24,28 @@ def add_sample_data():
     route6 = Route(routeID='R006', routeName='HC-HCMC', departureAirportID='HUI', arrivalAirportID='TSN')
 
     flight1 = Flight(flightID='F001', routeID='R001',
-                     departureTime=datetime.strptime('2024-4-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-4-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+                     departureTime=datetime.strptime('2024-5-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
     flight2 = Flight(flightID='F002', routeID='R001',
-                     departureTime=datetime.strptime('2024-4-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-4-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+                     departureTime=datetime.strptime('2024-5-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
     flight3 = Flight(flightID='F003', routeID='R001',
-                     departureTime=datetime.strptime('2024-4-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-4-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+                     departureTime=datetime.strptime('2024-5-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
     flight4 = Flight(flightID='F004', routeID='R002',
-                     departureTime=datetime.strptime('2024-4-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-4-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+                     departureTime=datetime.strptime('2024-5-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
     flight5 = Flight(flightID='F005', routeID='R002',
-                     departureTime=datetime.strptime('2024-4-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-4-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+                     departureTime=datetime.strptime('2024-5-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
     flight6 = Flight(flightID='F006', routeID='R002',
-                     departureTime=datetime.strptime('2024-4-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-4-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+                     departureTime=datetime.strptime('2024-5-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
 
     seat_class1 = SeatClass(classID='SC001', className='First Class', maxCheckedWeight=32, maxCarryOnWeight=10)
