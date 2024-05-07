@@ -62,7 +62,7 @@
                                     <div class="valid-feedback"></div>
                                     <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
                                 </div>
-                                {% if error_code %}
+                                {% if error_code == 'login_failed' %}
                                 <p class="text-danger" style="font-weight: 700;">Tên đăng nhập hoặc mật khẩu không
                                     đúng!</p>
                                 {% endif %}
@@ -132,4 +132,5 @@
         </div>
     </div>
     {% endif %}
+
 {% endblock %}

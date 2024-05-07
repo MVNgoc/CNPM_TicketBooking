@@ -16,11 +16,11 @@ def process_login():
     username = request.form.get('username')
     password = request.form.get('pswd')
     u = dao.auth_user(username=username, password=password)
-    if u:
+    if u == 'login_failed':
+        return render_template('index.html', error_code=u)
+    else:
         login_user(user=u)
         return redirect('/flight-lookup')
-    else:
-        return redirect('/')
 
 
 @app.route('/register', methods=['post'])
@@ -110,7 +110,8 @@ def pay_ticket():
     path = request.path
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
-    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path, bookticketstep=bookticketstep)
+    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
 
 
 if __name__ == '__main__':
