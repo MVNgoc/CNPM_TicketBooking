@@ -4,6 +4,8 @@ from ticketbooking import db, app
 from enum import Enum as UserEnum
 from flask_login import UserMixin
 
+
+
 transit_airports_routes = Table(
     'transit_airports_routes',
     db.metadata,
@@ -17,7 +19,6 @@ class Airport(db.Model):
     locationCity = Column(String(50))
     locationCountry = Column(String(50))
     capacity = Column(Integer)
-
     routes = relationship('Route', secondary=transit_airports_routes, back_populates='airports')
 
 class Route(db.Model):
@@ -102,7 +103,7 @@ class Employee(db.Model):
     birthDate= Column(DateTime)
     employeeRole = Column(Enum('Employee', 'Admin', name='role_enum'))
 
-class Account(db.Model):
+class Account(db.Model,UserMixin):
     __tablename__ = 'account'
     userName = Column(String(50), primary_key=True)
     password = Column(String(20))
