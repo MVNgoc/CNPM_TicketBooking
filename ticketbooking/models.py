@@ -1,10 +1,8 @@
-from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey, Float, DateTime, Enum
+from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey, Float, DateTime, Enum, Time, LargeBinary
 from sqlalchemy.orm import relationship
 from ticketbooking import db, app
 from enum import Enum as UserEnum
 from flask_login import UserMixin
-
-
 
 transit_airports_routes = Table(
     'transit_airports_routes',
@@ -12,101 +10,130 @@ transit_airports_routes = Table(
     Column('airport_id', String(10), ForeignKey('airport.airportID'), primary_key=True),
     Column('route_id', String(10), ForeignKey('route.routeID'), primary_key=True)
 )
+
+
 class Airport(db.Model):
     __tablename__ = 'airport'
-    airportID= Column(String(10), primary_key= True)
-    airportName = Column(String(100), nullable= False)
+    airportID = Column(String(10), primary_key=True)
+    airportName = Column(String(100), nullable=False)
     locationCity = Column(String(50))
     locationCountry = Column(String(50))
     capacity = Column(Integer)
+
     routes = relationship('Route', secondary=transit_airports_routes, back_populates='airports')
+
 
 class Route(db.Model):
     __tablename__ = 'route'
-    routeID = Column(String(10), primary_key= True)
+    routeID = Column(String(10), primary_key=True)
     routeName = Column(String(50))
     departureAirportID = Column(String(10), ForeignKey(Airport.airportID), nullable=False)
     arrivalAirportID = Column(String(10), ForeignKey(Airport.airportID), nullable=False)
 
     airports = relationship('Airport', secondary=transit_airports_routes, back_populates='routes')
 
+
 class Flight(db.Model):
     __tablename__ = 'flight'
-    flightID = Column(String(15), primary_key= True)
-    routeID = Column(String(10), ForeignKey(Route.routeID),nullable=False)
+    flightID = Column(String(15), primary_key=True)
+    routeID = Column(String(10), ForeignKey(Route.routeID), nullable=False)
     departureTime = Column(DateTime)
     arrivalTime = Column(DateTime)
     numOf1stClassSeat = Column(Integer)
     numOf2ndClassSeat = Column(Integer)
-    flightStatus = Column(Enum('Scheduled','Dalayed', 'Cancelled', 'Completed', name='flight_status'))
+    flightStatus = Column(Enum('Scheduled', 'Delayed', 'Cancelled', 'Completed', name='flight_status'))
     availableSeats = Column(Integer)
 
     route = relationship(Route)
+
+
 class SeatClass(db.Model):
+    __tablename__ = 'seat_class'
     classID = Column(String(10), primary_key=True)
     className = Column(String(50))
     maxCheckedWeight = Column(Integer)
-    maxCarryOnWeight= Column(Integer)
+    maxCarryOnWeight = Column(Integer)
+
 
 class Price(db.Model):
-    priceID = Column(String(10),primary_key=True)
-    flightID = Column(String(15),ForeignKey(Flight.flightID),nullable=False)
-    classID = Column(String(10),ForeignKey(SeatClass.classID),nullable=False)
+    __tablename__ = 'price'
+    priceID = Column(String(10), primary_key=True)
+    flightID = Column(String(15), ForeignKey(Flight.flightID), nullable=False)
+    classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)
     price = Column(Float)
 
     flight = relationship(Flight)
     seat_class = relationship(SeatClass)
 
+
 class Customer(db.Model):
     __tablename__ = 'customer'
     customerID = Column(String(10), primary_key=True)
-    customerName = Column(String(50),nullable=False)
-    gender = Column(Enum('Male', 'Female', name= 'customer_gender'))
+    customerName = Column(String(50), nullable=False)
+    gender = Column(Enum('Male', 'Female', name='customer_gender'))
     birthDate = Column(DateTime)
-    idNumber= Column(Integer,nullable=False)
-    phoneNumber = Column(Integer,nullable=False)
+    idNumber = Column(Integer, nullable=False)
+    phoneNumber = Column(Integer, nullable=False)
+
 
 class Ticket(db.Model):
     __tablename__ = 'ticket'
-    ticketID = Column(Integer, primary_key=True,autoincrement=True)
-    invoiceID = Column(Integer, ForeignKey('invoice.invoiceID'),nullable=False)
-    customerID = Column(String(10), ForeignKey(Customer.customerID),nullable=False)
-    flightID = Column(String(15), ForeignKey(Flight.flightID),nullable=False)
-    classID = Column(String(10), ForeignKey(SeatClass.classID),nullable=False)
-    priceID = Column(String(10), ForeignKey(Price.priceID),nullable=False)
-    paid = Column(Boolean, default=False)
-    bookingTime = Column(DateTime)
+    ticketID = Column(Integer, primary_key=True, autoincrement=True)
+    invoiceID = Column(Integer, ForeignKey('invoice.invoiceID'), nullable=False)
+    customerID = Column(String(10), ForeignKey(Customer.customerID), nullable=False)
+    accountID = Column(Integer, ForeignKey('account.id'), nullable=False)
+    flightID = Column(String(15), ForeignKey(Flight.flightID), nullable=False)
+    classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)
+    priceID = Column(String(10), ForeignKey(Price.priceID), nullable=False)
+
 
     customer = relationship(Customer)
     flight = relationship(Flight)
     seat_class = relationship(SeatClass)
     price = relationship(Price)
-
-
-class Invoice(db.Model):
-    __tablename__ = 'invoice'
-    invoiceID = Column(Integer, primary_key=True, autoincrement=True)
-    customerID = Column(String(10), ForeignKey(Customer.customerID),nullable=False)
-    paymentAmount = Column(Float,nullable=False)
-    paymentStatus = Column(Enum('Pending', 'Paid', 'Cancelled', name='payment_status'))
-    paymentMethod = Column(Enum( 'BankTransfer', 'Cash', name='payment_method'))
-    paymentTime = Column(DateTime)
-
-    customer = relationship(Customer)
-    tickets = relationship(Ticket, backref='invoice')
+    account = relationship("Account")
 
 
 class Employee(db.Model):
     __tablename__ = 'employee'
-    employeeID = Column(String(10),primary_key=True)
+    employeeID = Column(String(10), primary_key=True)
     employeeName = Column(String(50))
-    birthDate= Column(DateTime)
+    birthDate = Column(DateTime)
     employeeRole = Column(Enum('Employee', 'Admin', name='role_enum'))
 
-class Account(db.Model,UserMixin):
+
+class Account(db.Model, UserMixin):
     __tablename__ = 'account'
-    userName = Column(String(50), primary_key=True)
-    password = Column(String(20))
-    userRole = Column(Enum('Customer','Employee','Admin', name='userrole_enum'))
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    userName = Column(String(50), unique=True)
+    password = Column(String(1000))
+    userRole = Column(Enum('Customer', 'Employee', 'Admin', name='userrole_enum'))
+    def __str__(self):
+        return self.userName
 
+class Invoice(db.Model):
+    __tablename__ = 'invoice'
+    invoiceID = Column(Integer, primary_key=True, autoincrement=True)
+    accountID = Column(Integer,ForeignKey(Account.id), nullable=False)
+    paymentAmount = Column(Float, nullable=False)
+    paymentStatus = Column(Enum('Pending', 'Paid', 'Cancelled', name='payment_status'))
+    paymentMethod = Column(Enum('BankTransfer', 'Cash', name='payment_method'))
+    transferImage = Column(LargeBinary)
+    paymentTime = Column(DateTime)
 
+    tickets = relationship(Ticket, backref='invoice')
+    account = relationship(Account)
+
+class SystemRule(db.Model):
+    __tablename__ = 'system_rule'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    numAirports = Column(Integer, nullable=False)  # Số lượng sân bay
+    minFlightTime = Column(Float, nullable=False)  # Thời gian bay tối thiểu
+    maxIntermediatedAirports = Column(Integer, nullable=False)  # Số sân bay trung gian tối đa
+    minStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối thiểu tại các sân bay trung gian
+    maxStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối đa tại các sân bay trung gian
+    ticketSaleTime = Column(Time, nullable=False)  # Thời gian bắt đầu bán vé
+    ticketBookingTime = Column(Time, nullable=False)  # Thời gian bắt đầu đặt vé
+
+    def __str__(self):
+        return self.userName
