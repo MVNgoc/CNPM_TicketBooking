@@ -61,4 +61,10 @@ window.onload = function() {
         });
         myModal.show();
     }
+    else if(errorCode == 'account_already_exists' || errorCode == 'create_account_false') {
+        var myModal = new bootstrap.Modal(document.getElementById('popupFormModal2'), {
+            keyboard: false
+        });
+        myModal.show();
+    }
 };

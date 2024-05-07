@@ -29,11 +29,9 @@ def process_register():
     password = request.form.get('passwordInput')
     u = dao.register_user(user_name=username, password=password)
     if u == 'account_already_exists':
-        print('Tài khoản đã tồn tại')
-        return redirect('/')
+        return render_template('index.html', error_code=u)
     elif u == 'create_account_false':
-        print('Tạo tài khoản không thành công')
-        return redirect('/')
+        return render_template('index.html', error_code=u)
     else:
         login_user(user=u)
         return redirect('/flight-lookup')

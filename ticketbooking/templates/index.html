@@ -116,6 +116,14 @@
                                            placeholder="Nhập lại mật khẩu" name="confirmPasswordInput">
                                     <div id="passwordHelpBlock" class="form-text"></div>
                                 </div>
+
+                                <p class="text-danger" style="font-weight: 700;">
+                                    {% if error_code == 'account_already_exists' %}
+                                        Tên đăng nhập đã tồn tại!
+                                    {% elif error_code == 'create_account_false' %}
+                                        Đăng ký ta khoản thất bại. Vui lòng thử lại!
+                                    {% endif %}
+                                </p>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal"
                                             style="width: 150px; font-weight: 700;">Đóng
