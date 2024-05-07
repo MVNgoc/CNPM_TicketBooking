@@ -109,7 +109,9 @@ def passengers():
 def tickets_booked():
     path = request.path
     categories = dao.load_categories()
-    return render_template('listofticket/tickets_booked.html', categories=categories, path=path)
+    kw = request.args.get('keyword')
+    invoice = dao.load_list_of_ticket(kw=kw)
+    return render_template('listofticket/tickets_booked.html', categories=categories, path=path, invoice=invoice)
 
 
 @app.route('/tickets-booked/tickets-booked-details')
