@@ -61,21 +61,20 @@ def add_sample_data():
                          birthDate=datetime.strptime('1997-4-6 00:00:00', '%Y-%m-%d %H:%M:%S'), idNumber=123456789,
                          phoneNumber=987654321)
 
-    invoice1 = Invoice(invoiceID=1, customerID='C001', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice1 = Invoice(invoiceID=1, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-18 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice2 = Invoice(invoiceID=2, customerID='C001', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice2 = Invoice(invoiceID=2, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-19 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice3 = Invoice(invoiceID=3, customerID='C001', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice3 = Invoice(invoiceID=3, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-20 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice4 = Invoice(invoiceID=4, customerID='C002', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice4 = Invoice(invoiceID=4, accountID = '2', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-20 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice5 = Invoice(invoiceID=5, customerID='C002', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice5 = Invoice(invoiceID=5, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-22 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice6 = Invoice(invoiceID=6, customerID='C002', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice6 = Invoice(invoiceID=6, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-23 16:30:00', '%Y-%m-%d %H:%M:%S'))
 
-    ticket1 = Ticket(invoiceID=1, customerID='C001', accountID='1', flightID='F001', classID='SC001', priceID='P001',
-                     bookingTime=datetime.strptime('2024-4-18 16:30:00', '%Y-%m-%d %H:%M:%S'), paid=True)
+    ticket1 = Ticket(invoiceID=1, customerID='C001', accountID='1', flightID='F001', classID='SC001', priceID='P001')
 
     employee1 = Employee(employeeID='E001', employeeName='Jane Smith',
                          birthDate=datetime.strptime('1996-7-17 00:00:00', '%Y-%m-%d %H:%M:%S'), employeeRole='Admin')

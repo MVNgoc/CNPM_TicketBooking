@@ -85,28 +85,13 @@ class Ticket(db.Model):
     flightID = Column(String(15), ForeignKey(Flight.flightID), nullable=False)
     classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)
     priceID = Column(String(10), ForeignKey(Price.priceID), nullable=False)
-    paid = Column(Boolean, default=False)
-    bookingTime = Column(DateTime)
+
 
     customer = relationship(Customer)
     flight = relationship(Flight)
     seat_class = relationship(SeatClass)
     price = relationship(Price)
     account = relationship("Account")
-
-
-class Invoice(db.Model):
-    __tablename__ = 'invoice'
-    invoiceID = Column(Integer, primary_key=True, autoincrement=True)
-    customerID = Column(String(10), ForeignKey(Customer.customerID), nullable=False)
-    paymentAmount = Column(Float, nullable=False)
-    paymentStatus = Column(Enum('Pending', 'Paid', 'Cancelled', name='payment_status'))
-    paymentMethod = Column(Enum('BankTransfer', 'Cash', name='payment_method'))
-    transferImage = Column(LargeBinary)
-    paymentTime = Column(DateTime)
-
-    customer = relationship(Customer)
-    tickets = relationship(Ticket, backref='invoice')
 
 
 class Employee(db.Model):
@@ -125,6 +110,19 @@ class Account(db.Model, UserMixin):
     userRole = Column(Enum('Customer', 'Employee', 'Admin', name='userrole_enum'))
     def __str__(self):
         return self.userName
+
+class Invoice(db.Model):
+    __tablename__ = 'invoice'
+    invoiceID = Column(Integer, primary_key=True, autoincrement=True)
+    accountID = Column(Integer,ForeignKey(Account.id), nullable=False)
+    paymentAmount = Column(Float, nullable=False)
+    paymentStatus = Column(Enum('Pending', 'Paid', 'Cancelled', name='payment_status'))
+    paymentMethod = Column(Enum('BankTransfer', 'Cash', name='payment_method'))
+    transferImage = Column(LargeBinary)
+    paymentTime = Column(DateTime)
+
+    tickets = relationship(Ticket, backref='invoice')
+    account = relationship(Account)
 
 class SystemRule(db.Model):
     __tablename__ = 'system_rule'
