@@ -63,6 +63,7 @@ def load_list_of_ticket(kw=None):
 
     return query.all()
 
+
 def load_list_of_airports():
     return Airport.query.all()
 
