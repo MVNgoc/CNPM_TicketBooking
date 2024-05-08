@@ -63,7 +63,7 @@ def get_account_id(username):
         return None
 
 
-def load_list_of_ticket(account_id=None, kw=None):
+def load_list_of_ticket(account_id=None, kw=None, page=None):
     if current_user.is_authenticated:
         account_id = current_user.id
         query = Invoice.query.filter_by(accountID=account_id)
