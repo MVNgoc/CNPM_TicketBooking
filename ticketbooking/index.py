@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect
 from flask import Flask
 from ticketbooking import app, dao, login
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 
 
 @app.route('/')
@@ -20,7 +20,7 @@ def process_login():
         return render_template('index.html', error_code=u)
     else:
         login_user(user=u)
-        return redirect('/flight-lookup')
+        return redirect('/')
 
 
 @app.route('/register', methods=['post'])
@@ -34,7 +34,7 @@ def process_register():
         return render_template('index.html', error_code=u)
     else:
         login_user(user=u)
-        return redirect('/flight-lookup')
+        return redirect('/')
 
 
 @login.user_loader
@@ -110,8 +110,12 @@ def tickets_booked():
     path = request.path
     categories = dao.load_categories()
     kw = request.args.get('keyword')
-    invoice = dao.load_list_of_ticket(kw=kw)
-    return render_template('listofticket/tickets_booked.html', categories=categories, path=path, invoice=invoice)
+    account_id = current_user.id
+    invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
+
+    print('invoice:', invoices)
+
+    return render_template('listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)
 
 
 @app.route('/tickets-booked/tickets-booked-details')
@@ -131,7 +135,7 @@ def login():
 
 
 @app.route('/register')
-def signin():
+def register():
     path = request.path
     categories = dao.load_categories()
     return render_template('register.html', categories=categories, path=path)

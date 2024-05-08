@@ -4,6 +4,7 @@ from models import Account, Invoice, Airport, Route, Flight
 import hashlib
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import cast, Date
+from flask_login import current_user
 
 
 def load_categories():
@@ -55,8 +56,19 @@ def register_user(user_name, password):
         return 'create_account_false'
 
 
-def load_list_of_ticket(kw=None):
-    query = Invoice.query
+def get_account_id(username):
+    if current_user.is_authenticated:
+        return current_user.id
+    else:
+        return None
+
+
+def load_list_of_ticket(account_id=None, kw=None):
+    if current_user.is_authenticated:
+        account_id = current_user.id
+        query = Invoice.query.filter_by(accountID=account_id)
+    else:
+        query = Invoice.query
 
     if kw:
         query = query.filter(Invoice.invoiceID.contains(kw))
