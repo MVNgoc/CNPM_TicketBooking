@@ -72,28 +72,35 @@ def process_select_flight():
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
 
-    departure_point = request.form.get('departure_point').split('-')[0]
-    destination = request.form.get('destination').split('-')[0]
+    departure_point = request.form.get('departure_point').split('-')
+    destination = request.form.get('destination').split('-')
     date_of_department = request.form['date_of_department']
     quantity = request.form.get('quantity')
     type_ticket = request.form.get('type_ticket')
-    returnDate = ''
     return_flight_list = ''
 
-    route = dao.load_route_of_airports(departure_point, destination)
-    return_route = dao.load_route_of_airports(destination, departure_point)
+    route = dao.load_route_of_airports(departure_point[0], destination[0])
+    return_route = dao.load_route_of_airports(destination[0], departure_point[0])
 
     if type_ticket == 'two-way':
         returnDate = request.form['returnDate']
-        return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)
+        if return_route:
+            return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)
+        else:
+            return_flight_list = []
 
-    flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
+    if route:
+        flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
+    else:
+        flight_list = []
 
     print('flight_list:', flight_list)
     print('return_flight_list', return_flight_list)
 
     return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep)
+                           bookticketstep=bookticketstep, flight_list=flight_list,
+                           return_flight_list=return_flight_list, type_ticket=type_ticket, quantity=quantity,
+                           departure_point=departure_point, destination=destination)
 
 
 @app.route('/flight-lookup/passengers')
@@ -112,8 +119,6 @@ def tickets_booked():
     kw = request.args.get('keyword')
     account_id = current_user.id
     invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
-
-    print('invoice:', invoices)
 
     return render_template('listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)
 

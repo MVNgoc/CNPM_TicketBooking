@@ -5,6 +5,7 @@ import hashlib
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import cast, Date
 from flask_login import current_user
+from datetime import datetime, timedelta, timezone
 
 
 def load_categories():
@@ -85,5 +86,11 @@ def load_route_of_airports(departure_point, destination):
 
 
 def load_flight_of_airports(routeID, time):
+    # Lấy thời gian hiện tại
+    current_time = datetime.now(timezone.utc)
+    # Xác định thời điểm cách đây 12 tiếng
+    twelve_hours_later = current_time + timedelta(hours=12)
+
     return Flight.query.filter_by(routeID=routeID).filter(
-        cast(Flight.departureTime, Date) == time).all()
+        cast(Flight.departureTime, Date) == time,
+        Flight.departureTime >= twelve_hours_later).all()
