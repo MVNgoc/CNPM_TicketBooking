@@ -12,7 +12,7 @@
         <input class="form-control me-2" name="keyword" style="width: 250px;" type="text" placeholder="Tìm mã hóa đơn">
         <button class="btn btn-primary" style="font-weight: 700;" type="submit">Tìm kiếm</button>
     </form>
-    {% if invoice %}
+    {% if invoices %}
     <table id="data-table" class=" table table-hover table-primary table-striped mt-3 shadow was-validated px-2">
         <thead class="table-dark">
         <tr>
@@ -24,9 +24,9 @@
         </tr>
         </thead>
         <tbody>
-        {% for index, invoice in enumerate(invoices) %}
+        {% for invoice in invoices %}
         <tr>
-            <th>{{ index + 1 }}</th>
+            <th>{{ loop.index }}</th>
             <td><a href="/tickets-booked/tickets-booked-details">{{ invoice.invoiceID }}</a></td>
             <td>{{ invoice.paymentTime }}</td>
             <td>{{ "{:,.1f}".format(invoice.paymentAmount) }}</td>
