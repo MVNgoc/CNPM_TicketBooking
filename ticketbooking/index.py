@@ -112,6 +112,15 @@ def passengers():
                            bookticketstep=bookticketstep)
 
 
+@app.route('/flight-lookup/pay-ticket')
+def pay_ticket():
+    path = request.path
+    categories = dao.load_categories()
+    bookticketstep = dao.load_book_ticket_step()
+    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
+
+
 @app.route('/tickets-booked')
 def tickets_booked():
     path = request.path
@@ -137,22 +146,6 @@ def login():
     path = request.path
     categories = dao.load_categories()
     return render_template('login.html', categories=categories, path=path)
-
-
-@app.route('/register')
-def register():
-    path = request.path
-    categories = dao.load_categories()
-    return render_template('register.html', categories=categories, path=path)
-
-
-@app.route('/flight-lookup/pay-ticket')
-def pay_ticket():
-    path = request.path
-    categories = dao.load_categories()
-    bookticketstep = dao.load_book_ticket_step()
-    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep)
 
 
 if __name__ == '__main__':

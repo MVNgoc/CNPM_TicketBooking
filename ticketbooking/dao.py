@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import cast, Date
 from flask_login import current_user
 from datetime import datetime, timedelta, timezone
+from sqlalchemy import desc
 
 
 def load_categories():
@@ -57,15 +58,9 @@ def register_user(user_name, password):
         return 'create_account_false'
 
 
-def get_account_id(username):
-    if current_user.is_authenticated:
-        return current_user.id
-    else:
-        return None
-
-
 def load_list_of_ticket(account_id=None, kw=None, page=None):
     if current_user.is_authenticated:
+    # Lấy mã hóa đơn theo user_id
         account_id = current_user.id
         query = Invoice.query.filter_by(accountID=account_id)
     else:
@@ -73,6 +68,9 @@ def load_list_of_ticket(account_id=None, kw=None, page=None):
 
     if kw:
         query = query.filter(Invoice.invoiceID.contains(kw))
+
+    # Sắp xếp theo thời gian tạo, từ mới nhất đến cũ nhất
+    query = query.order_by(desc(Invoice.paymentTime))
 
     return query.all()
 
