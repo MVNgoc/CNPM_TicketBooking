@@ -89,8 +89,9 @@ def add_sample_data():
                        userRole='Employee')
 
     system_rule = SystemRule(numAirports=2, minFlightTime=3.5, maxIntermediatedAirports=1, minStopoverTime=1.5,
-                             maxStopoverTime=4.0, ticketSaleTime=time(hour=8), ticketBookingTime=time(
-            hour=8))  # Thời gian bắt đầu bán vé từ 8 giờ sáng   # Thời gian bắt đầu đặt vé từ 8 giờ sáng
+                             maxStopoverTime=4.0, ticketSaleTime_Start=time(hour=8), ticketBookingTime_Start=time(
+            hour=8), ticketSaleTime_End=time(hour=17),  ticketBookingTime_End=time(
+            hour=23) )  # Thời gian bắt đầu bán vé từ 8 giờ sáng   # Thời gian bắt đầu đặt vé từ 8 giờ sáng
 
     db.session.add_all(
         [airport1, airport2, airport3, airport4, airport5, airport6,

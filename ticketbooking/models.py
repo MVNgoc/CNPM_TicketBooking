@@ -132,8 +132,10 @@ class SystemRule(db.Model):
     maxIntermediatedAirports = Column(Integer, nullable=False)  # Số sân bay trung gian tối đa
     minStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối thiểu tại các sân bay trung gian
     maxStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối đa tại các sân bay trung gian
-    ticketSaleTime = Column(Time, nullable=False)  # Thời gian bắt đầu bán vé
-    ticketBookingTime = Column(Time, nullable=False)  # Thời gian bắt đầu đặt vé
+    ticketSaleTime_Start= Column(Time, nullable=False)  # Thời gian bắt đầu bán vé
+    ticketBookingTime_Start= Column(Time, nullable=False)  # Thời gian bắt đầu đặt vé
+    ticketSaleTime_End = Column(Time, nullable=False)  # Thời gian kết thúc bán vé
+    ticketBookingTime_End= Column(Time, nullable=False)  # Thời gian kết thúc đặt vé
 
     def __str__(self):
         return self.userName
