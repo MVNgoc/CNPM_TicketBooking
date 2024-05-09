@@ -96,14 +96,14 @@
     </div>
 
     <div class="session-style container d-flex justify-content-between mt-5">
-        <form action="/action_page.php" class="card p-4 shadow was-validated mt-3" style="width: 800px; height: fit-content;">
+        <form method="post" enctype="multipart/form-data" action="/action_page.php" class="card p-4 shadow was-validated mt-3" style="width: 800px; height: fit-content;">
             <h2>Thông tin khách hàng</h2>
             <div class="tab-content p-3 border bg-light" id="nav-tabContent mt-3">
                 <div>
-                    <label for="username" class="form-label" style="font-weight: 700;">Họ và tên:</label>
-                    <input type="text" class="form-control" style="width:600px;" id="username"
+                    <label for="customerName" class="form-label" style="font-weight: 700;">Họ và tên:</label>
+                    <input type="text" class="form-control" style="width:600px;" id="customerName"
                            placeholder="Nhập họ và tên"
-                           name="username" required>
+                           name="customerName" required>
                     <div class="valid-feedback"></div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -111,15 +111,15 @@
                         <label for="sex" class="form-label" style="font-weight: 700;">Giới tính:</label>
                         <input class="form-control" style="width: 300px;" list="sex_list" name="sex" id="sex" required>
                         <datalist id="sex_list">
-                            <option value="Nam" label="Nam">
-                            <option value="Nữ" label="Nữ">
+                            <option value="Male" label="Nam">
+                            <option value="Female" label="Nữ">
                         </datalist>
                     </div>
                     <div class="mt-3">
-                        <label for="Date_of_birth" class="form-label" style="font-weight: 700;">Ngày sinh:</label>
-                        <input id="Date_of_birth" width="300" required/>
+                        <label for="birthDate" class="form-label" style="font-weight: 700;">Ngày sinh:</label>
+                        <input id="birthDate" width="300" required/>
                         <script>
-                            $('#Date_of_birth').datepicker({
+                            $('#birthDate').datepicker({
                                 uiLibrary: 'bootstrap5'
                             });
                         </script>
@@ -127,15 +127,15 @@
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div class="">
-                        <label for="username" class="form-label" style="font-weight: 700;">CMND/CCCD:</label>
-                        <input type="text" class="form-control" style="width:300px;" id="cccd"
-                               placeholder="Nhập CMND/CCCD" name="cccd" required>
+                        <label for="idNumber" class="form-label" style="font-weight: 700;">CMND/CCCD:</label>
+                        <input type="text" class="form-control" style="width:300px;" id="idNumber"
+                               placeholder="Nhập CMND/CCCD" name="idNumber" required>
                         <div class="valid-feedback"></div>
                     </div>
                     <div class="">
-                        <label for="username" class="form-label" style="font-weight: 700;">Số điện thoại:</label>
-                        <input type="text" class="form-control" style="width:300px;" id="phonenumber"
-                               placeholder="Nhập số điện thoại" name="phonenumber" required>
+                        <label for="phoneNumber" class="form-label" style="font-weight: 700;">Số điện thoại:</label>
+                        <input type="text" class="form-control" style="width:300px;" id="phoneNumber"
+                               placeholder="Nhập số điện thoại" name="phoneNumber" required>
                         <div class="valid-feedback"></div>
                     </div>
                 </div>
