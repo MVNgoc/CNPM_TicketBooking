@@ -1,0 +1,144 @@
+Index: ticketbooking/__init__.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from flask import Flask\nfrom flask_sqlalchemy import SQLAlchemy\nfrom urllib.parse import quote\nfrom flask_login import LoginManager\n\napp = Flask(__name__)\napp.config[\n    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:%s@localhost/flight_ticket_booking_system?charset=utf8mb4' % quote(\n    'TDtu288392200114@')\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True\napp.secret_key = '!@@!#@!#!@sdkjfasdadhadkhdjahdsaldha!@#!@#@!#@!'\n\ndb = SQLAlchemy(app=app)\n\nlogin = LoginManager(app)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ticketbooking/__init__.py b/ticketbooking/__init__.py
+--- a/ticketbooking/__init__.py	(revision 4df4038ec896a7005201056dd176b73e6dfd848b)
++++ b/ticketbooking/__init__.py	(date 1715191138699)
+@@ -3,6 +3,7 @@
+ from urllib.parse import quote
+ from flask_login import LoginManager
+ 
++
+ app = Flask(__name__)
+ app.config[
+     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:%s@localhost/flight_ticket_booking_system?charset=utf8mb4' % quote(
+Index: ticketbooking/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey, Float, DateTime, Enum, Time, LargeBinary\nfrom sqlalchemy.orm import relationship\nfrom ticketbooking import db, app\nfrom enum import Enum as UserEnum\nfrom flask_login import UserMixin\n\ntransit_airports_routes = Table(\n    'transit_airports_routes',\n    db.metadata,\n    Column('airport_id', String(10), ForeignKey('airport.airportID'), primary_key=True),\n    Column('route_id', String(10), ForeignKey('route.routeID'), primary_key=True)\n)\n\n\nclass Airport(db.Model):\n    __tablename__ = 'airport'\n    airportID = Column(String(10), primary_key=True)\n    airportName = Column(String(100), nullable=False)\n    locationCity = Column(String(50))\n    locationCountry = Column(String(50))\n    capacity = Column(Integer)\n\n    routes = relationship('Route', secondary=transit_airports_routes, back_populates='airports')\n\n\nclass Route(db.Model):\n    __tablename__ = 'route'\n    routeID = Column(String(10), primary_key=True)\n    routeName = Column(String(50))\n    departureAirportID = Column(String(10), ForeignKey(Airport.airportID), nullable=False)\n    arrivalAirportID = Column(String(10), ForeignKey(Airport.airportID), nullable=False)\n\n    airports = relationship('Airport', secondary=transit_airports_routes, back_populates='routes')\n\n\nclass Flight(db.Model):\n    __tablename__ = 'flight'\n    flightID = Column(String(15), primary_key=True)\n    routeID = Column(String(10), ForeignKey(Route.routeID), nullable=False)\n    departureTime = Column(DateTime)\n    arrivalTime = Column(DateTime)\n    numOf1stClassSeat = Column(Integer)\n    numOf2ndClassSeat = Column(Integer)\n    flightStatus = Column(Enum('Scheduled', 'Delayed', 'Cancelled', 'Completed', name='flight_status'))\n    availableSeats = Column(Integer)\n\n    route = relationship(Route)\n\n\nclass SeatClass(db.Model):\n    __tablename__ = 'seat_class'\n    classID = Column(String(10), primary_key=True)\n    className = Column(String(50))\n    maxCheckedWeight = Column(Integer)\n    maxCarryOnWeight = Column(Integer)\n\n\nclass Price(db.Model):\n    __tablename__ = 'price'\n    priceID = Column(String(10), primary_key=True)\n    flightID = Column(String(15), ForeignKey(Flight.flightID), nullable=False)\n    classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)\n    price = Column(Float)\n\n    flight = relationship(Flight)\n    seat_class = relationship(SeatClass)\n\n\nclass Customer(db.Model):\n    __tablename__ = 'customer'\n    customerID = Column(String(10), primary_key=True)\n    customerName = Column(String(50), nullable=False)\n    gender = Column(Enum('Male', 'Female', name='customer_gender'))\n    birthDate = Column(DateTime)\n    idNumber = Column(Integer, nullable=False)\n    phoneNumber = Column(Integer, nullable=False)\n\n\nclass Ticket(db.Model):\n    __tablename__ = 'ticket'\n    ticketID = Column(Integer, primary_key=True, autoincrement=True)\n    invoiceID = Column(Integer, ForeignKey('invoice.invoiceID'), nullable=False)\n    customerID = Column(String(10), ForeignKey(Customer.customerID), nullable=False)\n    accountID = Column(Integer, ForeignKey('account.id'), nullable=False)\n    flightID = Column(String(15), ForeignKey(Flight.flightID), nullable=False)\n    classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)\n    priceID = Column(String(10), ForeignKey(Price.priceID), nullable=False)\n\n\n    customer = relationship(Customer)\n    flight = relationship(Flight)\n    seat_class = relationship(SeatClass)\n    price = relationship(Price)\n    account = relationship(\"Account\")\n\n\nclass Employee(db.Model):\n    __tablename__ = 'employee'\n    employeeID = Column(String(10), primary_key=True)\n    employeeName = Column(String(50))\n    birthDate = Column(DateTime)\n    employeeRole = Column(Enum('Employee', 'Admin', name='role_enum'))\n\n\nclass Account(db.Model, UserMixin):\n    __tablename__ = 'account'\n    id = Column(Integer, autoincrement=True, primary_key=True)\n    userName = Column(String(50), unique=True)\n    password = Column(String(1000))\n    userRole = Column(Enum('Customer', 'Employee', 'Admin', name='userrole_enum'))\n    def __str__(self):\n        return self.userName\n\nclass Invoice(db.Model):\n    __tablename__ = 'invoice'\n    invoiceID = Column(Integer, primary_key=True, autoincrement=True)\n    accountID = Column(Integer,ForeignKey(Account.id), nullable=False)\n    paymentAmount = Column(Float, nullable=False)\n    paymentStatus = Column(Enum('Pending', 'Paid', 'Cancelled', name='payment_status'))\n    paymentMethod = Column(Enum('BankTransfer', 'Cash', name='payment_method'))\n    transferImage = Column(LargeBinary)\n    paymentTime = Column(DateTime)\n\n    tickets = relationship(Ticket, backref='invoice')\n    account = relationship(Account)\n\nclass SystemRule(db.Model):\n    __tablename__ = 'system_rule'\n    id = Column(Integer, primary_key=True, autoincrement=True)\n    numAirports = Column(Integer, nullable=False)  # Số lượng sân bay\n    minFlightTime = Column(Float, nullable=False)  # Thời gian bay tối thiểu\n    maxIntermediatedAirports = Column(Integer, nullable=False)  # Số sân bay trung gian tối đa\n    minStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối thiểu tại các sân bay trung gian\n    maxStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối đa tại các sân bay trung gian\n    ticketSaleTime = Column(Time, nullable=False)  # Thời gian bắt đầu bán vé\n    ticketBookingTime = Column(Time, nullable=False)  # Thời gian bắt đầu đặt vé\n\n    def __str__(self):\n        return self.userName\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ticketbooking/models.py b/ticketbooking/models.py
+--- a/ticketbooking/models.py	(revision 4df4038ec896a7005201056dd176b73e6dfd848b)
++++ b/ticketbooking/models.py	(date 1715191138701)
+@@ -8,7 +8,8 @@
+     'transit_airports_routes',
+     db.metadata,
+     Column('airport_id', String(10), ForeignKey('airport.airportID'), primary_key=True),
+-    Column('route_id', String(10), ForeignKey('route.routeID'), primary_key=True)
++    Column('route_id', String(10), ForeignKey('route.routeID'), primary_key=True),
++    extend_existing=True
+ )
+ 
+ 
+Index: ticketbooking/admin.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from wtforms.fields.simple import StringField\nfrom wtforms.validators import InputRequired\n\nfrom ticketbooking.models import Flight,Route,Account,Employee\nfrom ticketbooking import db, app\nfrom flask_admin import Admin, BaseView, expose\nfrom flask_admin.contrib.sqla import ModelView\n\n\nclass FlightView(ModelView):\n    def scaffold_form(self):\n        form_class= super(FlightView, self).scaffold_form()\n        form_class.flightID = StringField('Mã chuyến bay',validators=[InputRequired()])\n        form_class.routeID = StringField('Mã tuyến bay',validators=[InputRequired()])\n        return form_class\n\n    column_display_pk = True\n    column_searchable_list= ['flightID','routeID','flightStatus']\n    column_filters = ['flightStatus','arrivalTime','departureTime']\n    can_view_details = True\n    column_labels= {\n        'flightID': 'Mã chuyến bay',\n        'routeID':'Mã tuyến bay',\n        'departureTime':'Thời gian khởi hành',\n        'arrivalTime': 'Thời Gian Đến',\n        'numOf1stClassSeat':'Sô ghế hạng 1',\n        'numOf2ndClassSeat':'Số ghế hạng 2',\n        'flightStatus':'Tình trạng chuyến bay',\n        'availableSeats':'Ghế có sẵn'\n    }\nclass RouteView(ModelView):\n    def scaffold_form(self):\n        form_class= super(RouteView, self).scaffold_form()\n        form_class.flightID = StringField('Mã tuyến bay',validators=[InputRequired()])\n        form_class.departureAirportID = StringField('Sân bay đi',validators=[InputRequired()])\n        form_class.arrivalAirportID = StringField('Sân bay đến',validators=[InputRequired()])\n        return form_class\n\n    column_display_pk = True\n    column_filters = ['routeName']\n    can_view_details = True\n    column_labels={'routeName':'Tên Tuyến Bay',\n                   'routeID': 'Mã Tuyến Bay'}\n\nclass AccountView(ModelView):\n    def scaffold_form(self):\n        form_class= super(AccountView, self).scaffold_form()\n        form_class.userName = StringField('Tên người dùng',validators=[InputRequired()])\n        return form_class\n    column_display_pk = True\n    column_searchable_list = ['userName','userRole']\n    column_filters = ['userRole']\n    can_view_details = True\n    column_labels={\n        'userName':'Tên Người dùng',\n        'password':'Mật Khẩu',\n        'userRole':'Người Dùng'\n     }\nclass EmployeeView(ModelView):\n    def scaffold_form(self):\n        form_class= super(EmployeeView, self).scaffold_form()\n        form_class.employeeID = StringField('Mã nhân viên',validators=[InputRequired()])\n        return form_class\n    column_display_pk = True\n    column_searchable_list = ['employeeID','employeeName','employeeRole']\n    column_filters = ['employeeRole']\n    can_view_details = True\n    column_labels = {\n        'employeeID': 'Mã Nhân Viên',\n        'employeeName': 'Tên Nhân Viên',\n        'birthDate': 'Ngày sinh',\n        'employeeRole': 'Chức năng'\n    }\n\nclass StatsView(BaseView):\n    @expose('/')\n    def index(self):\n        return self.render('admin/stats.html')\n\nadmin = Admin (app=app, name='Quản Lý Chuyến Bay',template_mode='bootstrap4')\nadmin.add_view(FlightView(Flight,db.session, name='Chuyến Bay'))\nadmin.add_view(RouteView(Route,db.session, name='Tuyến Bay'))\nadmin.add_view(AccountView(Account,db.session, name ='Tài Khoản'))\nadmin.add_view(EmployeeView(Employee,db.session, name= 'Nhân Viên'))\nadmin.add_view(StatsView(name='Thống Kê'))
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ticketbooking/admin.py b/ticketbooking/admin.py
+--- a/ticketbooking/admin.py	(revision 4df4038ec896a7005201056dd176b73e6dfd848b)
++++ b/ticketbooking/admin.py	(date 1715191138703)
+@@ -5,6 +5,7 @@
+ from ticketbooking import db, app
+ from flask_admin import Admin, BaseView, expose
+ from flask_admin.contrib.sqla import ModelView
++from flask_login import current_user
+ 
+ 
+ class FlightView(ModelView):
+@@ -56,6 +57,9 @@
+         'password':'Mật Khẩu',
+         'userRole':'Người Dùng'
+      }
++
++    def is_accessible(self):
++        return current_user.is_authenticated
+ class EmployeeView(ModelView):
+     def scaffold_form(self):
+         form_class= super(EmployeeView, self).scaffold_form()
+@@ -81,5 +85,5 @@
+ admin.add_view(FlightView(Flight,db.session, name='Chuyến Bay'))
+ admin.add_view(RouteView(Route,db.session, name='Tuyến Bay'))
+ admin.add_view(AccountView(Account,db.session, name ='Tài Khoản'))
+-admin.add_view(EmployeeView(Employee,db.session, name= 'Nhân Viên'))
++admin.add_view(EmployeeView(Employee,db.session, name = 'Nhân Viên'))
+ admin.add_view(StatsView(name='Thống Kê'))
+\ No newline at end of file
+Index: ticketbooking/index.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from flask import render_template, request, redirect\nfrom flask import Flask\nfrom ticketbooking import app, dao, login\nfrom flask_login import login_user, logout_user, current_user\n\n\n@app.route('/')\ndef index():\n    path = request.path\n    categories = dao.load_categories()\n    return render_template('index.html', categories=categories, path=path)\n\n\n@app.route('/', methods=['post'])\ndef process_login():\n    username = request.form.get('username')\n    password = request.form.get('pswd')\n    u = dao.auth_user(username=username, password=password)\n    if u == 'login_failed':\n        return render_template('index.html', error_code=u)\n    else:\n        login_user(user=u)\n        return redirect('/')\n\n\n@app.route('/register', methods=['post'])\ndef process_register():\n    username = request.form.get('username')\n    password = request.form.get('passwordInput')\n    u = dao.register_user(user_name=username, password=password)\n    if u == 'account_already_exists':\n        return render_template('index.html', error_code=u)\n    elif u == 'create_account_false':\n        return render_template('index.html', error_code=u)\n    else:\n        login_user(user=u)\n        return redirect('/')\n\n\n@login.user_loader\ndef load_user(id):\n    return dao.get_user_by_username(id)\n\n\n@app.route('/logout')\ndef logout():\n    logout_user()\n    return redirect('/')\n\n\n@app.route('/flight-lookup')\ndef flight_lookup():\n    path = request.path\n    categories = dao.load_categories()\n    list_airports = dao.load_list_of_airports()\n    return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,\n                           list_airports=list_airports)\n\n\n@app.route('/flight-lookup/select-flight')\ndef select_flight():\n    path = request.path\n    categories = dao.load_categories()\n    bookticketstep = dao.load_book_ticket_step()\n    return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,\n                           bookticketstep=bookticketstep)\n\n\n@app.route('/flight-lookup/select-flight', methods=['post'])\ndef process_select_flight():\n    path = request.path\n    categories = dao.load_categories()\n    bookticketstep = dao.load_book_ticket_step()\n\n    departure_point = request.form.get('departure_point').split('-')\n    destination = request.form.get('destination').split('-')\n    date_of_department = request.form['date_of_department']\n    quantity = request.form.get('quantity')\n    type_ticket = request.form.get('type_ticket')\n    return_flight_list = ''\n\n    route = dao.load_route_of_airports(departure_point[0], destination[0])\n    return_route = dao.load_route_of_airports(destination[0], departure_point[0])\n\n    if type_ticket == 'two-way':\n        returnDate = request.form['returnDate']\n        if return_route:\n            return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)\n        else:\n            return_flight_list = []\n\n    if route:\n        flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)\n    else:\n        flight_list = []\n\n    print('flight_list:', flight_list)\n    print('return_flight_list', return_flight_list)\n\n    return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,\n                           bookticketstep=bookticketstep, flight_list=flight_list,\n                           return_flight_list=return_flight_list, type_ticket=type_ticket, quantity=quantity,\n                           departure_point=departure_point, destination=destination)\n\n\n@app.route('/flight-lookup/passengers')\ndef passengers():\n    path = request.path\n    categories = dao.load_categories()\n    bookticketstep = dao.load_book_ticket_step()\n    return render_template('flightlookuplayout/passengers.html', categories=categories, path=path,\n                           bookticketstep=bookticketstep)\n\n\n@app.route('/tickets-booked')\ndef tickets_booked():\n    path = request.path\n    categories = dao.load_categories()\n    kw = request.args.get('keyword')\n    account_id = current_user.id\n    invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)\n\n    return render_template('listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)\n\n\n@app.route('/tickets-booked/tickets-booked-details')\ndef tickets_booked_details():\n    path = request.path\n    categories = dao.load_categories()\n    listofticketstep = dao.load_list_of_ticket_step()\n    return render_template('listofticket/tickets_booked_details.html', categories=categories, path=path,\n                           listofticketstep=listofticketstep)\n\n\n@app.route('/login')\ndef login():\n    path = request.path\n    categories = dao.load_categories()\n    return render_template('login.html', categories=categories, path=path)\n\n\n@app.route('/register')\ndef register():\n    path = request.path\n    categories = dao.load_categories()\n    return render_template('register.html', categories=categories, path=path)\n\n\n@app.route('/flight-lookup/pay-ticket')\ndef pay_ticket():\n    path = request.path\n    categories = dao.load_categories()\n    bookticketstep = dao.load_book_ticket_step()\n    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,\n                           bookticketstep=bookticketstep)\n\n\nif __name__ == '__main__':\n    with app.app_context():\n        app.run(debug=True)\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ticketbooking/index.py b/ticketbooking/index.py
+--- a/ticketbooking/index.py	(revision 4df4038ec896a7005201056dd176b73e6dfd848b)
++++ b/ticketbooking/index.py	(date 1715191138709)
+@@ -2,7 +2,7 @@
+ from flask import Flask
+ from ticketbooking import app, dao, login
+ from flask_login import login_user, logout_user, current_user
+-
++from ticketbooking import admin
+ 
+ @app.route('/')
+ def index():
+@@ -139,6 +139,19 @@
+     return render_template('login.html', categories=categories, path=path)
+ 
+ 
++@app.route('/login_admin', methods=['post'])
++def admin_login():
++    username = request.form['username']
++    passwork = request.form['passwork']
++
++    user = dao.auth_user(username=username, passwork=passwork)
++    if user:
++        login_user(user=user)
++
++    return redirect('/admin')
++
++
++
+ @app.route('/register')
+ def register():
+     path = request.path
+Index: ticketbooking/templates/admin/index.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends 'admin/master.html' %}\n\n{% block body %}\n<h1 class=\"text-center text-info\"> QUẢN LÝ CHUYẾN BAY </h1>\n<form action=\"/action_page.php\">\n  <div class=\"mb-3 mt-3\">\n    <label for=\"username\" class=\"form-label\">Tên đăng nhập:</label>\n    <input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"Nhập tên đăng nhập\" name=\"username\">\n  </div>\n  <div class=\"mb-3\">\n    <label for=\"pwd\" class=\"form-label\">Mật khẩu:</label>\n    <input type=\"password\" class=\"form-control\" id=\"pwd\" placeholder=\"Nhập mật khẩu\" name=\"pswd\">\n  </div>\n  <button type=\"submit\" class=\"btn btn-primary\">Đăng nhập</button>\n</form>\n{% endblock %}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ticketbooking/templates/admin/index.html b/ticketbooking/templates/admin/index.html
+--- a/ticketbooking/templates/admin/index.html	(revision 4df4038ec896a7005201056dd176b73e6dfd848b)
++++ b/ticketbooking/templates/admin/index.html	(date 1715191138712)
+@@ -1,8 +1,11 @@
+ {% extends 'admin/master.html' %}
+ 
+ {% block body %}
++
++{% if current_user.is_authenticated %}
+ <h1 class="text-center text-info"> QUẢN LÝ CHUYẾN BAY </h1>
+-<form action="/action_page.php">
++{% else %}
++<form method="post" action="/login-admin">
+   <div class="mb-3 mt-3">
+     <label for="username" class="form-label">Tên đăng nhập:</label>
+     <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập" name="username">
+@@ -13,4 +16,7 @@
+   </div>
+   <button type="submit" class="btn btn-primary">Đăng nhập</button>
+ </form>
++
++{% endif %}
++
+ {% endblock %}
