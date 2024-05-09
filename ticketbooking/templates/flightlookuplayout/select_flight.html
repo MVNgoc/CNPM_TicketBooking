@@ -141,12 +141,12 @@
             </div>
             {% endif %}
         </div>
-        {% if type_ticket == 'one-way' and flight_list == [] %}
+        {% if type_ticket == 'one-way' and flight_list_format == [] %}
         <div class="text-center" style="margin-top: 100px;">
             <p class="active" style="font-size: 24px;">Không tìm thấy chuyến bay nào cho lựa chọn của bạn. Quay lại để
                 chọn ngày khác.</p>
         </div>
-        {% elif type_ticket == 'two-way' and (flight_list == [] or return_flight_list == []) %}
+        {% elif type_ticket == 'two-way' and (flight_list_format == [] or return_flight_list_format == []) %}
         <div class="text-center" style="margin-top: 100px;">
             <p class="active" style="font-size: 24px;">Không tìm thấy chuyến bay nào cho lựa chọn của bạn. Quay lại để
                 chọn ngày khác.</p>
@@ -155,7 +155,7 @@
 
         <div class="d-flex justify-content-between mt-3">
             <div style="width: 48%;">
-                {% if flight_list %}
+                {% if flight_list_format %}
                 <div class="d-flex">
                     <div class="ticket-title-box"></div>
                     <div class="ticket-title-box"
@@ -169,7 +169,7 @@
                 </div>
                 {% endif %}
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    {% for f in flight_list %}
+                    {% for f in flight_list_format %}
                     <div class="d-flex">
                         <div class="ticket-info-box">
                             <p>{{ f.flightID }}</p>
@@ -178,7 +178,11 @@
                         </div>
                         <div class="ticket-price-select">
                             {% if f.numOf1stClassSeat > 0 %}
-                            <p>5.900.000 VND</p>
+                            {% for p in f.price %}
+                            {% if p.classID == 'SC001' %}
+                            <p>{{ p.price }} VND</p>
+                            {% endif %}
+                            {% endfor %}
                             {% else %}
                             <div class="sold-out-ticket">
                                 <img src="https://www.vietjetair.com/static/media/noflight.cee84207.svg">
@@ -188,7 +192,11 @@
                         </div>
                         <div class="ticket-price-select">
                             {% if f.numOf2ndClassSeat > 0 %}
-                            <p>5.900.000 VND</p>
+                            {% for p in f.price %}
+                            {% if p.classID == 'SC002' %}
+                            <p>{{ p.price }} VND</p>
+                            {% endif %}
+                            {% endfor %}
                             {% else %}
                             <div class="sold-out-ticket">
                                 <img src="https://www.vietjetair.com/static/media/noflight.cee84207.svg">
@@ -202,7 +210,7 @@
             </div>
             {% if type_ticket == 'two-way' %}
             <div style="width: 48%;">
-                {% if return_flight_list %}
+                {% if return_flight_list_format %}
                 <div class="d-flex">
                     <div class="ticket-title-box"></div>
                     <div class="ticket-title-box"
@@ -216,7 +224,7 @@
                 </div>
                 {% endif %}
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    {% for f in return_flight_list %}
+                    {% for f in return_flight_list_format %}
                     <div class="d-flex">
                         <div class="ticket-info-box">
                             <p>{{ f.flightID }}</p>
@@ -225,7 +233,11 @@
                         </div>
                         <div class="ticket-price-select">
                             {% if f.numOf1stClassSeat > 0 %}
-                            <p>5.900.000 VND</p>
+                            {% for p in f.price %}
+                            {% if p.classID == 'SC001' %}
+                            <p>{{ p.price }} VND</p>
+                            {% endif %}
+                            {% endfor %}
                             {% else %}
                             <div class="sold-out-ticket">
                                 <img src="https://www.vietjetair.com/static/media/noflight.cee84207.svg">
@@ -235,7 +247,11 @@
                         </div>
                         <div class="ticket-price-select">
                             {% if f.numOf2ndClassSeat > 0 %}
-                            <p>5.900.000 VND</p>
+                            {% for p in f.price %}
+                            {% if p.classID == 'SC002' %}
+                            <p>{{ p.price }} VND</p>
+                            {% endif %}
+                            {% endfor %}
                             {% else %}
                             <div class="sold-out-ticket">
                                 <img src="https://www.vietjetair.com/static/media/noflight.cee84207.svg">
@@ -331,9 +347,9 @@
             <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span type="text"
                                                                                               style="font-size: 24px; font-weight: 700;">10,000,000 VND</span>
             </p>
-            {% if type_ticket == 'one-way' and flight_list %}
+            {% if type_ticket == 'one-way' and flight_list_format %}
             <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
-            {% elif type_ticket == 'two-way' and flight_list and return_flight_list %}
+            {% elif type_ticket == 'two-way' and flight_list_format and return_flight_list_format %}
             <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
             {% endif %}
         </div>

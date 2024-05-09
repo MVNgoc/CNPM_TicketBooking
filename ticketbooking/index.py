@@ -87,6 +87,8 @@ def process_select_flight():
     quantity = request.form.get('quantity')
     type_ticket = request.form.get('type_ticket')
     return_flight_list = ''
+    flight_list_format = []
+    return_flight_list_format = []
 
     route = dao.load_route_of_airports(departure_point[0], destination[0])
     return_route = dao.load_route_of_airports(destination[0], departure_point[0])
@@ -95,20 +97,46 @@ def process_select_flight():
         returnDate = request.form['returnDate']
         if return_route:
             return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)
+            for flight in return_flight_list:
+                price_ticket = dao.get_price_ticket(flight.flightID)
+                return_flight_list_format.append(
+                    {
+                        'flightID': flight.flightID,
+                        'routeID': flight.routeID,
+                        'departureTime': flight.departureTime,
+                        'arrivalTime': flight.arrivalTime,
+                        'numOf1stClassSeat': flight.numOf1stClassSeat,
+                        'numOf2ndClassSeat': flight.numOf2ndClassSeat,
+                        'flightStatus': flight.flightStatus,
+                        'availableSeats': flight.availableSeats,
+                        'price': price_ticket
+                    })
         else:
             return_flight_list = []
 
     if route:
         flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
+        for flight in flight_list:
+            price_ticket = dao.get_price_ticket(flight.flightID)
+            flight_list_format.append(
+                {
+                    'flightID': flight.flightID,
+                    'routeID': flight.routeID,
+                    'departureTime': flight.departureTime,
+                    'arrivalTime': flight.arrivalTime,
+                    'numOf1stClassSeat': flight.numOf1stClassSeat,
+                    'numOf2ndClassSeat': flight.numOf2ndClassSeat,
+                    'flightStatus': flight.flightStatus,
+                    'availableSeats': flight.availableSeats,
+                    'price': price_ticket
+                })
     else:
         flight_list = []
 
-    print('flight_list:', flight_list)
-    print('return_flight_list', return_flight_list)
-
     return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep, flight_list=flight_list,
-                           return_flight_list=return_flight_list, type_ticket=type_ticket, quantity=quantity,
+                           bookticketstep=bookticketstep, flight_list_format=flight_list_format,
+                           return_flight_list_format=return_flight_list_format, type_ticket=type_ticket,
+                           quantity=quantity,
                            departure_point=departure_point, destination=destination)
 
 

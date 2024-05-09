@@ -1,6 +1,6 @@
 import json
-from ticketbooking import app, login, db
-from models import Account, Invoice, Airport, Route, Flight, SystemRule
+from ticketbooking import app, db
+from models import Account, Invoice, Airport, Route, Flight, Price, SystemRule
 import hashlib
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import cast, Date
@@ -93,6 +93,9 @@ def load_flight_of_airports(routeID, time):
         cast(Flight.departureTime, Date) == time,
         Flight.departureTime >= twelve_hours_later).all()
 
+
+def get_price_ticket(flightID):
+    return Price.query.filter_by(flightID=flightID).all()
 
 def load_booking_time():
     current_time = datetime.now().time()
