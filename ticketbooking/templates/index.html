@@ -51,16 +51,12 @@
                                         nhập:</label>
                                     <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập"
                                            name="username" required>
-                                    <div class="valid-feedback"></div>
-                                    <div class="invalid-feedback">Vui lòng điền tên đăng nhập.</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="pwd" class="form-label" style="font-weight: 700;">Mật khẩu:</label>
                                     <input type="password" class="form-control" id="pwd" placeholder="Mật khẩu"
                                            name="pswd"
                                            required>
-                                    <div class="valid-feedback"></div>
-                                    <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
                                 </div>
                                 {% if error_code == 'login_failed' %}
                                 <p class="text-danger" style="font-weight: 700;">Tên đăng nhập hoặc mật khẩu không
@@ -97,8 +93,6 @@
                                         nhập:</label>
                                     <input type="text" class="form-control" id="username2" placeholder="Tên đăng nhập"
                                            name="username" required>
-                                    <div class="valid-feedback"></div>
-                                    <div class="invalid-feedback">Vui lòng điền tên đăng nhập.</div>
                                 </div>
                                 <div class="mb-3 was-validated">
                                     <label for="passwordInput" class="form-label" style="font-weight: 700;">Mật
@@ -106,8 +100,6 @@
                                     <input type="password" class="form-control" id="passwordInput" placeholder="Mật khẩu"
                                            name="passwordInput"
                                            required>
-                                    <div class="valid-feedback"></div>
-                                    <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="confirmPasswordInput" class="form-label" style="font-weight: 700;">Nhập lại
@@ -121,7 +113,7 @@
                                     {% if error_code == 'account_already_exists' %}
                                         Tên đăng nhập đã tồn tại!
                                     {% elif error_code == 'create_account_false' %}
-                                        Đăng ký ta khoản thất bại. Vui lòng thử lại!
+                                        Đăng ký tài khoản thất bại. Vui lòng thử lại!
                                     {% endif %}
                                 </p>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">

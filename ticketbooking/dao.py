@@ -1,6 +1,6 @@
 import json
 from ticketbooking import app, login, db
-from models import Account, Invoice, Airport, Route, Flight
+from models import Account, Invoice, Airport, Route, Flight, SystemRule
 import hashlib
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import cast, Date
@@ -58,9 +58,9 @@ def register_user(user_name, password):
         return 'create_account_false'
 
 
-def load_list_of_ticket(account_id=None, kw=None, page=None):
+def load_list_of_ticket(account_id=None, kw=None):
     if current_user.is_authenticated:
-    # Lấy mã hóa đơn theo user_id
+        # Lấy mã hóa đơn theo user_id
         account_id = current_user.id
         query = Invoice.query.filter_by(accountID=account_id)
     else:
@@ -92,3 +92,14 @@ def load_flight_of_airports(routeID, time):
     return Flight.query.filter_by(routeID=routeID).filter(
         cast(Flight.departureTime, Date) == time,
         Flight.departureTime >= twelve_hours_later).all()
+
+
+def load_booking_time():
+    current_time = datetime.now().time()
+    start_time = SystemRule.query.first().ticketBookingTime_Start
+    end_time = SystemRule.query.first().ticketBookingTime_End
+
+    if start_time <= current_time <= end_time:
+        return 'booking_time_true'
+    else:
+        return 'booking_time_false'

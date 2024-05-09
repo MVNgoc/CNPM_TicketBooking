@@ -1,3 +1,5 @@
+import datetime
+
 from flask import render_template, request, redirect
 from flask import Flask
 from ticketbooking import app, dao, login
@@ -53,8 +55,15 @@ def flight_lookup():
     path = request.path
     categories = dao.load_categories()
     list_airports = dao.load_list_of_airports()
-    return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
-                           list_airports=list_airports)
+    booking_allowed = dao.load_booking_time()
+    print('booking_allowed:', booking_allowed)
+    if booking_allowed == 'booking_time_true':
+        return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+                               list_airports=list_airports, booking_allowed=booking_allowed)
+
+    if booking_allowed == 'booking_time_false':
+        return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+                               error_code=booking_allowed)
 
 
 @app.route('/flight-lookup/select-flight')
