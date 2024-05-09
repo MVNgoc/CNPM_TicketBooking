@@ -2,7 +2,7 @@ from flask import render_template, request, redirect
 from flask import Flask
 from ticketbooking import app, dao, login
 from flask_login import login_user, logout_user, current_user
-
+from ticketbooking import admin
 
 @app.route('/')
 def index():
@@ -22,6 +22,25 @@ def process_login():
         login_user(user=u)
         return redirect('/')
 
+@app.route('/login-admin', methods=['post'])
+def admin_login():
+    username = request.form['username']
+    password = request.form['pswd']
+
+    user = dao.auth_user(username=username, password = password)
+    if user == 'login_failed':
+        return render_template('index.html', error_code=user)
+    else:
+        login_user(user=user)
+    return redirect('/admin')
+
+
+@app.context_processor
+def common_atstr():
+    categories = dao.load_categories()
+    return {
+        'categories' : categories
+    }
 
 @app.route('/register', methods=['post'])
 def process_register():
@@ -112,15 +131,6 @@ def passengers():
                            bookticketstep=bookticketstep)
 
 
-@app.route('/flight-lookup/pay-ticket')
-def pay_ticket():
-    path = request.path
-    categories = dao.load_categories()
-    bookticketstep = dao.load_book_ticket_step()
-    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep)
-
-
 @app.route('/tickets-booked')
 def tickets_booked():
     path = request.path
@@ -146,6 +156,22 @@ def login():
     path = request.path
     categories = dao.load_categories()
     return render_template('login.html', categories=categories, path=path)
+
+
+@app.route('/register')
+def register():
+    path = request.path
+    categories = dao.load_categories()
+    return render_template('register.html', categories=categories, path=path)
+
+
+@app.route('/flight-lookup/pay-ticket')
+def pay_ticket():
+    path = request.path
+    categories = dao.load_categories()
+    bookticketstep = dao.load_book_ticket_step()
+    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
 
 
 if __name__ == '__main__':

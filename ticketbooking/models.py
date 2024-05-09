@@ -8,7 +8,8 @@ transit_airports_routes = Table(
     'transit_airports_routes',
     db.metadata,
     Column('airport_id', String(10), ForeignKey('airport.airportID'), primary_key=True),
-    Column('route_id', String(10), ForeignKey('route.routeID'), primary_key=True)
+    Column('route_id', String(10), ForeignKey('route.routeID'), primary_key=True),
+    extend_existing=True
 )
 
 
@@ -21,7 +22,7 @@ class Airport(db.Model):
     capacity = Column(Integer)
 
     routes = relationship('Route', secondary=transit_airports_routes, back_populates='airports')
-
+    __table_args__ = {'extend_existing': True}
 
 class Route(db.Model):
     __tablename__ = 'route'
@@ -31,7 +32,7 @@ class Route(db.Model):
     arrivalAirportID = Column(String(10), ForeignKey(Airport.airportID), nullable=False)
 
     airports = relationship('Airport', secondary=transit_airports_routes, back_populates='routes')
-
+    __table_args__ = {'extend_existing': True}
 
 class Flight(db.Model):
     __tablename__ = 'flight'
@@ -45,7 +46,7 @@ class Flight(db.Model):
     availableSeats = Column(Integer)
 
     route = relationship(Route)
-
+    __table_args__ = {'extend_existing': True}
 
 class SeatClass(db.Model):
     __tablename__ = 'seat_class'
@@ -53,7 +54,7 @@ class SeatClass(db.Model):
     className = Column(String(50))
     maxCheckedWeight = Column(Integer)
     maxCarryOnWeight = Column(Integer)
-
+    __table_args__ = {'extend_existing': True}
 
 class Price(db.Model):
     __tablename__ = 'price'
@@ -64,7 +65,7 @@ class Price(db.Model):
 
     flight = relationship(Flight)
     seat_class = relationship(SeatClass)
-
+    __table_args__ = {'extend_existing': True}
 
 class Customer(db.Model):
     __tablename__ = 'customer'
@@ -74,7 +75,7 @@ class Customer(db.Model):
     birthDate = Column(DateTime)
     idNumber = Column(Integer, nullable=False)
     phoneNumber = Column(Integer, nullable=False)
-
+    __table_args__ = {'extend_existing': True}
 
 class Ticket(db.Model):
     __tablename__ = 'ticket'
@@ -92,7 +93,7 @@ class Ticket(db.Model):
     seat_class = relationship(SeatClass)
     price = relationship(Price)
     account = relationship("Account")
-
+    __table_args__ = {'extend_existing': True}
 
 class Employee(db.Model):
     __tablename__ = 'employee'
@@ -100,14 +101,15 @@ class Employee(db.Model):
     employeeName = Column(String(50))
     birthDate = Column(DateTime)
     employeeRole = Column(Enum('Employee', 'Admin', name='role_enum'))
-
+    __table_args__ = {'extend_existing': True}
 
 class Account(db.Model, UserMixin):
     __tablename__ = 'account'
     id = Column(Integer, autoincrement=True, primary_key=True)
     userName = Column(String(50), unique=True)
-    password = Column(String(1000))
+    password = Column(String(1000), nullable=True)
     userRole = Column(Enum('Customer', 'Employee', 'Admin', name='userrole_enum'))
+    __table_args__ = {'extend_existing': True}
     def __str__(self):
         return self.userName
 
@@ -123,6 +125,7 @@ class Invoice(db.Model):
 
     tickets = relationship(Ticket, backref='invoice')
     account = relationship(Account)
+    __table_args__ = {'extend_existing': True}
 
 class SystemRule(db.Model):
     __tablename__ = 'system_rule'
@@ -136,6 +139,7 @@ class SystemRule(db.Model):
     ticketBookingTime_Start= Column(Time, nullable=False)  # Thời gian bắt đầu đặt vé
     ticketSaleTime_End = Column(Time, nullable=False)  # Thời gian kết thúc bán vé
     ticketBookingTime_End= Column(Time, nullable=False)  # Thời gian kết thúc đặt vé
+    __table_args__ = {'extend_existing': True}
 
     def __str__(self):
         return self.userName

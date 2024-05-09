@@ -81,12 +81,10 @@ def add_sample_data():
     employee2 = Employee(employeeID='E002', employeeName='Jesscica Huynh',
                          birthDate=datetime.strptime('2000-1-1 00:00:00', '%Y-%m-%d %H:%M:%S'), employeeRole='Employee')
 
-    account1 = Account(id=1, userName='JohnDoe64', password=str(hashlib.md5("johndoe64@@".encode('utf-8')).hexdigest()),
-                       userRole='Customer')
-    account2 = Account(id=2, userName='E001', password=str(hashlib.md5("admine001.,".encode('utf-8')).hexdigest()),
-                       userRole='Admin')
-    account3 = Account(id=3, userName='E002', password=str(hashlib.md5("employeeE002..".encode('utf-8')).hexdigest()),
-                       userRole='Employee')
+
+    account1 = Account(id=1, userName='JohnDoe64', password=str(hashlib.md5("johndoe64@@".encode('utf-8')).hexdigest()),userRole='Customer')
+    account2 = Account(id=2, userName='E001', password=str(hashlib.md5("admine001.,".encode('utf-8')).hexdigest()),userRole='Admin')
+    account3 = Account(id=3, userName='E002', password=str(hashlib.md5("employeeE002..".encode('utf-8')).hexdigest()),userRole='Employee')
 
     system_rule = SystemRule(numAirports=2, minFlightTime=3.5, maxIntermediatedAirports=1, minStopoverTime=1.5,
                              maxStopoverTime=4.0, ticketSaleTime_Start=time(hour=8), ticketBookingTime_Start=time(
