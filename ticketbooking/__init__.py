@@ -4,11 +4,10 @@ from urllib.parse import quote
 from flask_login import LoginManager
 # import cloudinary
 
-
 app = Flask(__name__)
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:%s@localhost/flight_ticket_booking_system?charset=utf8mb4' % quote(
-    'admin@123')
+    '123456')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.secret_key = '!@@!#@!#!@sdkjfasdadhadkhdjahdsaldha!@#!@#@!#@!'
 
