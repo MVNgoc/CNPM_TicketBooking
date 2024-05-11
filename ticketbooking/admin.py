@@ -5,7 +5,7 @@ from ticketbooking.models import Flight,Route,Account,Employee
 from ticketbooking import db, app
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
-
+from flask_login import current_user
 
 class FlightView(ModelView):
     def scaffold_form(self):
@@ -56,6 +56,9 @@ class AccountView(ModelView):
         'password':'Mật Khẩu',
         'userRole':'Người Dùng'
      }
+
+    def is_accessible(self):
+        return current_user.is_authenticated
 class EmployeeView(ModelView):
     def scaffold_form(self):
         form_class= super(EmployeeView, self).scaffold_form()
@@ -72,6 +75,7 @@ class EmployeeView(ModelView):
         'employeeRole': 'Chức năng'
     }
 
+
 class StatsView(BaseView):
     @expose('/')
     def index(self):
@@ -81,5 +85,5 @@ admin = Admin (app=app, name='Quản Lý Chuyến Bay',template_mode='bootstrap4
 admin.add_view(FlightView(Flight,db.session, name='Chuyến Bay'))
 admin.add_view(RouteView(Route,db.session, name='Tuyến Bay'))
 admin.add_view(AccountView(Account,db.session, name ='Tài Khoản'))
-admin.add_view(EmployeeView(Employee,db.session, name= 'Nhân Viên'))
+admin.add_view(EmployeeView(Employee,db.session, name = 'Nhân Viên'))
 admin.add_view(StatsView(name='Thống Kê'))

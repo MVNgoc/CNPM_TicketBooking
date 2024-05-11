@@ -102,11 +102,52 @@ window.onload = function() {
     }
 
     // Validate returnDate not before departureDate
-    document.getElementById("submitBtn").addEventListener('click', function() {
-        var departureDate = new Date(document.getElementById("departureDate").value);
-        var returnDate = new Date(document.getElementById("returnDate").value);
-        if (returnDate < departureDate) {
-            return false; // Prevent form submission
-        }
-    });
+    let button_submit = document.getElementById("submitBtn")
+    if(button_submit) {
+        document.getElementById("submitBtn").addEventListener('click', function() {
+            var departureDate = new Date(document.getElementById("departureDate").value);
+            var returnDate = new Date(document.getElementById("returnDate").value);
+            if (returnDate < departureDate) {
+                return false; // Prevent form submission
+            }
+        });
+    }
+
+    // JS xử lý hiển thị tiền khi chọn vé
+    let ticket_price_item = document.getElementsByClassName("ticket_price_item")
+    let ticket_price_return_item = document.getElementsByClassName("ticket_price_return_item")
+
+    let ticket_price = document.getElementById("ticket_price");
+    let return_ticket_price = document.getElementById("return_ticket_price");
+
+    let total_price_ticket = document.getElementById("total_price_ticket");
+
+    let ticket_price_value = 0;
+    let return_ticket_price_value = 0;
+
+    let ticket_price_input = document.getElementById("ticket_price_input")
+    let return_ticket_price_input = document.getElementById("return_ticket_price_input")
+    let total_price_ticket_input = document.getElementById("total_price_ticket_input")
+
+    for (let i = 0; i < ticket_price_item.length; i++) {
+        ticket_price_item[i].onclick = function displayPrice()
+        {
+            ticket_price.innerHTML = parseInt(this.getAttribute("data-price")).toLocaleString('en-US');
+            ticket_price_value = parseInt(this.getAttribute("data-price"));
+            ticket_price_input.value = ticket_price_value
+            total_price_ticket.innerHTML = (parseInt(this.getAttribute("data-price")) + return_ticket_price_value).toLocaleString('en-US') + ' VND';
+            total_price_ticket_input.value = (parseInt(this.getAttribute("data-price")) + return_ticket_price_value);
+        };
+    }
+
+    for (let i = 0; i < ticket_price_return_item.length; i++) {
+        ticket_price_return_item[i].onclick = function displayPrice()
+        {
+            return_ticket_price.innerHTML = parseInt(this.getAttribute("data-price")).toLocaleString('en-US');
+            return_ticket_price_value = parseInt(this.getAttribute("data-price"))
+            return_ticket_price_input.value = return_ticket_price_value
+            total_price_ticket.innerHTML = (parseInt(this.getAttribute("data-price")) + ticket_price_value).toLocaleString('en-US') + ' VND';
+            total_price_ticket_input.value = (parseInt(this.getAttribute("data-price")) + ticket_price_value);
+        };
+    }
 };

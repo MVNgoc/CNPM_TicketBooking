@@ -1,8 +1,10 @@
-{% extends 'layout/base.html' %}
+{% extends 'customer/layout/base.html' %}
 
 {% block title %}Tra cứu chuyến bay{% endblock %}
 
 {% block content %}
+
+
 <div class="session-style container d-flex justify-content-between align-items-center">
     <img src="../static/images/flight_lookup_banner.png"
          alt="flight_lookup_banner" style="height: 720px;">
@@ -63,7 +65,9 @@
                             {% endif %}</p>
                         <button type="submit"
                                 class="btn btn-success mt-3 {{ 'disabled' if error_code == 'booking_time_false' }}"
-                                style="border-radius: 10px; font-weight: 600;">Tìm kiếm
+
+                                style="border-radius: 10px; font-weight: 600;">
+                            Tìm kiếm
                         </button>
                     </form>
                 </div>

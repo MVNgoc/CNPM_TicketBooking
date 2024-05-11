@@ -1,6 +1,6 @@
-{% extends 'layout/base.html' %}
+{% extends 'customer/layout/base.html' %}
 
-{% block title %}Tra cứu chuyến bay{% endblock %}
+{% block title %}Vé đã đặt{% endblock %}
 
 {% block content %}
 
@@ -29,7 +29,7 @@
             <th>{{ loop.index }}</th>
             <td><a href="/tickets-booked/tickets-booked-details">{{ invoice.invoiceID }}</a></td>
             <td>{{ invoice.paymentTime }}</td>
-            <td>{{ "{:,.1f}".format(invoice.paymentAmount) }}</td>
+            <td>{{ "{:,.0f}".format(invoice.paymentAmount) }}</td>
             <td>
                 <button class="btn
                 {% if invoice.paymentStatus == 'Pending' %} btn-warning
