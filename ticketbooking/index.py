@@ -10,16 +10,16 @@ from flask_login import login_user, logout_user, current_user
 def index():
     path = request.path
     categories = dao.load_categories()
-    return render_template('index.html', categories=categories, path=path)
+    return render_template('customer/index.html', categories=categories, path=path)
 
 
 @app.route('/', methods=['post'])
 def process_login():
     username = request.form.get('username')
     password = request.form.get('pswd')
-    u = dao.auth_user(username=username, password=password)
+    u = dao.auth_user_customer(username=username, password=password)
     if u == 'login_failed':
-        return render_template('index.html', error_code=u)
+        return render_template('customer/index.html', error_code=u)
     else:
         login_user(user=u)
         return redirect('/')
@@ -30,7 +30,7 @@ def admin_login():
     username = request.form['username']
     password = request.form['pswd']
 
-    user = dao.auth_user(username=username, password = password)
+    user = dao.auth_user(username=username, password = password) #hàm auth user không còn sử dụng được do chỉ cho customer đăng nhập, cần viết lại hàm
     if user == 'login_failed':
         return render_template('index.html', error_code=user)
     else:
@@ -42,8 +42,9 @@ def admin_login():
 def common_atstr():
     categories = dao.load_categories()
     return {
-        'categories' : categories
+        'categories': categories
     }
+
 
 @app.route('/register', methods=['post'])
 def process_register():
@@ -51,9 +52,9 @@ def process_register():
     password = request.form.get('passwordInput')
     u = dao.register_user(user_name=username, password=password)
     if u == 'account_already_exists':
-        return render_template('index.html', error_code=u)
+        return render_template('customer/index.html', error_code=u)
     elif u == 'create_account_false':
-        return render_template('index.html', error_code=u)
+        return render_template('customer/index.html', error_code=u)
     else:
         login_user(user=u)
         return redirect('/')
@@ -169,6 +170,15 @@ def passengers():
                            bookticketstep=bookticketstep)
 
 
+@app.route('/flight-lookup/pay-ticket')
+def pay_ticket():
+    path = request.path
+    categories = dao.load_categories()
+    bookticketstep = dao.load_book_ticket_step()
+    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
+
+
 @app.route('/tickets-booked')
 def tickets_booked():
     path = request.path
@@ -194,22 +204,6 @@ def login():
     path = request.path
     categories = dao.load_categories()
     return render_template('login.html', categories=categories, path=path)
-
-
-@app.route('/register')
-def register():
-    path = request.path
-    categories = dao.load_categories()
-    return render_template('register.html', categories=categories, path=path)
-
-
-@app.route('/flight-lookup/pay-ticket')
-def pay_ticket():
-    path = request.path
-    categories = dao.load_categories()
-    bookticketstep = dao.load_book_ticket_step()
-    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep)
 
 
 if __name__ == '__main__':

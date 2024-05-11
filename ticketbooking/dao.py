@@ -24,13 +24,13 @@ def load_list_of_ticket_step():
         return json.load(f)
 
 
-def auth_user(username, password):
+def auth_user_customer(username, password):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    user = Account.query.filter_by(userName=username.strip(), password=password).first()
-    # if user:
-    #     return user
-    # else:
-    return 'login_failed'
+    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Customer').first()
+    if user:
+        return user
+    else:
+        return 'login_failed' #code này chỉ dành cho trang customer, không dùng được cho trang admin
 
 
 def get_user_by_username(id):
@@ -96,6 +96,7 @@ def load_flight_of_airports(routeID, time):
 
 def get_price_ticket(flightID):
     return Price.query.filter_by(flightID=flightID).all()
+
 
 def load_booking_time():
     current_time = datetime.now().time()
