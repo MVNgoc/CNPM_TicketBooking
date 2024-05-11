@@ -107,3 +107,10 @@ def load_booking_time():
         return 'booking_time_true'
     else:
         return 'booking_time_false'
+
+
+def load_current_user():
+    if current_user.is_authenticated:
+        return 'true'
+    else:
+        return 'false'

@@ -30,7 +30,8 @@ def admin_login():
     username = request.form['username']
     password = request.form['pswd']
 
-    user = dao.auth_user(username=username, password = password) #hàm auth user không còn sử dụng được do chỉ cho customer đăng nhập, cần viết lại hàm
+    user = dao.auth_user(username=username,
+                         password=password)  # hàm auth user không còn sử dụng được do chỉ cho customer đăng nhập, cần viết lại hàm
     if user == 'login_failed':
         return render_template('index.html', error_code=user)
     else:
@@ -77,13 +78,17 @@ def flight_lookup():
     categories = dao.load_categories()
     list_airports = dao.load_list_of_airports()
     booking_allowed = dao.load_booking_time()
-    if booking_allowed == 'booking_time_true':
-        return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
-                               list_airports=list_airports, booking_allowed=booking_allowed)
+    authen = dao.load_current_user()
 
-    if booking_allowed == 'booking_time_false':
-        return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+    if authen == 'true':
+        if booking_allowed == 'booking_time_true':
+            return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+                               list_airports=list_airports, booking_allowed=booking_allowed)
+        if booking_allowed == 'booking_time_false':
+            return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
                                error_code=booking_allowed)
+    else:
+        return redirect('/')
 
 
 @app.route('/flight-lookup/select-flight')
@@ -91,8 +96,13 @@ def select_flight():
     path = request.path
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
-    return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep)
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
+                               bookticketstep=bookticketstep)
+    else:
+        return redirect('/')
 
 
 @app.route('/flight-lookup/select-flight', methods=['post'])
@@ -165,8 +175,13 @@ def passengers():
     path = request.path
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
-    return render_template('flightlookuplayout/passengers.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep)
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        return render_template('flightlookuplayout/passengers.html', categories=categories, path=path,
+                               bookticketstep=bookticketstep)
+    else:
+        return redirect('/')
 
 
 @app.route('/flight-lookup/pay-ticket')
@@ -174,19 +189,29 @@ def pay_ticket():
     path = request.path
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
-    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep)
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+                               bookticketstep=bookticketstep)
+    else:
+        return redirect('/')
 
 
 @app.route('/tickets-booked')
 def tickets_booked():
-    path = request.path
-    categories = dao.load_categories()
-    kw = request.args.get('keyword')
-    account_id = current_user.id
-    invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
+    authen = dao.load_current_user()
 
-    return render_template('listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)
+    if authen == 'true':
+        path = request.path
+        categories = dao.load_categories()
+        kw = request.args.get('keyword')
+        account_id = current_user.id
+        invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
+
+        return render_template('listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)
+    else:
+        return redirect('/')
 
 
 @app.route('/tickets-booked/tickets-booked-details')
@@ -194,8 +219,13 @@ def tickets_booked_details():
     path = request.path
     categories = dao.load_categories()
     listofticketstep = dao.load_list_of_ticket_step()
-    return render_template('listofticket/tickets_booked_details.html', categories=categories, path=path,
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        return render_template('listofticket/tickets_booked_details.html', categories=categories, path=path,
                            listofticketstep=listofticketstep)
+    else:
+        return redirect('/')
 
 
 @app.route('/login')
