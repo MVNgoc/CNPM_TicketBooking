@@ -265,6 +265,7 @@ p {
     align-items: center;
     cursor: pointer;
     transition: background 0.4s ease;
+    position: relative;
 }
 
 .ticket-price-select:hover {
@@ -354,4 +355,16 @@ button:hover .arrow:before {
     line-height: 29px;
     text-align: center;
     color: #333333;
+}
+
+.ticket_price_item,
+.ticket_price_return_item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

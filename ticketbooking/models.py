@@ -24,6 +24,7 @@ class Airport(db.Model):
     routes = relationship('Route', secondary=transit_airports_routes, back_populates='airports')
     __table_args__ = {'extend_existing': True}
 
+
 class Route(db.Model):
     __tablename__ = 'route'
     routeID = Column(String(10), primary_key=True)
@@ -33,6 +34,7 @@ class Route(db.Model):
 
     airports = relationship('Airport', secondary=transit_airports_routes, back_populates='routes')
     __table_args__ = {'extend_existing': True}
+
 
 class Flight(db.Model):
     __tablename__ = 'flight'
@@ -48,6 +50,7 @@ class Flight(db.Model):
     route = relationship(Route)
     __table_args__ = {'extend_existing': True}
 
+
 class SeatClass(db.Model):
     __tablename__ = 'seat_class'
     classID = Column(String(10), primary_key=True)
@@ -55,6 +58,7 @@ class SeatClass(db.Model):
     maxCheckedWeight = Column(Integer)
     maxCarryOnWeight = Column(Integer)
     __table_args__ = {'extend_existing': True}
+
 
 class Price(db.Model):
     __tablename__ = 'price'
@@ -67,6 +71,7 @@ class Price(db.Model):
     seat_class = relationship(SeatClass)
     __table_args__ = {'extend_existing': True}
 
+
 class Customer(db.Model):
     __tablename__ = 'customer'
     customerID = Column(String(10), primary_key=True)
@@ -76,6 +81,7 @@ class Customer(db.Model):
     idNumber = Column(Integer, nullable=False)
     phoneNumber = Column(Integer, nullable=False)
     __table_args__ = {'extend_existing': True}
+
 
 class Ticket(db.Model):
     __tablename__ = 'ticket'
@@ -87,13 +93,13 @@ class Ticket(db.Model):
     classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)
     priceID = Column(String(10), ForeignKey(Price.priceID), nullable=False)
 
-
     customer = relationship(Customer)
     flight = relationship(Flight)
     seat_class = relationship(SeatClass)
     price = relationship(Price)
     account = relationship("Account")
     __table_args__ = {'extend_existing': True}
+
 
 class Employee(db.Model):
     __tablename__ = 'employee'
@@ -103,6 +109,7 @@ class Employee(db.Model):
     employeeRole = Column(Enum('Employee', 'Admin', name='role_enum'))
     __table_args__ = {'extend_existing': True}
 
+
 class Account(db.Model, UserMixin):
     __tablename__ = 'account'
     id = Column(Integer, autoincrement=True, primary_key=True)
@@ -110,13 +117,15 @@ class Account(db.Model, UserMixin):
     password = Column(String(1000), nullable=True)
     userRole = Column(Enum('Customer', 'Employee', 'Admin', name='userrole_enum'))
     __table_args__ = {'extend_existing': True}
+
     def __str__(self):
         return self.userName
+
 
 class Invoice(db.Model):
     __tablename__ = 'invoice'
     invoiceID = Column(Integer, primary_key=True, autoincrement=True)
-    accountID = Column(Integer,ForeignKey(Account.id), nullable=False)
+    accountID = Column(Integer, ForeignKey(Account.id), nullable=False)
     paymentAmount = Column(Float, nullable=False)
     paymentStatus = Column(Enum('Pending', 'Paid', 'Cancelled', name='payment_status'))
     paymentMethod = Column(Enum('BankTransfer', 'Cash', name='payment_method'))
@@ -127,6 +136,7 @@ class Invoice(db.Model):
     account = relationship(Account)
     __table_args__ = {'extend_existing': True}
 
+
 class SystemRule(db.Model):
     __tablename__ = 'system_rule'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -135,10 +145,10 @@ class SystemRule(db.Model):
     maxIntermediatedAirports = Column(Integer, nullable=False)  # Số sân bay trung gian tối đa
     minStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối thiểu tại các sân bay trung gian
     maxStopoverTime = Column(Float, nullable=False)  # Thời gian dừng tối đa tại các sân bay trung gian
-    ticketSaleTime_Start= Column(Time, nullable=False)  # Thời gian bắt đầu bán vé
-    ticketBookingTime_Start= Column(Time, nullable=False)  # Thời gian bắt đầu đặt vé
+    ticketSaleTime_Start = Column(Time, nullable=False)  # Thời gian bắt đầu bán vé
+    ticketBookingTime_Start = Column(Time, nullable=False)  # Thời gian bắt đầu đặt vé
     ticketSaleTime_End = Column(Time, nullable=False)  # Thời gian kết thúc bán vé
-    ticketBookingTime_End= Column(Time, nullable=False)  # Thời gian kết thúc đặt vé
+    ticketBookingTime_End = Column(Time, nullable=False)  # Thời gian kết thúc đặt vé
     __table_args__ = {'extend_existing': True}
 
     def __str__(self):

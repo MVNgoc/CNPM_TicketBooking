@@ -180,7 +180,10 @@
                             {% if f.numOf1stClassSeat > 0 %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC001' %}
-                            <p>{{ p.price }} VND</p>
+                            <div class="ticket_price_item" data-price="{{ p.price }}">
+                                <p>{{ "{:,.0f}".format(p.price) }}
+                                    VND</p>
+                            </div>
                             {% endif %}
                             {% endfor %}
                             {% else %}
@@ -194,7 +197,10 @@
                             {% if f.numOf2ndClassSeat > 0 %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC002' %}
-                            <p>{{ p.price }} VND</p>
+                            <div class="ticket_price_item" data-price="{{ p.price }}">
+                                <p>{{ "{:,.0f}".format(p.price) }}
+                                    VND</p>
+                            </div>
                             {% endif %}
                             {% endfor %}
                             {% else %}
@@ -235,7 +241,10 @@
                             {% if f.numOf1stClassSeat > 0 %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC001' %}
-                            <p>{{ p.price }} VND</p>
+                            <div class="ticket_price_return_item" data-price="{{ p.price }}">
+                                <p>{{ "{:,.0f}".format(p.price) }}
+                                    VND</p>
+                            </div>
                             {% endif %}
                             {% endfor %}
                             {% else %}
@@ -249,7 +258,10 @@
                             {% if f.numOf2ndClassSeat > 0 %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC002' %}
-                            <p>{{ p.price }} VND</p>
+                            <div class="ticket_price_return_item" data-price="{{ p.price }}">
+                                <p>{{ "{:,.0f}".format(p.price) }}
+                                    VND</p>
+                            </div>
                             {% endif %}
                             {% endfor %}
                             {% else %}
@@ -316,7 +328,7 @@
                         <div class="ticket-price-box">
                             <p>Giá vé</p>
                             <div class="d-flex gap-2" style="font-weight: 700">
-                                <p>5.001.600</p>
+                                <p id="ticket_price">0</p>
                                 <p>VND</p>
                             </div>
                         </div>
@@ -330,7 +342,7 @@
                         </div>
                         <div class="ticket-price-box">
                             <div class="d-flex gap-2" style="font-weight: 700">
-                                <p>5.001.600</p>
+                                <p id="return_ticket_price">0</p>
                                 <p>VND</p>
                             </div>
                             <p>Giá vé</p>
@@ -341,11 +353,12 @@
             </div>
         </div>
         <div class="container d-flex justify-content-between align-items-center" style="height: 100%;">
-            <button type="submit" class="btn btn-secondary" style="width: 150px; font-weight: 700; display: none;">Quay
+            <a href="/flight-lookup" type="submit" class="btn btn-secondary" style="width: 150px; font-weight: 700;">Quay
                 lại
-            </button>
-            <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span type="text"
-                                                                                              style="font-size: 24px; font-weight: 700;">10,000,000 VND</span>
+            </a>
+            <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span id="total_price_ticket"
+                                                                                              type="text"
+                                                                                              style="font-size: 24px; font-weight: 700;">0</span>
             </p>
             {% if type_ticket == 'one-way' and flight_list_format %}
             <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>

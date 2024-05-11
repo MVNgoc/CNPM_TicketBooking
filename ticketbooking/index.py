@@ -77,7 +77,6 @@ def flight_lookup():
     categories = dao.load_categories()
     list_airports = dao.load_list_of_airports()
     booking_allowed = dao.load_booking_time()
-    print('booking_allowed:', booking_allowed)
     if booking_allowed == 'booking_time_true':
         return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
                                list_airports=list_airports, booking_allowed=booking_allowed)
