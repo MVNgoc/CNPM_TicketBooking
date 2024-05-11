@@ -37,7 +37,8 @@
                                 Điềm khởi hành
                             </div>
                             <div class="active">
-                                {{ session['flight_info']['departure_point'][1] }} ( {{ session['flight_info']['departure_point'][0] }} )
+                                {{ session['flight_info']['departure_point'][1] }} ( {{
+                                session['flight_info']['departure_point'][0] }} )
                             </div>
                         </div>
                     </div>
@@ -49,7 +50,8 @@
                                 Điềm đến
                             </div>
                             <div class="active">
-                                {{ session['flight_info']['destination'][1] }} ( {{ session['flight_info']['destination'][0] }} )
+                                {{ session['flight_info']['destination'][1] }} ( {{
+                                session['flight_info']['destination'][0] }} )
                             </div>
                         </div>
                     </div>
@@ -64,7 +66,8 @@
                                 Điềm khởi hành
                             </div>
                             <div class="active">
-                                {{ session['flight_info']['destination'][1] }} ( {{ session['flight_info']['destination'][0] }} )
+                                {{ session['flight_info']['destination'][1] }} ( {{
+                                session['flight_info']['destination'][0] }} )
                             </div>
                         </div>
                     </div>
@@ -76,7 +79,8 @@
                                 Điềm đến
                             </div>
                             <div class="active">
-                                {{ session['flight_info']['departure_point'][1] }} ( {{ session['flight_info']['departure_point'][0] }} )
+                                {{ session['flight_info']['departure_point'][1] }} ( {{
+                                session['flight_info']['departure_point'][0] }} )
                             </div>
                         </div>
                     </div>
@@ -106,8 +110,10 @@
         <div class="d-flex justify-content-between">
             <div class="place_info_card">
                 <div style="text-align: center;">
-                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">{{ session['flight_info']['departure_point'][0] }}</p>
-                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">{{ session['flight_info']['departure_point'][1] }}</p>
+                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">{{
+                        session['flight_info']['departure_point'][0] }}</p>
+                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">{{
+                        session['flight_info']['departure_point'][1] }}</p>
                 </div>
                 <svg width="57" height="55" viewBox="0 0 57 55" fill="none" xmlns="http://www.w3.org/2000/svg"
                      style="height: 100%;">
@@ -117,15 +123,19 @@
                     <path d="M19.1165 34L7.5 34C17 39 16 38 23 44V37L19.1165 34Z" fill="#D3D3D3"></path>
                 </svg>
                 <div style="text-align: center;">
-                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">{{ session['flight_info']['destination'][0] }}</p>
-                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">{{ session['flight_info']['destination'][1] }}</p>
+                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">{{
+                        session['flight_info']['destination'][0] }}</p>
+                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">{{
+                        session['flight_info']['destination'][1] }}</p>
                 </div>
             </div>
             {% if session['flight_info']['type_ticket'] == 'two-way' %}
             <div class="place_info_card">
                 <div style="text-align: center;">
-                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">{{ session['flight_info']['departure_point'][0] }}</p>
-                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">{{ session['flight_info']['departure_point'][1] }}</p>
+                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">{{
+                        session['flight_info']['departure_point'][0] }}</p>
+                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">{{
+                        session['flight_info']['departure_point'][1] }}</p>
                 </div>
                 <svg width="57" height="55" viewBox="0 0 57 55" fill="none" xmlns="http://www.w3.org/2000/svg"
                      style="height: 100%;">
@@ -135,8 +145,10 @@
                     <path d="M19.1165 34L7.5 34C17 39 16 38 23 44V37L19.1165 34Z" fill="#DA2128"></path>
                 </svg>
                 <div style="text-align: center;">
-                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">{{ session['flight_info']['destination'][0] }}</p>
-                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">{{ session['flight_info']['destination'][1] }}</p>
+                    <p style="font-size: 24px; font-weight: 700; line-height: 29px">{{
+                        session['flight_info']['destination'][0] }}</p>
+                    <p style="font-size: 16px; font-weight: 500; line-height: 19px">{{
+                        session['flight_info']['destination'][1] }}</p>
                 </div>
             </div>
             {% endif %}
@@ -146,7 +158,8 @@
             <p class="active" style="font-size: 24px;">Không tìm thấy chuyến bay nào cho lựa chọn của bạn. Quay lại để
                 chọn ngày khác.</p>
         </div>
-        {% elif session['flight_info']['type_ticket'] == 'two-way' and (flight_list_format == [] or return_flight_list_format == []) %}
+        {% elif session['flight_info']['type_ticket'] == 'two-way' and (flight_list_format == [] or
+        return_flight_list_format == []) %}
         <div class="text-center" style="margin-top: 100px;">
             <p class="active" style="font-size: 24px;">Không tìm thấy chuyến bay nào cho lựa chọn của bạn. Quay lại để
                 chọn ngày khác.</p>
@@ -321,14 +334,17 @@
                      style="padding: 14px 0px; font-size: 16px; font-weight: 700; line-height: 21px;">
                     <div style="width: 50%; padding-right: 10px;">
                         <div class="d-flex align-items-center gap-3">
-                            <p>{{ session['flight_info']['departure_point'][1] }} ( {{ session['flight_info']['departure_point'][0] }} )</p>
+                            <p>{{ session['flight_info']['departure_point'][1] }} ( {{
+                                session['flight_info']['departure_point'][0] }} )</p>
                             <img src="https://www.vietjetair.com/static/media/thai-vietjet.535af1a2.svg" alt="">
-                            <p>{{ session['flight_info']['destination'][1] }} ( {{ session['flight_info']['destination'][0] }} )</p>
+                            <p>{{ session['flight_info']['destination'][1] }} ( {{
+                                session['flight_info']['destination'][0] }} )</p>
                         </div>
                         <div class="ticket-price-box">
                             <p>Giá vé</p>
                             <div class="d-flex gap-2" style="font-weight: 700">
                                 <p id="ticket_price" name="ticket_price">0</p>
+                                <input type="number" id="ticket_price_input" name="ticket_price" style="display: none;">
                                 <p>VND</p>
                             </div>
                         </div>
@@ -336,13 +352,17 @@
                     {% if session['flight_info']['type_ticket'] == 'two-way' %}
                     <div style="width: 50%; padding-left: 10px; display: flex; flex-direction: column; align-items: end;">
                         <div class="d-flex align-items-center gap-3">
-                            <p>{{ session['flight_info']['destination'][1] }} ( {{ session['flight_info']['destination'][0] }} )</p>
+                            <p>{{ session['flight_info']['destination'][1] }} ( {{
+                                session['flight_info']['destination'][0] }} )</p>
                             <img src="https://www.vietjetair.com/static/media/thai-vietjet.535af1a2.svg" alt="">
-                            <p>{{ session['flight_info']['departure_point'][1] }} ( {{ session['flight_info']['departure_point'][0]}} )</p>
+                            <p>{{ session['flight_info']['departure_point'][1] }} ( {{
+                                session['flight_info']['departure_point'][0]}} )</p>
                         </div>
                         <div class="ticket-price-box">
                             <div class="d-flex gap-2" style="font-weight: 700">
-                                <p id="return_ticket_price" name="ticket_price_return">0</p>
+                                <p id="return_ticket_price">0</p>
+                                <input type="number" id="return_ticket_price_input" name="ticket_price_return"
+                                       style="display: none;">
                                 <p>VND</p>
                             </div>
                             <p>Giá vé</p>
@@ -358,11 +378,14 @@
             </a>
             <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span id="total_price_ticket"
                                                                                               type="text"
-                                                                                              style="font-size: 24px; font-weight: 700;" name="total_ticket_price">0</span>
+                                                                                              style="font-size: 24px; font-weight: 700;"
+            >0</span>
+                <input type="number" id="total_price_ticket_input" name="total_ticket_price" style="display: none;">
             </p>
             {% if session['flight_info']['type_ticket'] == 'one-way' and flight_list_format %}
             <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
-            {% elif session['flight_info']['type_ticket'] == 'two-way' and flight_list_format and return_flight_list_format %}
+            {% elif session['flight_info']['type_ticket'] == 'two-way' and flight_list_format and
+            return_flight_list_format %}
             <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
             {% endif %}
         </div>

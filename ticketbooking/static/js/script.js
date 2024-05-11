@@ -125,12 +125,18 @@ window.onload = function() {
     let ticket_price_value = 0;
     let return_ticket_price_value = 0;
 
+    let ticket_price_input = document.getElementById("ticket_price_input")
+    let return_ticket_price_input = document.getElementById("return_ticket_price_input")
+    let total_price_ticket_input = document.getElementById("total_price_ticket_input")
+
     for (let i = 0; i < ticket_price_item.length; i++) {
         ticket_price_item[i].onclick = function displayPrice()
         {
             ticket_price.innerHTML = parseInt(this.getAttribute("data-price")).toLocaleString('en-US');
             ticket_price_value = parseInt(this.getAttribute("data-price"));
+            ticket_price_input.value = ticket_price_value
             total_price_ticket.innerHTML = (parseInt(this.getAttribute("data-price")) + return_ticket_price_value).toLocaleString('en-US') + ' VND';
+            total_price_ticket_input.value = (parseInt(this.getAttribute("data-price")) + return_ticket_price_value);
         };
     }
 
@@ -139,7 +145,9 @@ window.onload = function() {
         {
             return_ticket_price.innerHTML = parseInt(this.getAttribute("data-price")).toLocaleString('en-US');
             return_ticket_price_value = parseInt(this.getAttribute("data-price"))
+            return_ticket_price_input.value = return_ticket_price_value
             total_price_ticket.innerHTML = (parseInt(this.getAttribute("data-price")) + ticket_price_value).toLocaleString('en-US') + ' VND';
+            total_price_ticket_input.value = (parseInt(this.getAttribute("data-price")) + ticket_price_value);
         };
     }
 };

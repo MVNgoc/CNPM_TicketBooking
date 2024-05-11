@@ -211,7 +211,7 @@
                         <div class="ticket-price-box">
                             <p>Giá vé</p>
                             <div class="d-flex gap-2" style="font-weight: 700">
-                                <p id="ticket_price" name="ticket_price">0</p>
+                                <p id="ticket_price" name="ticket_price">{{ "{:,.0f}".format(session['ticket_price_info']['ticket_price']) }}</p>
                                 <p>VND</p>
                             </div>
                         </div>
@@ -227,7 +227,7 @@
                         </div>
                         <div class="ticket-price-box">
                             <div class="d-flex gap-2" style="font-weight: 700">
-                                <p id="return_ticket_price" name="ticket_price_return">0</p>
+                                <p id="return_ticket_price" name="ticket_price_return">{{ "{:,.0f}".format(session['ticket_price_info']['ticket_price_return']) }}</p>
                                 <p>VND</p>
                             </div>
                             <p>Giá vé</p>
@@ -244,7 +244,7 @@
             <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span id="total_price_ticket"
                                                                                               type="text"
                                                                                               style="font-size: 24px; font-weight: 700;"
-                                                                                              name="total_ticket_price">0</span>
+                                                                                              name="total_ticket_price">{{ "{:,.0f}".format(session['ticket_price_info']['total_ticket_price']) }} VND</span>
             </p>
             <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
         </div>

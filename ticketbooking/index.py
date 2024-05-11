@@ -194,13 +194,26 @@ def process_passengers():
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
 
-    ticket_price = request.form.get('ticket_price')
-    ticket_price_return = request.form.get('ticket_price_return')
-    total_ticket_price = request.form.get('total_ticket_price')
+    if request.form.get('ticket_price'):
+        ticket_price = request.form.get('ticket_price')
+    else:
+        ticket_price = 0
 
-    print('ticket_price: ', ticket_price)
-    print('ticket_price_return: ', ticket_price_return)
-    print('total_ticket_price: ', total_ticket_price)
+    if request.form.get('ticket_price_return'):
+        ticket_price_return = request.form.get('ticket_price_return')
+    else:
+        ticket_price_return = 0
+
+    if request.form.get('total_ticket_price'):
+        total_ticket_price = request.form.get('total_ticket_price')
+    else:
+        total_ticket_price = 0
+
+    session['ticket_price_info'] = {
+        'ticket_price': float(ticket_price) or 0,
+        'ticket_price_return': float(ticket_price_return) or 0,
+        'total_ticket_price': float(total_ticket_price) or 0,
+    }
 
     return render_template('flightlookuplayout/passengers.html', categories=categories, path=path,
                            bookticketstep=bookticketstep)
@@ -218,6 +231,16 @@ def pay_ticket():
                                bookticketstep=bookticketstep)
     else:
         return redirect('/')
+
+
+@app.route('/flight-lookup/pay-ticket', methods=['post'])
+def process_pay_ticket():
+    path = request.path
+    categories = dao.load_categories()
+    bookticketstep = dao.load_book_ticket_step()
+
+    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
 
 
 @app.route('/tickets-booked')
