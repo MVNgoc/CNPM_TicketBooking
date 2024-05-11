@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask
+from flask import Flask, session
 from flask import render_template, request, redirect
 from ticketbooking import app, dao, login
 from flask_login import login_user, logout_user, current_user
@@ -83,10 +83,10 @@ def flight_lookup():
     if authen == 'true':
         if booking_allowed == 'booking_time_true':
             return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
-                               list_airports=list_airports, booking_allowed=booking_allowed)
+                                   list_airports=list_airports, booking_allowed=booking_allowed)
         if booking_allowed == 'booking_time_false':
             return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
-                               error_code=booking_allowed)
+                                   error_code=booking_allowed)
     else:
         return redirect('/')
 
@@ -113,10 +113,9 @@ def process_select_flight():
 
     departure_point = request.form.get('departure_point').split('-')
     destination = request.form.get('destination').split('-')
-    date_of_department = request.form['date_of_department']
+    date_of_department = request.form.get('date_of_department')
     quantity = request.form.get('quantity')
     type_ticket = request.form.get('type_ticket')
-    return_flight_list = ''
     flight_list_format = []
     return_flight_list_format = []
 
@@ -142,7 +141,7 @@ def process_select_flight():
                         'price': price_ticket
                     })
         else:
-            return_flight_list = []
+            return_flight_list_format = []
 
     if route:
         flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
@@ -161,13 +160,18 @@ def process_select_flight():
                     'price': price_ticket
                 })
     else:
-        flight_list = []
+        flight_list_format = []
+
+    session['flight_info'] = {
+        'departure_point': departure_point,
+        'destination': destination,
+        'type_ticket': type_ticket,
+        'quantity': quantity,
+    }
 
     return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, flight_list_format=flight_list_format,
-                           return_flight_list_format=return_flight_list_format, type_ticket=type_ticket,
-                           quantity=quantity,
-                           departure_point=departure_point, destination=destination)
+                           return_flight_list_format=return_flight_list_format)
 
 
 @app.route('/flight-lookup/passengers')
@@ -182,6 +186,24 @@ def passengers():
                                bookticketstep=bookticketstep)
     else:
         return redirect('/')
+
+
+@app.route('/flight-lookup/passengers', methods=['post'])
+def process_passengers():
+    path = request.path
+    categories = dao.load_categories()
+    bookticketstep = dao.load_book_ticket_step()
+
+    ticket_price = request.form.get('ticket_price')
+    ticket_price_return = request.form.get('ticket_price_return')
+    total_ticket_price = request.form.get('total_ticket_price')
+
+    print('ticket_price: ', ticket_price)
+    print('ticket_price_return: ', ticket_price_return)
+    print('total_ticket_price: ', total_ticket_price)
+
+    return render_template('flightlookuplayout/passengers.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
 
 
 @app.route('/flight-lookup/pay-ticket')
@@ -223,7 +245,7 @@ def tickets_booked_details():
 
     if authen == 'true':
         return render_template('listofticket/tickets_booked_details.html', categories=categories, path=path,
-                           listofticketstep=listofticketstep)
+                               listofticketstep=listofticketstep)
     else:
         return redirect('/')
 
