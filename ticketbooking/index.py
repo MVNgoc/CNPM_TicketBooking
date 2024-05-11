@@ -1,10 +1,10 @@
 import datetime
 
-from flask import render_template, request, redirect
 from flask import Flask
+from flask import render_template, request, redirect
 from ticketbooking import app, dao, login
 from flask_login import login_user, logout_user, current_user
-from ticketbooking import admin
+
 
 @app.route('/')
 def index():
@@ -23,6 +23,7 @@ def process_login():
     else:
         login_user(user=u)
         return redirect('/')
+
 
 @app.route('/login-admin', methods=['post'])
 def admin_login():
