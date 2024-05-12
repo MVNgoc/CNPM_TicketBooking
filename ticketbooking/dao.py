@@ -1,6 +1,6 @@
 import json
 from ticketbooking import app, db
-from models import Account, Invoice, Airport, Route, Flight, Price, SystemRule
+from models import Account, Invoice, Airport, Route, Flight, Price, SystemRule, Customer, Ticket
 import hashlib
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import cast, Date
@@ -30,7 +30,7 @@ def auth_user_customer(username, password):
     if user:
         return user
     else:
-        return 'login_failed' #code này chỉ dành cho trang customer, không dùng được cho trang admin
+        return 'login_failed'  # code này chỉ dành cho trang customer, không dùng được cho trang admin
 
 
 def get_user_by_username(id):
@@ -114,3 +114,38 @@ def load_current_user():
         return 'true'
     else:
         return 'false'
+
+
+def add_customer(list_info_user, quantity):
+    try:
+        for i in range(int(quantity)):
+            customer = Customer(customerName=list_info_user['customerName'][i], gender=list_info_user['sex'][i],
+                                birthDate=datetime.strptime(list_info_user['birthdate'][i], '%m/%d/%Y'),
+                                idNumber=list_info_user['idNumber'][i],
+                                phoneNumber=list_info_user['phoneNumber'][i])
+            db.session.add(customer)
+
+        db.session.commit()
+
+    except IntegrityError as e:
+        db.session.rollback()
+        return 'add_customer_false'
+
+    return customer
+
+
+def add_invoice(paymentAmount, transferImage):
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    account_id = current_user.id
+    invoice = Invoice(accountID=int(account_id), paymentAmount=float(paymentAmount), paymentStatus='Pending',
+                      paymentMethod='BankTransfer', transferImage=transferImage,
+                      paymentTime=current_time)
+
+    db.session.add(invoice)
+    db.session.commit()
+    return invoice
+
+
+def add_ticket(invoiceID, customerID):
+    account_id = current_user.id
+    ticket = Ticket(invoiceID=int(invoiceID), customerID=int(customerID), accountID=int(account_id))

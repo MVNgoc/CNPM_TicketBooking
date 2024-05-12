@@ -4,6 +4,7 @@ from flask import Flask, session
 from flask import render_template, request, redirect
 from ticketbooking import app, dao, login
 from flask_login import login_user, logout_user, current_user
+import cloudinary.uploader
 
 
 @app.route('/')
@@ -138,7 +139,7 @@ def process_select_flight():
                         'numOf2ndClassSeat': flight.numOf2ndClassSeat,
                         'flightStatus': flight.flightStatus,
                         'availableSeats': flight.availableSeats,
-                        'price': price_ticket
+                        'price': price_ticket <--- nó nằm trong đây hết nè
                     })
         else:
             return_flight_list_format = []
@@ -174,25 +175,13 @@ def process_select_flight():
                            return_flight_list_format=return_flight_list_format)
 
 
-@app.route('/flight-lookup/passengers')
-def passengers():
-    path = request.path
-    categories = dao.load_categories()
-    bookticketstep = dao.load_book_ticket_step()
-    authen = dao.load_current_user()
-
-    if authen == 'true':
-        return render_template('customer/flightlookuplayout/passengers.html', categories=categories, path=path,
-                               bookticketstep=bookticketstep)
-    else:
-        return redirect('/')
-
-
 @app.route('/flight-lookup/passengers', methods=['post'])
 def process_passengers():
     path = request.path
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
+
+    quantity = int(session['flight_info']['quantity'])
 
     if request.form.get('ticket_price'):
         ticket_price = request.form.get('ticket_price')
@@ -216,7 +205,7 @@ def process_passengers():
     }
 
     return render_template('customer/flightlookuplayout/passengers.html', categories=categories, path=path,
-                           bookticketstep=bookticketstep)
+                           bookticketstep=bookticketstep, quantity=quantity)
 
 
 @app.route('/flight-lookup/pay-ticket')
@@ -239,8 +228,37 @@ def process_pay_ticket():
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
 
+    customerName = request.form.getlist('customerName')
+    sex = request.form.getlist('sex')
+    birthdate = request.form.getlist('birthdate')
+    idNumber = request.form.getlist('idNumber')
+    phoneNumber = request.form.getlist('phoneNumber')
+
+    session['passengers'] = {
+        'customerName': customerName,
+        'sex': sex,
+        'birthdate': birthdate,
+        'idNumber': idNumber,
+        'phoneNumber': phoneNumber,
+    }
+
     return render_template('customer/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
                            bookticketstep=bookticketstep)
+
+
+@app.route('/flight-lookup/pay-ticket-upload', methods=['post'])
+def process_pay_ticket_upload():
+    image = request.files['image']
+    res = cloudinary.uploader.upload(image)
+    url_image = res['secure_url']
+
+    if url_image:
+        customer_id = dao.add_customer(session['passengers'], session['flight_info']['quantity']).customerID
+        invoice_id = dao.add_invoice(session['ticket_price_info']['total_ticket_price'], url_image).invoiceID
+        print(invoice_id, customer_id)
+        return redirect('/flight-lookup/pay-ticket')
+    else:
+        print(url_image)
 
 
 @app.route('/tickets-booked')

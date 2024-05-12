@@ -3,7 +3,7 @@
 {% block title %}Thông tin khách hàng{% endblock %}
 
 {% block content %}
-<div class="session-style">
+<form style="padding-bottom: 120px;" method="post" action="/flight-lookup/pay-ticket" enctype="multipart/form-data">
     <div class="" style="background:linear-gradient(28.91deg, #F9A51A 2.24%, #FBB612 31.03%, #FBF300 97.21%)">
         <div class="" style="background:linear-gradient(28.91deg, #F9A51A 2.24%, #FBB612 31.03%, #FBF300 97.21%)">
             <div class="container py-3">
@@ -110,56 +110,61 @@
     </div>
 
     <div class="session-style container d-flex justify-content-between mt-5">
-        <form method="post" enctype="multipart/form-data" action="/action_page.php"
-              class="card p-4 shadow was-validated mt-3" style="width: 800px; height: fit-content;">
-            <h2>Thông tin khách hàng</h2>
-            <div class="tab-content p-3 border bg-light" id="nav-tabContent mt-3">
-                <div>
-                    <label for="customerName" class="form-label" style="font-weight: 700;">Họ và tên:</label>
-                    <input type="text" class="form-control" style="width:600px;" id="customerName"
-                           placeholder="Nhập họ và tên"
-                           name="customerName" required>
-                    <div class="valid-feedback"></div>
+                <div enctype="multipart/form-data"
+                      class="card p-4 shadow was-validated mt-3" style="width: 800px; height: fit-content;">
+                    <h2>Thông tin khách hàng</h2>
+                    {% for i in range(quantity) %}
+                    <div class="tab-content p-3 border bg-light mt-3" id="nav-tabContent mt-3">
+                        <h4 style="text-align: center;"> Khách hàng {{ i+1 }}</h4>
+                        <div>
+                            <label for="customerName" class="form-label" style="font-weight: 700;">Họ và tên:</label>
+                            <input type="text" class="form-control" id="customerName"
+                                   placeholder="Nhập họ và tên"
+                                   name="customerName" required>
+                            <div class="valid-feedback"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <label for="sex" class="form-label" style="font-weight: 700;">Giới tính:</label>
+                                <input class="form-control" style="width: 300px;" list="sex_list" name="sex" id="sex" required>
+                                <datalist id="sex_list">
+                                    <option value="Male" label="Nam">
+                                    <option value="Female" label="Nữ">
+                                </datalist>
+                            </div>
+                            <div class="mt-3">
+                                <label for="birthDate-{{ i }}" class="form-label" style="font-weight: 700;">Ngày sinh:</label>
+                                <input id="birthDate-{{ i }}" name="birthdate" width="300" required/>
+                                <script>
+                                    var birthDateID = 'birthDate-' + {{ i }}
+                                    $('#'+ birthDateID).datepicker({
+                                        uiLibrary: 'bootstrap5'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="">
+                                <label for="idNumber" class="form-label" style="font-weight: 700;">CMND/CCCD:</label>
+                                <input type="text" class="form-control" style="width:300px;" id="idNumber"
+                                       placeholder="Nhập CMND/CCCD" name="idNumber" required>
+                                <div class="valid-feedback"></div>
+                            </div>
+                            <div class="">
+                                <label for="phoneNumber" class="form-label" style="font-weight: 700;">Số điện thoại:</label>
+                                <input type="text" class="form-control" style="width:300px;" id="phoneNumber"
+                                       placeholder="Nhập số điện thoại" name="phoneNumber" required>
+                                <div class="valid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <label for="sex" class="form-label" style="font-weight: 700;">Giới tính:</label>
-                        <input class="form-control" style="width: 300px;" list="sex_list" name="sex" id="sex" required>
-                        <datalist id="sex_list">
-                            <option value="Male" label="Nam">
-                            <option value="Female" label="Nữ">
-                        </datalist>
-                    </div>
-                    <div class="mt-3">
-                        <label for="birthDate" class="form-label" style="font-weight: 700;">Ngày sinh:</label>
-                        <input id="birthDate" width="300" required/>
-                        <script>
-                            $('#birthDate').datepicker({
-                                uiLibrary: 'bootstrap5'
-                            });
-                        </script>
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div class="">
-                        <label for="idNumber" class="form-label" style="font-weight: 700;">CMND/CCCD:</label>
-                        <input type="text" class="form-control" style="width:300px;" id="idNumber"
-                               placeholder="Nhập CMND/CCCD" name="idNumber" required>
-                        <div class="valid-feedback"></div>
-                    </div>
-                    <div class="">
-                        <label for="phoneNumber" class="form-label" style="font-weight: 700;">Số điện thoại:</label>
-                        <input type="text" class="form-control" style="width:300px;" id="phoneNumber"
-                               placeholder="Nhập số điện thoại" name="phoneNumber" required>
-                        <div class="valid-feedback"></div>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <img src="../static/images/personal_information.png" alt="personal_information" style="height: 500px;">
+                <img src="../static/images/personal_information.png" alt="personal_information" style="height: 500px;">
     </div>
 
-    <form method="post" action="/flight-lookup/pay-ticket" class="total_price_box">
+    <div class="total_price_box">
         <div class="mb-4">
             <div class="select_flight_header">
                 <p>THÔNG TIN CHUYẾN BAY
@@ -211,7 +216,8 @@
                         <div class="ticket-price-box">
                             <p>Giá vé</p>
                             <div class="d-flex gap-2" style="font-weight: 700">
-                                <p id="ticket_price" name="ticket_price">{{ "{:,.0f}".format(session['ticket_price_info']['ticket_price']) }}</p>
+                                <p id="ticket_price" name="ticket_price">{{
+                                    "{:,.0f}".format(session['ticket_price_info']['ticket_price']) }}</p>
                                 <p>VND</p>
                             </div>
                         </div>
@@ -227,7 +233,8 @@
                         </div>
                         <div class="ticket-price-box">
                             <div class="d-flex gap-2" style="font-weight: 700">
-                                <p id="return_ticket_price" name="ticket_price_return">{{ "{:,.0f}".format(session['ticket_price_info']['ticket_price_return']) }}</p>
+                                <p id="return_ticket_price" name="ticket_price_return">{{
+                                    "{:,.0f}".format(session['ticket_price_info']['ticket_price_return']) }}</p>
                                 <p>VND</p>
                             </div>
                             <p>Giá vé</p>
@@ -239,8 +246,7 @@
         </div>
         <div class="container d-flex justify-content-between align-items-center" style="height: 100%;">
             <a href="/flight-lookup" type="submit" class="btn btn-secondary" style="width: 150px; font-weight: 700;">Quay
-                lại
-            </a>
+                lại</a>
             <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span id="total_price_ticket"
                                                                                               type="text"
                                                                                               style="font-size: 24px; font-weight: 700;"
@@ -248,6 +254,6 @@
             </p>
             <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
         </div>
-    </form>
-</div>
+    </div>
+</form>
 {% endblock %}
