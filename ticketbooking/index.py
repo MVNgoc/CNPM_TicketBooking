@@ -4,8 +4,7 @@ from flask import Flask, session
 from flask import render_template, request, redirect
 from ticketbooking import app, dao, login
 from flask_login import login_user, logout_user, current_user
-
-
+from admin import admin
 @app.route('/')
 def index():
     path = request.path
@@ -30,8 +29,8 @@ def admin_login():
     username = request.form['username']
     password = request.form['pswd']
 
-    user = dao.auth_user(username=username,
-                         password=password)  # hàm auth user không còn sử dụng được do chỉ cho customer đăng nhập, cần viết lại hàm
+    user = dao.auth_user_employee(username=username,
+                         password=password)
     if user == 'login_failed':
         return render_template('index.html', error_code=user)
     else:
@@ -274,8 +273,7 @@ def tickets_booked_details(invoice_id):
         payment_status = invoice.paymentStatus
 
         return render_template('customer/listofticket/tickets_booked_details.html', categories=categories, path=path,
-                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers, total_amount=total_amount,
-                           payment_status=payment_status)
+                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers, total_amount=total_amount, payment_status=payment_status)
     else:
         return redirect('/')
 

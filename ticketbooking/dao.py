@@ -1,6 +1,6 @@
 import json
 from ticketbooking import app, db
-from models import Account, Invoice, Airport, Route, Flight, Price, SystemRule, Ticket, Customer
+from ticketbooking.models import Account, Invoice, Airport, Route, Flight, Price, SystemRule, Ticket, Customer
 import hashlib
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import cast, Date
@@ -30,7 +30,16 @@ def auth_user_customer(username, password):
     if user:
         return user
     else:
-        return 'login_failed' #code này chỉ dành cho trang customer, không dùng được cho trang admin
+        return 'login_failed'  #code này chỉ dành cho trang customer, không dùng được cho trang admin
+
+
+def auth_user_employee(username, password):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Employee').first()
+    if user:
+        return user
+    else:
+        return 'login_failed'
 
 
 def get_user_by_username(id):
@@ -120,12 +129,13 @@ def load_invoice(invoice_id):
     invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
     return invoice
 
+
 def load_tickets(invoice_id):
     tickets = Ticket.query.filter_by(invoiceID=invoice_id).all()
     return tickets
+
 
 def load_customers(invoice_id):
     ticket_customer_ids = [ticket.customerID for ticket in Ticket.query.filter_by(invoiceID=invoice_id).all()]
     customers = Customer.query.filter(Customer.customerID.in_(ticket_customer_ids)).all()
     return customers
-
