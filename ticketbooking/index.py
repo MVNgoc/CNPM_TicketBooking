@@ -5,6 +5,7 @@ from flask import render_template, request, redirect
 from ticketbooking import app, dao, login
 from flask_login import login_user, logout_user, current_user
 import cloudinary.uploader
+from admin import admin
 
 
 @app.route('/')
@@ -31,10 +32,10 @@ def admin_login():
     username = request.form['username']
     password = request.form['pswd']
 
-    user = dao.auth_user(username=username,
-                         password=password)  # hàm auth user không còn sử dụng được do chỉ cho customer đăng nhập, cần viết lại hàm
+    user = dao.auth_user_admin(username=username,
+                         password=password)
     if user == 'login_failed':
-        return render_template('index.html', error_code=user)
+        return render_template('customer/index.html', error_code=user)
     else:
         login_user(user=user)
     return redirect('/admin')
@@ -117,6 +118,7 @@ def process_select_flight():
     date_of_department = request.form.get('date_of_department')
     quantity = request.form.get('quantity')
     type_ticket = request.form.get('type_ticket')
+    return_flight_list = ''
     flight_list_format = []
     return_flight_list_format = []
 
@@ -276,20 +278,24 @@ def tickets_booked():
     else:
         return redirect('/')
 
-
-@app.route('/tickets-booked/tickets-booked-details')
-def tickets_booked_details():
+@app.route('/tickets-booked/tickets-booked-details/<int:invoice_id>')
+def tickets_booked_details(invoice_id):
     path = request.path
     categories = dao.load_categories()
     listofticketstep = dao.load_list_of_ticket_step()
     authen = dao.load_current_user()
 
     if authen == 'true':
+        invoice = dao.load_invoice(invoice_id)
+        tickets = dao.load_tickets(invoice_id)
+        customers = dao.load_customers(invoice_id)
+        total_amount = invoice.paymentAmount
+        payment_status = invoice.paymentStatus
+
         return render_template('customer/listofticket/tickets_booked_details.html', categories=categories, path=path,
-                               listofticketstep=listofticketstep)
+                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers, total_amount=total_amount, payment_status=payment_status)
     else:
         return redirect('/')
-
 
 @app.route('/login')
 def login():

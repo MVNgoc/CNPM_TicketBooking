@@ -1,7 +1,7 @@
 from wtforms.fields.simple import StringField
 from wtforms.validators import InputRequired
 
-from ticketbooking.models import Flight,Route,Account,Employee
+from ticketbooking.models import Flight, Route, Account, Employee
 from ticketbooking import db, app
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
@@ -58,7 +58,9 @@ class AccountView(ModelView):
      }
 
     def is_accessible(self):
-        return current_user.is_authenticated
+        if current_user.is_authenticated and current_user.userRole in ['Admin', 'Employee']:
+            return True
+        return False
 class EmployeeView(ModelView):
     def scaffold_form(self):
         form_class= super(EmployeeView, self).scaffold_form()
@@ -80,6 +82,7 @@ class StatsView(BaseView):
     @expose('/')
     def index(self):
         return self.render('admin/stats.html')
+
 
 admin = Admin (app=app, name='Quản Lý Chuyến Bay',template_mode='bootstrap4')
 admin.add_view(FlightView(Flight,db.session, name='Chuyến Bay'))
