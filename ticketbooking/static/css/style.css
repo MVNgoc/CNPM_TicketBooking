@@ -268,7 +268,8 @@ p {
     position: relative;
 }
 
-.ticket-price-select:hover {
+.ticket-price-select:hover,
+.ticket-price-select-active {
     background: #f7e6a6;
 }
 
