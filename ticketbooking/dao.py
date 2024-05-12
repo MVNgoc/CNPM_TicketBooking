@@ -1,6 +1,5 @@
 import json
 from ticketbooking import app, db
-from models import Account, Invoice, Airport, Route, Flight, Price, SystemRule, Customer, Ticket
 from ticketbooking.models import Account, Invoice, Airport, Route, Flight, Price, SystemRule, Ticket, Customer
 import hashlib
 from sqlalchemy.exc import IntegrityError
