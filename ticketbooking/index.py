@@ -29,7 +29,7 @@ def admin_login():
     username = request.form['username']
     password = request.form['pswd']
 
-    user = dao.auth_user_employee(username=username,
+    user = dao.auth_user_admin(username=username,
                          password=password)
     if user == 'login_failed':
         return render_template('customer/index.html', error_code=user)

@@ -33,9 +33,9 @@ def auth_user_customer(username, password):
         return 'login_failed'  #code này chỉ dành cho trang customer, không dùng được cho trang admin
 
 
-def auth_user_employee(username, password):
+def auth_user_admin(username, password):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Employee').first()
+    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Admin').first()
     if user:
         return user
     else:
