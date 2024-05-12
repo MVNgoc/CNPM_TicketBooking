@@ -259,7 +259,6 @@ def tickets_booked():
     else:
         return redirect('/')
 
-
 @app.route('/tickets-booked/tickets-booked-details/<int:invoice_id>')
 def tickets_booked_details(invoice_id):
     path = request.path
@@ -271,9 +270,12 @@ def tickets_booked_details(invoice_id):
         invoice = dao.load_invoice(invoice_id)
         tickets = dao.load_tickets(invoice_id)
         customers = dao.load_customers(invoice_id)
+        total_amount = invoice.paymentAmount
+        payment_status = invoice.paymentStatus
 
         return render_template('customer/listofticket/tickets_booked_details.html', categories=categories, path=path,
-                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers)
+                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers, total_amount=total_amount,
+                           payment_status=payment_status)
     else:
         return redirect('/')
 

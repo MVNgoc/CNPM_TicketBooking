@@ -128,3 +128,4 @@ def load_customers(invoice_id):
     ticket_customer_ids = [ticket.customerID for ticket in Ticket.query.filter_by(invoiceID=invoice_id).all()]
     customers = Customer.query.filter(Customer.customerID.in_(ticket_customer_ids)).all()
     return customers
+

@@ -29,6 +29,7 @@
             <th>{{ loop.index }}</th>
             <td><a href="/tickets-booked/tickets-booked-details/{{ invoice.invoiceID }}">{{ invoice.invoiceID }}</a>
             </td>
+
             <td>{{ invoice.paymentTime }}</td>
             <td>{{ "{:,.0f}".format(invoice.paymentAmount) }}</td>
             <td>
