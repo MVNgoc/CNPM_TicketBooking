@@ -32,7 +32,7 @@ def admin_login():
     user = dao.auth_user_employee(username=username,
                          password=password)
     if user == 'login_failed':
-        return render_template('index.html', error_code=user)
+        return render_template('customer/index.html', error_code=user)
     else:
         login_user(user=user)
     return redirect('/admin')
