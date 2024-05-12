@@ -141,7 +141,7 @@ def process_select_flight():
                         'numOf2ndClassSeat': flight.numOf2ndClassSeat,
                         'flightStatus': flight.flightStatus,
                         'availableSeats': flight.availableSeats,
-                        'price': price_ticket <--- nó nằm trong đây hết nè
+                        'price': price_ticket
                     })
         else:
             return_flight_list_format = []
