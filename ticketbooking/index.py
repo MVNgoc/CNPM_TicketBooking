@@ -82,10 +82,10 @@ def flight_lookup():
 
     if authen == 'true':
         if booking_allowed == 'booking_time_true':
-            return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+            return render_template('customer/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
                                    list_airports=list_airports, booking_allowed=booking_allowed)
         if booking_allowed == 'booking_time_false':
-            return render_template('flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+            return render_template('customer/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
                                    error_code=booking_allowed)
     else:
         return redirect('/')
@@ -99,7 +99,7 @@ def select_flight():
     authen = dao.load_current_user()
 
     if authen == 'true':
-        return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
+        return render_template('customer/flightlookuplayout/select_flight.html', categories=categories, path=path,
                                bookticketstep=bookticketstep)
     else:
         return redirect('/')
@@ -169,7 +169,7 @@ def process_select_flight():
         'quantity': quantity,
     }
 
-    return render_template('flightlookuplayout/select_flight.html', categories=categories, path=path,
+    return render_template('customer/flightlookuplayout/select_flight.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, flight_list_format=flight_list_format,
                            return_flight_list_format=return_flight_list_format)
 
@@ -182,7 +182,7 @@ def passengers():
     authen = dao.load_current_user()
 
     if authen == 'true':
-        return render_template('flightlookuplayout/passengers.html', categories=categories, path=path,
+        return render_template('customer/flightlookuplayout/passengers.html', categories=categories, path=path,
                                bookticketstep=bookticketstep)
     else:
         return redirect('/')
@@ -215,7 +215,7 @@ def process_passengers():
         'total_ticket_price': float(total_ticket_price) or 0,
     }
 
-    return render_template('flightlookuplayout/passengers.html', categories=categories, path=path,
+    return render_template('customer/flightlookuplayout/passengers.html', categories=categories, path=path,
                            bookticketstep=bookticketstep)
 
 
@@ -227,7 +227,7 @@ def pay_ticket():
     authen = dao.load_current_user()
 
     if authen == 'true':
-        return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+        return render_template('customer/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
                                bookticketstep=bookticketstep)
     else:
         return redirect('/')
@@ -239,7 +239,7 @@ def process_pay_ticket():
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
 
-    return render_template('flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+    return render_template('customer/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
                            bookticketstep=bookticketstep)
 
 
@@ -254,7 +254,7 @@ def tickets_booked():
         account_id = current_user.id
         invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
 
-        return render_template('listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)
+        return render_template('customer/listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)
     else:
         return redirect('/')
 
@@ -267,7 +267,7 @@ def tickets_booked_details():
     authen = dao.load_current_user()
 
     if authen == 'true':
-        return render_template('listofticket/tickets_booked_details.html', categories=categories, path=path,
+        return render_template('customer/listofticket/tickets_booked_details.html', categories=categories, path=path,
                                listofticketstep=listofticketstep)
     else:
         return redirect('/')

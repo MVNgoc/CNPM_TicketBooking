@@ -113,6 +113,22 @@ window.onload = function() {
         });
     }
 
+    // Hàm xử lý disable button Tiếp theo khi chưa chọn vé
+    function handle_disable_button(ticket_price_value, return_ticket_price_value) {
+        let button_submit_choose_ticket = document.getElementById('button-submit-choose-ticket')
+
+        if(type_ticket == 'one-way') {
+            if(ticket_price_value > 0) {
+                button_submit_choose_ticket.removeAttribute('disabled')
+            }
+        }
+        else {
+            if(ticket_price_value > 0 && return_ticket_price_value > 0) {
+                button_submit_choose_ticket.removeAttribute('disabled')
+            }
+        }
+    }
+
     // JS xử lý hiển thị tiền khi chọn vé
     let ticket_price_item = document.getElementsByClassName("ticket_price_item")
     let ticket_price_return_item = document.getElementsByClassName("ticket_price_return_item")
@@ -137,6 +153,11 @@ window.onload = function() {
             ticket_price_input.value = ticket_price_value
             total_price_ticket.innerHTML = (parseInt(this.getAttribute("data-price")) + return_ticket_price_value).toLocaleString('en-US') + ' VND';
             total_price_ticket_input.value = (parseInt(this.getAttribute("data-price")) + return_ticket_price_value);
+            for (let j = 0; j < ticket_price_item.length; j++) {
+                ticket_price_item[j].classList.remove('ticket-price-select-active')
+            }
+            ticket_price_item[i].classList.add('ticket-price-select-active')
+            handle_disable_button(ticket_price_value, return_ticket_price_value)
         };
     }
 
@@ -148,6 +169,11 @@ window.onload = function() {
             return_ticket_price_input.value = return_ticket_price_value
             total_price_ticket.innerHTML = (parseInt(this.getAttribute("data-price")) + ticket_price_value).toLocaleString('en-US') + ' VND';
             total_price_ticket_input.value = (parseInt(this.getAttribute("data-price")) + ticket_price_value);
+            for (let j = 0; j < ticket_price_return_item.length; j++) {
+                ticket_price_return_item[j].classList.remove('ticket-price-select-active')
+            }
+            ticket_price_return_item[i].classList.add('ticket-price-select-active')
+            handle_disable_button(ticket_price_value, return_ticket_price_value)
         };
     }
 };
