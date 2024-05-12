@@ -382,11 +382,10 @@
             >0</span>
                 <input type="number" id="total_price_ticket_input" name="total_ticket_price" style="display: none;">
             </p>
-            {% if session['flight_info']['type_ticket'] == 'one-way' and flight_list_format %}
-            <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
-            {% elif session['flight_info']['type_ticket'] == 'two-way' and flight_list_format and
-            return_flight_list_format %}
-            <button type="submit" class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
+            {% if (session['flight_info']['type_ticket'] == 'one-way' and flight_list_format) or
+            (session['flight_info']['type_ticket'] == 'two-way' and flight_list_format and
+            return_flight_list_format) %}
+            <button type="submit" id="button-submit-choose-ticket" disabled class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
             {% endif %}
         </div>
     </form>
