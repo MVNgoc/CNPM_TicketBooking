@@ -27,7 +27,8 @@
         {% for invoice in invoices %}
         <tr>
             <th>{{ loop.index }}</th>
-            <td><a href="/tickets-booked/tickets-booked-details">{{ invoice.invoiceID }}</a></td>
+            <td><a href="/tickets-booked/tickets-booked-details/{{ invoice.invoiceID }}">{{ invoice.invoiceID }}</a>
+            </td>
             <td>{{ invoice.paymentTime }}</td>
             <td>{{ "{:,.0f}".format(invoice.paymentAmount) }}</td>
             <td>
@@ -36,7 +37,8 @@
                 {% elif invoice.paymentStatus == 'Paid' %} btn-success
                 {% elif invoice.paymentStatus == 'Cancelled' %} btn-danger
                 {% endif %}" style="font-weight: 700; width: 100px;">
-                    <a href="/tickets-booked/tickets-booked-details" style="text-decoration: none; color: white;">{{ invoice.paymentStatus }}</a>
+                    <a href="/tickets-booked/tickets-booked-details" style="text-decoration: none; color: white;">{{
+                        invoice.paymentStatus }}</a>
                 </button>
             </td>
         </tr>

@@ -116,6 +116,7 @@ def process_select_flight():
     date_of_department = request.form.get('date_of_department')
     quantity = request.form.get('quantity')
     type_ticket = request.form.get('type_ticket')
+    return_flight_list = ''
     flight_list_format = []
     return_flight_list_format = []
 
@@ -259,19 +260,22 @@ def tickets_booked():
         return redirect('/')
 
 
-@app.route('/tickets-booked/tickets-booked-details')
-def tickets_booked_details():
+@app.route('/tickets-booked/tickets-booked-details/<int:invoice_id>')
+def tickets_booked_details(invoice_id):
     path = request.path
     categories = dao.load_categories()
     listofticketstep = dao.load_list_of_ticket_step()
     authen = dao.load_current_user()
 
     if authen == 'true':
+        invoice = dao.load_invoice(invoice_id)
+        tickets = dao.load_tickets(invoice_id)
+        customers = dao.load_customers(invoice_id)
+
         return render_template('customer/listofticket/tickets_booked_details.html', categories=categories, path=path,
-                               listofticketstep=listofticketstep)
+                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers)
     else:
         return redirect('/')
-
 
 @app.route('/login')
 def login():

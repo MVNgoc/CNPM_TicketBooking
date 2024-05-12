@@ -1,6 +1,6 @@
 import json
 from ticketbooking import app, db
-from models import Account, Invoice, Airport, Route, Flight, Price, SystemRule
+from models import Account, Invoice, Airport, Route, Flight, Price, SystemRule, Ticket, Customer
 import hashlib
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import cast, Date
@@ -114,3 +114,17 @@ def load_current_user():
         return 'true'
     else:
         return 'false'
+
+
+def load_invoice(invoice_id):
+    invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
+    return invoice
+
+def load_tickets(invoice_id):
+    tickets = Ticket.query.filter_by(invoiceID=invoice_id).all()
+    return tickets
+
+def load_customers(invoice_id):
+    ticket_customer_ids = [ticket.customerID for ticket in Ticket.query.filter_by(invoiceID=invoice_id).all()]
+    customers = Customer.query.filter(Customer.customerID.in_(ticket_customer_ids)).all()
+    return customers
