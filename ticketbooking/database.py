@@ -54,42 +54,44 @@ def add_sample_data():
     price1 = Price(priceID='P001', flightID='F001', classID='SC001', price=100.0)
     price2 = Price(priceID='P002', flightID='F001', classID='SC002', price=50.0)
 
-    customer1 = Customer(customerID='C001', customerName='John Doe', gender='Male',
+    customer1 = Customer(customerID=1, customerName='John Doe', gender='Male',
                          birthDate=datetime.strptime('1997-4-6 00:00:00', '%Y-%m-%d %H:%M:%S'), idNumber=123456789,
                          phoneNumber=987654321)
-    customer2 = Customer(customerID='C002', customerName='Abc', gender='Female',
+    customer2 = Customer(customerID=2, customerName='Abc', gender='Female',
                          birthDate=datetime.strptime('1997-4-6 00:00:00', '%Y-%m-%d %H:%M:%S'), idNumber=123456789,
                          phoneNumber=987654321)
 
-    invoice1 = Invoice(invoiceID=1, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice1 = Invoice(invoiceID=1, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-18 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice2 = Invoice(invoiceID=2, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice2 = Invoice(invoiceID=2, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-19 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice3 = Invoice(invoiceID=3, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice3 = Invoice(invoiceID=3, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-20 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice4 = Invoice(invoiceID=4, accountID = '2', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice4 = Invoice(invoiceID=4, accountID='2', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-20 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice5 = Invoice(invoiceID=5, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice5 = Invoice(invoiceID=5, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-22 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice6 = Invoice(invoiceID=6, accountID = '1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
+    invoice6 = Invoice(invoiceID=6, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-23 16:30:00', '%Y-%m-%d %H:%M:%S'))
 
-    ticket1 = Ticket(invoiceID=1, customerID='C001', accountID='1', flightID='F001', classID='SC001', priceID='P001')
+    ticket1 = Ticket(invoiceID=1, customerID='1', accountID='1', flightID='F001', classID='SC001', priceID='P001')
 
     employee1 = Employee(employeeID='E001', employeeName='Jane Smith',
                          birthDate=datetime.strptime('1996-7-17 00:00:00', '%Y-%m-%d %H:%M:%S'), employeeRole='Admin')
     employee2 = Employee(employeeID='E002', employeeName='Jesscica Huynh',
                          birthDate=datetime.strptime('2000-1-1 00:00:00', '%Y-%m-%d %H:%M:%S'), employeeRole='Employee')
 
-
-    account1 = Account(id=1, userName='JohnDoe64', password=str(hashlib.md5("johndoe64@@".encode('utf-8')).hexdigest()),userRole='Customer')
-    account2 = Account(id=2, userName='E001', password=str(hashlib.md5("admine001.,".encode('utf-8')).hexdigest()),userRole='Admin')
-    account3 = Account(id=3, userName='E002', password=str(hashlib.md5("employeeE002..".encode('utf-8')).hexdigest()),userRole='Employee')
+    account1 = Account(id=1, userName='JohnDoe64', password=str(hashlib.md5("johndoe64@@".encode('utf-8')).hexdigest()),
+                       userRole='Customer')
+    account2 = Account(id=2, userName='E001', password=str(hashlib.md5("admine001.,".encode('utf-8')).hexdigest()),
+                       userRole='Admin')
+    account3 = Account(id=3, userName='E002', password=str(hashlib.md5("employeeE002..".encode('utf-8')).hexdigest()),
+                       userRole='Employee')
 
     system_rule = SystemRule(numAirports=2, minFlightTime=3.5, maxIntermediatedAirports=1, minStopoverTime=1.5,
                              maxStopoverTime=4.0, ticketSaleTime_Start=time(hour=8), ticketBookingTime_Start=time(
-            hour=8), ticketSaleTime_End=time(hour=17),  ticketBookingTime_End=time(
-            hour=23) )  # Thời gian bắt đầu bán vé từ 8 giờ sáng   # Thời gian bắt đầu đặt vé từ 8 giờ sáng
+            hour=8), ticketSaleTime_End=time(hour=17), ticketBookingTime_End=time(
+            hour=23))  # Thời gian bắt đầu bán vé từ 8 giờ sáng   # Thời gian bắt đầu đặt vé từ 8 giờ sáng
 
     db.session.add_all(
         [airport1, airport2, airport3, airport4, airport5, airport6,

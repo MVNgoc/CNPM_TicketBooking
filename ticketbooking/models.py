@@ -74,7 +74,7 @@ class Price(db.Model):
 
 class Customer(db.Model):
     __tablename__ = 'customer'
-    customerID = Column(String(10), primary_key=True)
+    customerID = Column(Integer, primary_key=True, autoincrement=True)
     customerName = Column(String(50), nullable=False)
     gender = Column(Enum('Male', 'Female', name='customer_gender'))
     birthDate = Column(DateTime)
@@ -87,7 +87,7 @@ class Ticket(db.Model):
     __tablename__ = 'ticket'
     ticketID = Column(Integer, primary_key=True, autoincrement=True)
     invoiceID = Column(Integer, ForeignKey('invoice.invoiceID'), nullable=False)
-    customerID = Column(String(10), ForeignKey(Customer.customerID), nullable=False)
+    customerID = Column(Integer, ForeignKey(Customer.customerID), nullable=False)
     accountID = Column(Integer, ForeignKey('account.id'), nullable=False)
     flightID = Column(String(15), ForeignKey(Flight.flightID), nullable=False)
     classID = Column(String(10), ForeignKey(SeatClass.classID), nullable=False)
@@ -129,7 +129,7 @@ class Invoice(db.Model):
     paymentAmount = Column(Float, nullable=False)
     paymentStatus = Column(Enum('Pending', 'Paid', 'Cancelled', name='payment_status'))
     paymentMethod = Column(Enum('BankTransfer', 'Cash', name='payment_method'))
-    transferImage = Column(LargeBinary)
+    transferImage = Column(String(500))
     paymentTime = Column(DateTime)
 
     tickets = relationship(Ticket, backref='invoice')
