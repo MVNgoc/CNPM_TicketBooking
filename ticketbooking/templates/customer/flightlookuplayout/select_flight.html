@@ -190,7 +190,7 @@
                                     class="time-style">{{ f.arrivalTime.strftime('%H:%M') }}</span></p>
                         </div>
                         <div class="ticket-price-select">
-                            {% if f.numOf1stClassSeat > 0 %}
+                            {% if f.numOf1stClassSeat >= session['flight_info']['quantity'] %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC001' %}
                             <div class="ticket_price_item" data-price="{{ p.price }}">
@@ -207,7 +207,7 @@
                             {% endif %}
                         </div>
                         <div class="ticket-price-select">
-                            {% if f.numOf2ndClassSeat > 0 %}
+                            {% if f.numOf2ndClassSeat >= session['flight_info']['quantity'] %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC002' %}
                             <div class="ticket_price_item" data-price="{{ p.price }}">
@@ -251,7 +251,7 @@
                                     class="time-style">{{ f.arrivalTime.strftime('%H:%M') }}</span></p>
                         </div>
                         <div class="ticket-price-select">
-                            {% if f.numOf1stClassSeat > 0 %}
+                            {% if f.numOf1stClassSeat >= session['flight_info']['quantity'] %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC001' %}
                             <div class="ticket_price_return_item" data-price="{{ p.price }}">
@@ -268,7 +268,7 @@
                             {% endif %}
                         </div>
                         <div class="ticket-price-select">
-                            {% if f.numOf2ndClassSeat > 0 %}
+                            {% if f.numOf2ndClassSeat >= session['flight_info']['quantity'] %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC002' %}
                             <div class="ticket_price_return_item" data-price="{{ p.price }}">
@@ -385,7 +385,9 @@
             {% if (session['flight_info']['type_ticket'] == 'one-way' and flight_list_format) or
             (session['flight_info']['type_ticket'] == 'two-way' and flight_list_format and
             return_flight_list_format) %}
-            <button type="submit" id="button-submit-choose-ticket" disabled class="btn btn-success" style="width: 150px; font-weight: 700;">Tiếp theo</button>
+            <button type="submit" id="button-submit-choose-ticket" disabled class="btn btn-success"
+                    style="width: 150px; font-weight: 700;">Tiếp theo
+            </button>
             {% endif %}
         </div>
     </form>

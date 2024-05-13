@@ -120,10 +120,6 @@ def process_select_flight():
     flight_list_format = []
     return_flight_list_format = []
 
-    # Chỗ này em tạo ra 2 cái mãng để lưu list id chuyến bay 1 chiều với khứ hồi
-    flight_id_list = []
-    flight_id_list_return = []
-
     route = dao.load_route_of_airports(departure_point[0], destination[0])
     return_route = dao.load_route_of_airports(destination[0], departure_point[0])
 
@@ -133,8 +129,6 @@ def process_select_flight():
             return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)
             for flight in return_flight_list:
                 price_ticket = dao.get_price_ticket(flight.flightID)
-                # Từ cái thông tin chuyến mình lôi cái ID ra để lưu riêng
-                flight_id_list.append(flight.flightID)
                 return_flight_list_format.append(
                     {
                         'flightID': flight.flightID,
@@ -154,8 +148,6 @@ def process_select_flight():
         flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
         for flight in flight_list:
             price_ticket = dao.get_price_ticket(flight.flightID)
-            # Tương tự với thằng khứ hồi
-            flight_id_list_return.append(flight.flightID)
             flight_list_format.append(
                 {
                     'flightID': flight.flightID,
@@ -175,16 +167,8 @@ def process_select_flight():
         'departure_point': departure_point,
         'destination': destination,
         'type_ticket': type_ticket,
-        'quantity': quantity,
+        'quantity': float(quantity),
     }
-
-    # Lấy được gou thì giờ mình lưu dô session
-    session['flight_id_list'] = {
-        'one-way': flight_id_list,
-        'two-way': flight_id_list_return
-    }
-
-    # Lưu xong thì ở dưới em chỉ việc gọi session ra dùng thôi
 
     return render_template('customer/flightlookuplayout/select_flight.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, flight_list_format=flight_list_format,
@@ -267,10 +251,6 @@ def process_pay_ticket_upload():
     image = request.files['image']
     res = cloudinary.uploader.upload(image)
     url_image = res['secure_url']
-
-    #Check thử xem lấy được chưa
-    print('flight_id_list: ', flight_id_list)
-    print('flight_id_list_return: ', flight_id_list_return)
 
     if url_image:
         customer_id = dao.add_customer(session['passengers'], session['flight_info']['quantity']).customerID

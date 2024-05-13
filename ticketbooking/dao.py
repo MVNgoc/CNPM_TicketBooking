@@ -30,7 +30,7 @@ def auth_user_customer(username, password):
     if user:
         return user
     else:
-        return 'login_failed' #code này chỉ dành cho trang customer, không dùng được cho trang admin
+        return 'login_failed'  # code này chỉ dành cho trang customer, không dùng được cho trang admin
 
 
 def auth_user_admin(username, password):
@@ -160,7 +160,7 @@ def add_ticket(invoiceID, customerID, flight_id_list):
 
     try:
         for i in range(int(flight_id_list)):
-            ticket = Ticket(invoiceID=int(invoiceID), customerID=int(customerID), accountID=int(account_id)
+            ticket = Ticket(invoiceID=int(invoiceID), customerID=int(customerID), accountID=int(account_id),
                             flightID=flight_id_list['one-way'])
             db.session.add(ticket)
 
@@ -187,7 +187,6 @@ def load_customers(invoice_id):
     ticket_customer_ids = [ticket.customerID for ticket in Ticket.query.filter_by(invoiceID=invoice_id).all()]
     customers = Customer.query.filter(Customer.customerID.in_(ticket_customer_ids)).all()
     return customers
-
 
 # code cho phần admin
 
