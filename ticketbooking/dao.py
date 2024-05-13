@@ -160,7 +160,6 @@ def add_ticket(invoiceID, customerID):
     ticket = Ticket(invoiceID=int(invoiceID), customerID=int(customerID), accountID=int(account_id))
 
 
-
 def load_invoice(invoice_id):
     invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
     return invoice
@@ -175,3 +174,9 @@ def load_customers(invoice_id):
     ticket_customer_ids = [ticket.customerID for ticket in Ticket.query.filter_by(invoiceID=invoice_id).all()]
     customers = Customer.query.filter(Customer.customerID.in_(ticket_customer_ids)).all()
     return customers
+
+
+# code cho phần admin
+
+
+# code cho phần employee

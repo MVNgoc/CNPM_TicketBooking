@@ -278,6 +278,7 @@ def tickets_booked():
     else:
         return redirect('/')
 
+
 @app.route('/tickets-booked/tickets-booked-details/<int:invoice_id>')
 def tickets_booked_details(invoice_id):
     path = request.path
@@ -297,11 +298,11 @@ def tickets_booked_details(invoice_id):
     else:
         return redirect('/')
 
-@app.route('/login')
-def login():
-    path = request.path
-    categories = dao.load_categories()
-    return render_template('login.html', categories=categories, path=path)
+
+# code cho phần admin
+
+
+# code cho phần employee
 
 
 if __name__ == '__main__':
