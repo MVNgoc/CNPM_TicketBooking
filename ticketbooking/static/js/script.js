@@ -97,7 +97,9 @@ window.onload = function() {
 
         // Disable past dates in returnDate and set min date based on departureDate
         departure_date.addEventListener('change', function() {
-            document.getElementById("returnDate").setAttribute('min', this.value);
+            let minReturnDate = new Date(this.value);
+            minReturnDate.setDate(minReturnDate.getDate() + 1); // Set return date to the day after departure
+            return_date.setAttribute('min', minReturnDate.toISOString().split('T')[0]);
         });
     }
 

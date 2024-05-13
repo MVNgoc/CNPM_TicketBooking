@@ -65,10 +65,11 @@
                         <div class="mb-3 was-validated">
                             <label for="quantity_one_way" class="form-label">Số lượng</label>
                             <input class="form-control" style="width: 50%;" name="quantity" id="quantity_one_way"
-                                   type="number" min="1" required>
+                                   type="number" min="1" max="5" required>
+<!--                            <div class="error-feedback mt-2">Vui lòng chọn tối đa 5 người.</div>-->
                         </div>
                         <button type="submit"
-                                class="btn btn-success mt-3 {{ 'disabled' if error_code == 'booking_time_false' }}"
+                                class="btn btn-success {{ 'disabled' if error_code == 'booking_time_false' }}"
                                 style="border-radius: 10px; font-weight: 600;">
                             Tìm kiếm
                         </button>
@@ -114,11 +115,11 @@
                         <div class="mb-3 was-validated">
                             <label for="quantity" class="form-label">Số lượng</label>
                             <input class="form-control" style="width: 50%;" name="quantity" id="quantity" type="number"
-                                   min="1"
-                                   required>
+                                   min="1" max="5" required>
+<!--                            <div class="error-feedback mt-2">Vui lòng chọn tối đa 5 người.</div>-->
                         </div>
                         <button type="submit"
-                                class="btn btn-success mt-3 {{ 'disabled' if error_code == 'booking_time_false' }}"
+                                class="btn btn-success {{ 'disabled' if error_code == 'booking_time_false' }}"
                                 style="border-radius: 10px; font-weight: 600;" data-bs-toggle="modal"
                                 data-bs-target="#popupFormModal">Tìm kiếm
                         </button>

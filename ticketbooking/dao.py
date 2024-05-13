@@ -107,6 +107,10 @@ def get_price_ticket(flightID):
     return Price.query.filter_by(flightID=flightID).all()
 
 
+# def check_available_seats(quantity):
+#     available_seats = Ticket.query.
+
+
 def load_booking_time():
     current_time = datetime.now().time()
     start_time = SystemRule.query.first().ticketBookingTime_Start
@@ -187,6 +191,7 @@ def load_customers(invoice_id):
     ticket_customer_ids = [ticket.customerID for ticket in Ticket.query.filter_by(invoiceID=invoice_id).all()]
     customers = Customer.query.filter(Customer.customerID.in_(ticket_customer_ids)).all()
     return customers
+
 
 # code cho phần admin
 
