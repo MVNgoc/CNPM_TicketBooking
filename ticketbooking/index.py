@@ -1,5 +1,4 @@
 import datetime
-
 from flask import Flask, session
 from flask import render_template, request, redirect
 from ticketbooking import app, dao, login
@@ -33,7 +32,7 @@ def admin_login():
     password = request.form['pswd']
 
     user = dao.auth_user_admin(username=username,
-                         password=password)
+                               password=password)
     if user == 'login_failed':
         return render_template('customer/index.html', error_code=user)
     else:
@@ -118,9 +117,12 @@ def process_select_flight():
     date_of_department = request.form.get('date_of_department')
     quantity = request.form.get('quantity')
     type_ticket = request.form.get('type_ticket')
-    return_flight_list = ''
     flight_list_format = []
     return_flight_list_format = []
+
+    # Chỗ này em tạo ra 2 cái mãng để lưu list id chuyến bay 1 chiều với khứ hồi
+    flight_id_list = []
+    flight_id_list_return = []
 
     route = dao.load_route_of_airports(departure_point[0], destination[0])
     return_route = dao.load_route_of_airports(destination[0], departure_point[0])
@@ -131,6 +133,8 @@ def process_select_flight():
             return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)
             for flight in return_flight_list:
                 price_ticket = dao.get_price_ticket(flight.flightID)
+                # Từ cái thông tin chuyến mình lôi cái ID ra để lưu riêng
+                flight_id_list.append(flight.flightID)
                 return_flight_list_format.append(
                     {
                         'flightID': flight.flightID,
@@ -150,6 +154,8 @@ def process_select_flight():
         flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
         for flight in flight_list:
             price_ticket = dao.get_price_ticket(flight.flightID)
+            # Tương tự với thằng khứ hồi
+            flight_id_list_return.append(flight.flightID)
             flight_list_format.append(
                 {
                     'flightID': flight.flightID,
@@ -171,6 +177,14 @@ def process_select_flight():
         'type_ticket': type_ticket,
         'quantity': quantity,
     }
+
+    # Lấy được gou thì giờ mình lưu dô session
+    session['flight_id_list'] = {
+        'one-way': flight_id_list,
+        'two-way': flight_id_list_return
+    }
+
+    # Lưu xong thì ở dưới em chỉ việc gọi session ra dùng thôi
 
     return render_template('customer/flightlookuplayout/select_flight.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, flight_list_format=flight_list_format,
@@ -254,10 +268,14 @@ def process_pay_ticket_upload():
     res = cloudinary.uploader.upload(image)
     url_image = res['secure_url']
 
+    #Check thử xem lấy được chưa
+    print('flight_id_list: ', flight_id_list)
+    print('flight_id_list_return: ', flight_id_list_return)
+
     if url_image:
         customer_id = dao.add_customer(session['passengers'], session['flight_info']['quantity']).customerID
         invoice_id = dao.add_invoice(session['ticket_price_info']['total_ticket_price'], url_image).invoiceID
-        print(invoice_id, customer_id)
+        # print(invoice_id, customer_id)
         return redirect('/flight-lookup/pay-ticket')
     else:
         print(url_image)
@@ -274,7 +292,8 @@ def tickets_booked():
         account_id = current_user.id
         invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
 
-        return render_template('customer/listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)
+        return render_template('customer/listofticket/tickets_booked.html', categories=categories, path=path,
+                               invoices=invoices)
     else:
         return redirect('/')
 
@@ -294,7 +313,8 @@ def tickets_booked_details(invoice_id):
         payment_status = invoice.paymentStatus
 
         return render_template('customer/listofticket/tickets_booked_details.html', categories=categories, path=path,
-                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers, total_amount=total_amount, payment_status=payment_status)
+                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers,
+                               total_amount=total_amount, payment_status=payment_status)
     else:
         return redirect('/')
 

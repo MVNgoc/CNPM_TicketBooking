@@ -155,9 +155,22 @@ def add_invoice(paymentAmount, transferImage):
     return invoice
 
 
-def add_ticket(invoiceID, customerID):
+def add_ticket(invoiceID, customerID, flight_id_list):
     account_id = current_user.id
-    ticket = Ticket(invoiceID=int(invoiceID), customerID=int(customerID), accountID=int(account_id))
+
+    try:
+        for i in range(int(flight_id_list)):
+            ticket = Ticket(invoiceID=int(invoiceID), customerID=int(customerID), accountID=int(account_id)
+                            flightID=flight_id_list['one-way'])
+            db.session.add(ticket)
+
+        db.session.commit()
+
+    except IntegrityError as e:
+        db.session.rollback()
+        return 'add_customer_false'
+
+    return ticket
 
 
 def load_invoice(invoice_id):
