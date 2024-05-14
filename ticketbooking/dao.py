@@ -33,7 +33,6 @@ def auth_user_customer(username, password):
         return 'login_failed'  # code này chỉ dành cho trang customer, không dùng được cho trang admin
 
 
-
 def get_user_by_username(id):
     return Account.query.filter_by(id=id).first()
 
@@ -99,10 +98,6 @@ def get_price_ticket(flightID):
     return Price.query.filter_by(flightID=flightID).all()
 
 
-# def check_available_seats(quantity):
-#     available_seats = Ticket.query.
-
-
 def load_booking_time():
     current_time = datetime.now().time()
     start_time = SystemRule.query.first().ticketBookingTime_Start
@@ -122,6 +117,7 @@ def load_current_user():
 
 
 def add_customer(list_info_user, quantity):
+    list_customer_id = []
     try:
         for i in range(int(quantity)):
             customer = Customer(customerName=list_info_user['customerName'][i], gender=list_info_user['sex'][i],
@@ -129,14 +125,15 @@ def add_customer(list_info_user, quantity):
                                 idNumber=list_info_user['idNumber'][i],
                                 phoneNumber=list_info_user['phoneNumber'][i])
             db.session.add(customer)
-
+            db.session.flush()  # Đảm bảo ID của khách hàng được tạo ra trước khi commit
+            list_customer_id.append(customer.customerID)
         db.session.commit()
 
     except IntegrityError as e:
         db.session.rollback()
         return 'add_customer_false'
 
-    return customer
+    return list_customer_id
 
 
 def add_invoice(paymentAmount, transferImage):
@@ -165,22 +162,29 @@ def cancel_invoice(invoice_id):
         return False
 
 
-def add_ticket(invoiceID, customerID, flight_id_list):
+def add_ticket(invoiceID, customerID, flightSelectInfo, type_ticket):
     account_id = current_user.id
-
     try:
-        for i in range(int(flight_id_list)):
-            ticket = Ticket(invoiceID=int(invoiceID), customerID=int(customerID), accountID=int(account_id),
-                            flightID=flight_id_list['one-way'])
+        for i in customerID:
+            ticket = Ticket(invoiceID=int(invoiceID), customerID=int(i), accountID=int(account_id),
+                            flightID=flightSelectInfo['flightID'], classID=flightSelectInfo['classID'],
+                            priceID=flightSelectInfo['priceID'])
             db.session.add(ticket)
+
+            if type_ticket == 'two-way':
+                ticket_return = Ticket(invoiceID=int(invoiceID), customerID=int(i), accountID=int(account_id),
+                                       flightID=flightSelectInfo['flightReturnID'],
+                                       classID=flightSelectInfo['classReturnID'],
+                                       priceID=flightSelectInfo['priceReturnID'])
+                db.session.add(ticket_return)
 
         db.session.commit()
 
     except IntegrityError as e:
         db.session.rollback()
-        return 'add_customer_false'
+        return 'add_ticket_failed'
 
-    return ticket
+    return 'add_ticket_success'
 
 
 def load_invoice(invoice_id):
@@ -207,6 +211,5 @@ def auth_user_admin(username, password):
         return user
     else:
         return 'login_failed'
-
 
 # code cho phần employee

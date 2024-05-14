@@ -193,7 +193,8 @@
                             {% if f.numOf1stClassSeat >= session['flight_info']['quantity'] %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC001' %}
-                            <div class="ticket_price_item" data-price="{{ p.price }}">
+                            <div class="ticket_price_item" data-price="{{ p.price }}" data-flightID="{{ f.flightID }}"
+                                 data-priceID="{{ p.priceID }}" data-classID="{{ p.classID }}">
                                 <p>{{ "{:,.0f}".format(p.price) }}
                                     VND</p>
                             </div>
@@ -210,7 +211,9 @@
                             {% if f.numOf2ndClassSeat >= session['flight_info']['quantity'] %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC002' %}
-                            <div class="ticket_price_item" data-price="{{ p.price }}">
+                            <div class="ticket_price_item" data-price="{{ p.price }}" data-flightID="{{ f.flightID }}"
+                                 data-priceID="{{ p.priceID }}" data-classID="{{ p.classID }}"
+                                 data-ticket="{{ p }}">
                                 <p>{{ "{:,.0f}".format(p.price) }}
                                     VND</p>
                             </div>
@@ -254,7 +257,10 @@
                             {% if f.numOf1stClassSeat >= session['flight_info']['quantity'] %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC001' %}
-                            <div class="ticket_price_return_item" data-price="{{ p.price }}">
+                            <div class="ticket_price_return_item" data-price="{{ p.price }}"
+                                 data-flightReturnID="{{ f.flightID }}"
+                                 data-priceReturnID="{{ p.priceID }}" data-classReturnID="{{ p.classID }}"
+                            >
                                 <p>{{ "{:,.0f}".format(p.price) }}
                                     VND</p>
                             </div>
@@ -271,7 +277,9 @@
                             {% if f.numOf2ndClassSeat >= session['flight_info']['quantity'] %}
                             {% for p in f.price %}
                             {% if p.classID == 'SC002' %}
-                            <div class="ticket_price_return_item" data-price="{{ p.price }}">
+                            <div class="ticket_price_return_item" data-price="{{ p.price }}"
+                                 data-flightReturnID="{{ f.flightID }}"
+                                 data-priceReturnID="{{ p.priceID }}" data-classReturnID="{{ p.classID }}">
                                 <p>{{ "{:,.0f}".format(p.price) }}
                                     VND</p>
                             </div>
@@ -293,6 +301,15 @@
     </div>
     <form method="post" action="/flight-lookup/passengers" class="total_price_box">
         <div class="mb-4">
+            <div style="display: none;">
+                <input type="text" name="flightID" id="flight_id">
+                <input type="text" name="priceID" id="price_id">
+                <input type="text" name="classID" id="class_id">
+
+                <input type="text" name="flightReturnID" id="flightReturn_id">
+                <input type="text" name="priceReturnID" id="priceReturn_id">
+                <input type="text" name="classReturnID" id="classReturn_id">
+            </div>
             <div class="select_flight_header">
                 <p>THÔNG TIN CHUYẾN BAY
                     {% if session['flight_info']['type_ticket'] == 'two-way' %}

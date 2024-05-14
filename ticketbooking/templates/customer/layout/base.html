@@ -65,6 +65,7 @@
 <script>
     var errorCode = {% if error_code %}"{{ error_code }}"{% else %}null{% endif %};
     var type_ticket = {% if session['flight_info'] %}"{{ session['flight_info']['type_ticket'] }}"{% else %}null{% endif %};
+    var payment_status = {% if payment_status %}"{{ payment_status }}"{% else %}null{% endif %};
 </script>
 <script src="../static/js/script.js" defer type="text/javascript"></script>
 </html>

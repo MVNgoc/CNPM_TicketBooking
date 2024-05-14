@@ -147,6 +147,14 @@ window.onload = function() {
     let return_ticket_price_input = document.getElementById("return_ticket_price_input")
     let total_price_ticket_input = document.getElementById("total_price_ticket_input")
 
+    let flight_id = document.getElementById("flight_id")
+    let price_id = document.getElementById("price_id")
+    let class_id = document.getElementById("class_id")
+
+    let flightReturn_id = document.getElementById("flightReturn_id")
+    let priceReturn_id = document.getElementById("priceReturn_id")
+    let classReturn_id = document.getElementById("classReturn_id")
+
     for (let i = 0; i < ticket_price_item.length; i++) {
         ticket_price_item[i].onclick = function displayPrice()
         {
@@ -160,6 +168,14 @@ window.onload = function() {
             }
             ticket_price_item[i].classList.add('ticket-price-select-active')
             handle_disable_button(ticket_price_value, return_ticket_price_value)
+
+//            JS xử lý lấy thông tin chuyến bay đi được chọn
+            flightID = this.getAttribute("data-flightID")
+            flight_id.value = flightID
+            priceID = this.getAttribute("data-priceID")
+            price_id.value = priceID
+            classID = this.getAttribute("data-classID")
+            class_id.value = classID
         };
     }
 
@@ -176,17 +192,27 @@ window.onload = function() {
             }
             ticket_price_return_item[i].classList.add('ticket-price-select-active')
             handle_disable_button(ticket_price_value, return_ticket_price_value)
+
+//            JS xử lý lấy thông tin chuyến bay về được chọn
+            flightReturnID = this.getAttribute("data-flightReturnID")
+            flightReturn_id.value = flightReturnID
+            priceReturnID = this.getAttribute("data-priceReturnID")
+            priceReturn_id.value = priceReturnID
+            classReturnID = this.getAttribute("data-classReturnID")
+            classReturn_id.value = classReturnID
         };
     }
 
     var paymentStatusElement = document.getElementById('paymentStatus');
-    var paymentStatus = paymentStatusElement.dataset.paymentStatus;
+    if(paymentStatusElement) {
+        var paymentStatus = paymentStatusElement.dataset.paymentStatus;
 
-    var confirmCancel = document.getElementById('confirmCancel');
-    var cancelButton = document.getElementById('cancelButton');
+        var confirmCancel = document.getElementById('confirmCancel');
+        var cancelButton = document.getElementById('cancelButton');
 
-    if (confirmCancel && paymentStatus === "Cancelled") {
-        cancelButton.classList.add('disabled-button'); // Thêm lớp CSS để vô hiệu hóa nút
+        if (confirmCancel && paymentStatus === "Cancelled") {
+            cancelButton.classList.add('disabled-button'); // Thêm lớp CSS để vô hiệu hóa nút
+        }
     }
 
     // Nếu không phải trạng thái "cancelled", thì thực hiện các hành động khi nhấp vào nút hủy
@@ -197,5 +223,19 @@ window.onload = function() {
             // Chuyển hướng đến trang /cancel-invoice/.. nếu hủy hóa đơn thành công
             window.location.href = `/cancel-invoice/${invoiceId}`;
         });
+    }
+
+    // JS hiện form popup thông báo Thanh toán đang chờ duyệt
+//    if(payment_status == 'success') {
+//        var myModal = new bootstrap.Modal(document.getElementById('popupFormModal1'), {
+//            keyboard: false
+//        });
+//        myModal.show();
+//    }
+    if(payment_status == 'success') {
+        alert(payment_status)
+    }
+    else {
+        alert(payment_status)
     }
 };
