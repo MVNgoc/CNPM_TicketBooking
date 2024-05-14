@@ -1,7 +1,7 @@
 import datetime
 from math import ceil
 
-from flask import Flask, session
+from flask import Flask, session, jsonify, url_for
 from flask import render_template, request, redirect
 from ticketbooking import app, dao, login
 from flask_login import login_user, logout_user, current_user
@@ -26,8 +26,6 @@ def process_login():
     else:
         login_user(user=u)
         return redirect('/')
-
-
 
 
 @app.route('/register', methods=['post'])
@@ -283,12 +281,20 @@ def tickets_booked_details(invoice_id):
 
         return render_template('customer/listofticket/tickets_booked_details.html', categories=categories, path=path,
                                listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers,
-                               total_amount=total_amount, payment_status=payment_status)
+                               total_amount=total_amount, payment_status=payment_status, invoice_id=invoice_id)
     else:
         return redirect('/')
 
 
+@app.route('/cancel-invoice/<int:invoice_id>', methods=['GET', 'POST'])
+def cancel_invoice_route(invoice_id):
+    dao.cancel_invoice(invoice_id)
+    return redirect('/tickets-booked')
+
+
 # code cho phần admin
+
+
 @app.route('/login-admin', methods=['post'])
 def admin_login():
     username = request.form['username']
@@ -309,6 +315,7 @@ def common_atstr():
     return {
         'categories': categories
     }
+
 
 # code cho phần employee
 

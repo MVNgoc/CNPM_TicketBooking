@@ -151,6 +151,20 @@ def add_invoice(paymentAmount, transferImage):
     return invoice
 
 
+def cancel_invoice(invoice_id):
+    try:
+        invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
+        if invoice:
+            invoice.paymentStatus = 'Cancelled'
+            db.session.commit()
+            return True
+        return False
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error cancelling invoice: {e}")
+        return False
+
+
 def add_ticket(invoiceID, customerID, flight_id_list):
     account_id = current_user.id
 

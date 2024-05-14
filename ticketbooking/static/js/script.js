@@ -178,4 +178,24 @@ window.onload = function() {
             handle_disable_button(ticket_price_value, return_ticket_price_value)
         };
     }
+
+    var paymentStatusElement = document.getElementById('paymentStatus');
+    var paymentStatus = paymentStatusElement.dataset.paymentStatus;
+
+    var confirmCancel = document.getElementById('confirmCancel');
+    var cancelButton = document.getElementById('cancelButton');
+
+    if (confirmCancel && paymentStatus === "Cancelled") {
+        cancelButton.classList.add('disabled-button'); // Thêm lớp CSS để vô hiệu hóa nút
+    }
+
+    // Nếu không phải trạng thái "cancelled", thì thực hiện các hành động khi nhấp vào nút hủy
+    if (confirmCancel && paymentStatus !== "Cancelled") {
+        confirmCancel.addEventListener('click', function() {
+            var invoiceId = cancelButton.getAttribute('data-id');
+
+            // Chuyển hướng đến trang /cancel-invoice/.. nếu hủy hóa đơn thành công
+            window.location.href = `/cancel-invoice/${invoiceId}`;
+        });
+    }
 };
