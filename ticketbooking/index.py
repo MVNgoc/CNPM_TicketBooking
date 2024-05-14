@@ -1,4 +1,6 @@
 import datetime
+from math import ceil
+
 from flask import Flask, session
 from flask import render_template, request, redirect
 from ticketbooking import app, dao, login
@@ -26,26 +28,6 @@ def process_login():
         return redirect('/')
 
 
-@app.route('/login-admin', methods=['post'])
-def admin_login():
-    username = request.form['username']
-    password = request.form['pswd']
-
-    user = dao.auth_user_admin(username=username,
-                               password=password)
-    if user == 'login_failed':
-        return render_template('customer/index.html', error_code=user)
-    else:
-        login_user(user=user)
-    return redirect('/admin')
-
-
-@app.context_processor
-def common_atstr():
-    categories = dao.load_categories()
-    return {
-        'categories': categories
-    }
 
 
 @app.route('/register', methods=['post'])
@@ -271,9 +253,16 @@ def tickets_booked():
         kw = request.args.get('keyword')
         account_id = current_user.id
         invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
+        total_invoices = len(invoices)  # Tổng số hóa đơn
+        per_page = 5  # Số lượng hóa đơn muốn hiển thị trên mỗi trang
+        page = request.args.get('page', 1, type=int)
+        num_pages = ceil(total_invoices / per_page)  # Tính số trang
+        start_index = (page - 1) * per_page
+        end_index = min(start_index + per_page, total_invoices)
+        invoices_on_page = invoices[start_index:end_index]
 
         return render_template('customer/listofticket/tickets_booked.html', categories=categories, path=path,
-                               invoices=invoices)
+                               invoices=invoices_on_page, page=page, num_pages=num_pages)
     else:
         return redirect('/')
 
@@ -300,7 +289,26 @@ def tickets_booked_details(invoice_id):
 
 
 # code cho phần admin
+@app.route('/login-admin', methods=['post'])
+def admin_login():
+    username = request.form['username']
+    password = request.form['pswd']
 
+    user = dao.auth_user_admin(username=username,
+                               password=password)
+    if user == 'login_failed':
+        return render_template('customer/index.html', error_code=user)
+    else:
+        login_user(user=user)
+    return redirect('/admin')
+
+
+@app.context_processor
+def common_atstr():
+    categories = dao.load_categories()
+    return {
+        'categories': categories
+    }
 
 # code cho phần employee
 

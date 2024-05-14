@@ -33,14 +33,6 @@ def auth_user_customer(username, password):
         return 'login_failed'  # code này chỉ dành cho trang customer, không dùng được cho trang admin
 
 
-def auth_user_admin(username, password):
-    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Admin').first()
-    if user:
-        return user
-    else:
-        return 'login_failed'
-
 
 def get_user_by_username(id):
     return Account.query.filter_by(id=id).first()
@@ -194,6 +186,13 @@ def load_customers(invoice_id):
 
 
 # code cho phần admin
+def auth_user_admin(username, password):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Admin').first()
+    if user:
+        return user
+    else:
+        return 'login_failed'
 
 
 # code cho phần employee
