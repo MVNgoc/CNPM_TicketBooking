@@ -267,9 +267,9 @@ def process_pay_ticket_upload():
         if res_add_ticket == 'add_ticket_success':
             return redirect('/flight-lookup/pay-ticket?payment=success')
         else:
-            return redirect('/flight-lookup/pay-ticket?payment=false')
+            return redirect('/flight-lookup/pay-ticket?payment=failure')
     else:
-        return redirect('/flight-lookup/pay-ticket?payment=false')
+        return redirect('/flight-lookup/pay-ticket?payment=failure')
 
 
 @app.route('/tickets-booked')
