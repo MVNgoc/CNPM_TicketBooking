@@ -27,52 +27,49 @@ def add_sample_data():
                      departureTime=datetime.strptime('2024-5-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
                      arrivalTime=datetime.strptime('2024-5-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
-    flight2 = Flight(flightID='F002', routeID='R001',
+    flight2 = Flight(flightID='F002', routeID='R005',
                      departureTime=datetime.strptime('2024-5-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
                      arrivalTime=datetime.strptime('2024-5-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
-    flight3 = Flight(flightID='F003', routeID='R001',
-                     departureTime=datetime.strptime('2024-5-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-5-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+    flight3 = Flight(flightID='F003', routeID='R005',
+                     departureTime=datetime.strptime('2024-5-20 21:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-21 23:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
-    flight4 = Flight(flightID='F004', routeID='R002',
-                     departureTime=datetime.strptime('2024-5-20 08:00:00', '%Y-%m-%d %H:%M:%S'),
+    flight4 = Flight(flightID='F004', routeID='R006',
+                     departureTime=datetime.strptime('2024-5-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
                      arrivalTime=datetime.strptime('2024-5-20 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
-    flight5 = Flight(flightID='F005', routeID='R002',
-                     departureTime=datetime.strptime('2024-5-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-5-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+    flight5 = Flight(flightID='F005', routeID='R006',
+                     departureTime=datetime.strptime('2024-5-21 12:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-21 14:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
-    flight6 = Flight(flightID='F006', routeID='R002',
-                     departureTime=datetime.strptime('2024-5-21 08:00:00', '%Y-%m-%d %H:%M:%S'),
-                     arrivalTime=datetime.strptime('2024-5-21 11:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
+    flight6 = Flight(flightID='F006', routeID='R006',
+                     departureTime=datetime.strptime('2024-5-21 19:00:00', '%Y-%m-%d %H:%M:%S'),
+                     arrivalTime=datetime.strptime('2024-5-21 21:00:00', '%Y-%m-%d %H:%M:%S'), numOf1stClassSeat=100,
                      numOf2ndClassSeat=200, flightStatus='Scheduled', availableSeats=300)
 
     seat_class1 = SeatClass(classID='SC001', className='First Class', maxCheckedWeight=32, maxCarryOnWeight=10)
     seat_class2 = SeatClass(classID='SC002', className='Economy Class', maxCheckedWeight=20, maxCarryOnWeight=7)
 
-    price1 = Price(priceID='P001', flightID='F001', classID='SC001', price=100.0)
-    price2 = Price(priceID='P002', flightID='F001', classID='SC002', price=50.0)
+    price1 = Price(priceID='P001', flightID='F001', classID='SC001', price=1000000.0)
+    price2 = Price(priceID='P002', flightID='F001', classID='SC002', price=2500000.0)
+    price3 = Price(priceID='P003', flightID='F002', classID='SC001', price=3000000.0)
+    price4 = Price(priceID='P004', flightID='F002', classID='SC002', price=4500000.0)
+    price5 = Price(priceID='P005', flightID='F003', classID='SC001', price=1200000.0)
+    price6 = Price(priceID='P006', flightID='F003', classID='SC002', price=2500000.0)
+    price7 = Price(priceID='P007', flightID='F004', classID='SC001', price=1800000.0)
+    price8 = Price(priceID='P008', flightID='F004', classID='SC002', price=2900000.0)
+    price9 = Price(priceID='P009', flightID='F005', classID='SC001', price=3800000.0)
+    price10 = Price(priceID='P0010', flightID='F005', classID='SC002', price=4700000.0)
+    price11 = Price(priceID='P0011', flightID='F006', classID='SC001', price=3200000.0)
+    price12 = Price(priceID='P0012', flightID='F006', classID='SC002', price=1500000.0)
 
     customer1 = Customer(customerID=1, customerName='John Doe', gender='Male',
-                         birthDate=datetime.strptime('1997-4-6 00:00:00', '%Y-%m-%d %H:%M:%S'), idNumber=123456789,
-                         phoneNumber=987654321)
-    customer2 = Customer(customerID=2, customerName='Abc', gender='Female',
                          birthDate=datetime.strptime('1997-4-6 00:00:00', '%Y-%m-%d %H:%M:%S'), idNumber=123456789,
                          phoneNumber=987654321)
 
     invoice1 = Invoice(invoiceID=1, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
                        paymentTime=datetime.strptime('2024-4-18 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice2 = Invoice(invoiceID=2, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
-                       paymentTime=datetime.strptime('2024-4-19 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice3 = Invoice(invoiceID=3, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
-                       paymentTime=datetime.strptime('2024-4-20 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice4 = Invoice(invoiceID=4, accountID='2', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
-                       paymentTime=datetime.strptime('2024-4-20 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice5 = Invoice(invoiceID=5, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
-                       paymentTime=datetime.strptime('2024-4-22 16:30:00', '%Y-%m-%d %H:%M:%S'))
-    invoice6 = Invoice(invoiceID=6, accountID='1', paymentAmount=100.0, paymentStatus='Paid', paymentMethod='Cash',
-                       paymentTime=datetime.strptime('2024-4-23 16:30:00', '%Y-%m-%d %H:%M:%S'))
 
     ticket1 = Ticket(invoiceID=1, customerID='1', accountID='1', flightID='F001', classID='SC001', priceID='P001')
 
@@ -98,9 +95,9 @@ def add_sample_data():
          route1, route2, route3, route4, route5, route6,
          flight1, flight2, flight3, flight4, flight5, flight6,
          seat_class1, seat_class2,
-         price1, price2,
-         customer1, customer2,
-         invoice1, invoice2, invoice3, invoice4, invoice5, invoice6,
+         price1, price2, price3, price4, price5, price6, price7, price8, price9, price10, price11, price12,
+         customer1,
+         invoice1,
          ticket1,
          employee1, employee2,
          system_rule,

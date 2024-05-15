@@ -79,7 +79,7 @@ class Customer(db.Model):
     gender = Column(Enum('Male', 'Female', name='customer_gender'))
     birthDate = Column(DateTime)
     idNumber = Column(Integer, nullable=False)
-    phoneNumber = Column(Integer, nullable=False)
+    phoneNumber = Column(String(50), nullable=False)
     __table_args__ = {'extend_existing': True}
 
 
