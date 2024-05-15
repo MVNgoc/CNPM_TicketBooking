@@ -247,6 +247,15 @@ if (confirmCancel_nv && paymentStatus_nv !== "Cancelled") {
     });
 }
 
+// Nút Lưu chuyến bay
+var submitFlightButton = document.getElementById('submitFlight')
+submitFlightButton.addEventListener('click', function() {
+    var form = document.querySelector('form'); // Lấy đối tượng form
+    form.submit(); // Gửi yêu cầu POST đi
+     // Hiển thị cửa sổ popup
+    $('#successPopup').modal('show');
+});
+
     // JS hiện form popup thông báo Thanh toán đang chờ duyệt
     if(payment_status == 'success') {
         var myModal = new bootstrap.Modal(document.getElementById('popupForm2'), {

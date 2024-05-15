@@ -1,0 +1,78 @@
+{% extends 'employee/layout/base.html' %}
+
+{% block title %}Thêm Chuyến Bay{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+    <h2>Thêm Chuyến Bay</h2>
+    <form method="post" action="/employee/add-flight" enctype="multipart/form-data">
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <label for="flightCode" class="form-label" style="font-weight: 700;">Mã Chuyến Bay:</label>
+                <input type="text" class="form-control" id="flightCode" placeholder="Nhập mã chuyến bay" name="flightCode" required>
+            </div>
+            <div class="col-md-6">
+                <label for="routeCode" class="form-label" style="font-weight: 700;">Mã Tuyến Bay:</label>
+                <input type="text" class="form-control" id="routeCode" placeholder="Nhập mã tuyến bay" name="routeCode" required>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <label for="departureTime" class="form-label" style="font-weight: 700;">Thời Gian Khởi Hành:</label>
+                <input id="departureTime" name="departureTime" class="form-control" required/>
+                <script>
+                    $('#departureTime').datetimepicker({
+                        uiLibrary: 'bootstrap5',
+                        format: 'yyyy-mm-dd HH:MM:ss'
+                    });
+                </script>
+            </div>
+            <div class="col-md-6">
+                <label for="arrivalTime" class="form-label" style="font-weight: 700;">Thời Gian Đáp:</label>
+                <input id="arrivalTime" name="arrivalTime" class="form-control" required/>
+                <script>
+                    $('#arrivalTime').datetimepicker({
+                        uiLibrary: 'bootstrap5',
+                        format: 'yyyy-mm-dd HH:MM:ss'
+                    });
+                </script>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <label for="seatClass1" class="form-label" style="font-weight: 700;">Số Ghế Hạng 1:</label>
+                <input type="number" class="form-control" id="seatClass1" placeholder="Nhập số ghế hạng 1" name="seatClass1" required>
+            </div>
+            <div class="col-md-6">
+                <label for="seatClass2" class="form-label" style="font-weight: 700;">Số Ghế Hạng 2:</label>
+                <input type="number" class="form-control" id="seatClass2" placeholder="Nhập số ghế hạng 2" name="seatClass2" required>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12 d-flex justify-content-between">
+                <a href="/employee" class="btn btn-secondary" style="font-weight: 700;">Quay lại</a>
+                <button type="submit" class="btn btn-success" style="font-weight: 700;">Lưu</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="successPopup" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông báo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Chuyến bay đã được lưu thành công!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

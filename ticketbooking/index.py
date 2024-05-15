@@ -588,7 +588,24 @@ def employee_cancel_invoice_route(invoice_id):
     dao.cancel_invoice(invoice_id)
     return redirect('/employee/tickets-booked')
 
+@app.route('/employee/add-flight', methods=['GET', 'POST'])
+def employee_add_flight():
+    if request.method == 'POST':
+        flightID = request.form.get('flightCode')
+        routeID = request.form.get('routeCode')
+        departureTime = request.form.get('departureTime')
+        arrivalTime = request.form.get('arrivalTime')
+        numFirstClassSeat = int(request.form.get('seatClass1'))
+        numSecondClassSeat = int(request.form.get('seatClass2'))
 
+        dao.add_flight_employee(flightID, routeID, departureTime, arrivalTime, numFirstClassSeat, numSecondClassSeat)
+
+        return redirect('/employee')
+
+    else:
+        path = request.path
+        categories = dao.load_employee()
+        return render_template('employee/addflight/add-flight.html', categories=categories, path=path)
 
 if __name__ == '__main__':
     with app.app_context():

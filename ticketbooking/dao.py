@@ -240,3 +240,10 @@ def add_invoice_employee(paymentAmount):
     db.session.add(invoice)
     db.session.commit()
     return invoice
+def add_flight_employee(flightID, routeID, departureTime, arrivalTime, numFirstClassSeat, numSecondClassSeat):
+    total_Seat= numFirstClassSeat + numSecondClassSeat
+    flight = Flight(flightID=flightID, routeID=routeID, departureTime=departureTime,arrivalTime=arrivalTime,
+                    numOf1stClassSeat=numFirstClassSeat, numOf2ndClassSeat=numSecondClassSeat,flightStatus='Scheduled',
+                    availableSeats=total_Seat)
+    db.session.add(flight)
+    db.session.commit()
