@@ -8,26 +8,27 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 
 class FlightView(ModelView):
+    column_display_pk = True
+    column_searchable_list = ['flightID', 'routeID', 'flightStatus']
+    column_filters = ['flightStatus', 'arrivalTime', 'departureTime']
+    can_view_details = True
+    column_labels = {
+        'flightID': 'Mã chuyến bay',
+        'routeID': 'Mã tuyến bay',
+        'departureTime': 'Thời gian khởi hành',
+        'arrivalTime': 'Thời Gian Đến',
+        'numOf1stClassSeat': 'Sô ghế hạng 1',
+        'numOf2ndClassSeat': 'Số ghế hạng 2',
+        'flightStatus': 'Tình trạng chuyến bay',
+        'availableSeats': 'Ghế có sẵn'
+    }
     def scaffold_form(self):
-        form_class= super(FlightView, self).scaffold_form()
+        form_class = super(FlightView, self).scaffold_form()
         form_class.flightID = StringField('Mã chuyến bay',validators=[InputRequired()])
         form_class.routeID = StringField('Mã tuyến bay',validators=[InputRequired()])
         return form_class
 
-    column_display_pk = True
-    column_searchable_list= ['flightID','routeID','flightStatus']
-    column_filters = ['flightStatus','arrivalTime','departureTime']
-    can_view_details = True
-    column_labels= {
-        'flightID': 'Mã chuyến bay',
-        'routeID':'Mã tuyến bay',
-        'departureTime':'Thời gian khởi hành',
-        'arrivalTime': 'Thời Gian Đến',
-        'numOf1stClassSeat':'Sô ghế hạng 1',
-        'numOf2ndClassSeat':'Số ghế hạng 2',
-        'flightStatus':'Tình trạng chuyến bay',
-        'availableSeats':'Ghế có sẵn'
-    }
+
 class RouteView(ModelView):
     def scaffold_form(self):
         form_class= super(RouteView, self).scaffold_form()

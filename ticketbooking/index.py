@@ -1,7 +1,7 @@
 import datetime
+from math import ceil
 
-from flask import Flask, session
-from flask import render_template, request, redirect
+from flask import Flask, session, jsonify, url_for, render_template, request, redirect
 from ticketbooking import app, dao, login
 from flask_login import login_user, logout_user, current_user
 import cloudinary.uploader
@@ -25,28 +25,6 @@ def process_login():
     else:
         login_user(user=u)
         return redirect('/')
-
-
-@app.route('/login-admin', methods=['post'])
-def admin_login():
-    username = request.form['username']
-    password = request.form['pswd']
-
-    user = dao.auth_user_admin(username=username,
-                         password=password)
-    if user == 'login_failed':
-        return render_template('customer/index.html', error_code=user)
-    else:
-        login_user(user=user)
-    return redirect('/admin')
-
-
-@app.context_processor
-def common_atstr():
-    categories = dao.load_categories()
-    return {
-        'categories': categories
-    }
 
 
 @app.route('/register', methods=['post'])
@@ -118,7 +96,6 @@ def process_select_flight():
     date_of_department = request.form.get('date_of_department')
     quantity = request.form.get('quantity')
     type_ticket = request.form.get('type_ticket')
-    return_flight_list = ''
     flight_list_format = []
     return_flight_list_format = []
 
@@ -169,7 +146,7 @@ def process_select_flight():
         'departure_point': departure_point,
         'destination': destination,
         'type_ticket': type_ticket,
-        'quantity': quantity,
+        'quantity': int(quantity),
     }
 
     return render_template('customer/flightlookuplayout/select_flight.html', categories=categories, path=path,
@@ -206,6 +183,24 @@ def process_passengers():
         'total_ticket_price': float(total_ticket_price) or 0,
     }
 
+    # Lấy data vé đã chọn
+    flightID = request.form.get('flightID')
+    priceID = request.form.get('priceID')
+    classID = request.form.get('classID')
+
+    flightReturnID = request.form.get('flightReturnID')
+    priceReturnID = request.form.get('priceReturnID')
+    classReturnID = request.form.get('classReturnID')
+
+    session['flight_select_info'] = {
+        'flightID': flightID,
+        'priceID': priceID,
+        'classID': classID,
+        'flightReturnID': flightReturnID,
+        'priceReturnID': priceReturnID,
+        'classReturnID': classReturnID,
+    }
+
     return render_template('customer/flightlookuplayout/passengers.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, quantity=quantity)
 
@@ -217,9 +212,11 @@ def pay_ticket():
     bookticketstep = dao.load_book_ticket_step()
     authen = dao.load_current_user()
 
+    payment_status = request.args.get('payment')
+
     if authen == 'true':
         return render_template('customer/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
-                               bookticketstep=bookticketstep)
+                               bookticketstep=bookticketstep, payment_status=payment_status)
     else:
         return redirect('/')
 
@@ -255,12 +252,16 @@ def process_pay_ticket_upload():
     url_image = res['secure_url']
 
     if url_image:
-        customer_id = dao.add_customer(session['passengers'], session['flight_info']['quantity']).customerID
+        customer_id = dao.add_customer(session['passengers'], session['flight_info']['quantity'])
         invoice_id = dao.add_invoice(session['ticket_price_info']['total_ticket_price'], url_image).invoiceID
-        print(invoice_id, customer_id)
-        return redirect('/flight-lookup/pay-ticket')
+        res_add_ticket = dao.add_ticket(invoice_id, customer_id, session['flight_select_info'],
+                                        session['flight_info']['type_ticket'])
+        if res_add_ticket == 'add_ticket_success':
+            return redirect('/flight-lookup/pay-ticket?payment=success')
+        else:
+            return redirect('/flight-lookup/pay-ticket?payment=false')
     else:
-        print(url_image)
+        return redirect('/flight-lookup/pay-ticket?payment=false')
 
 
 @app.route('/tickets-booked')
@@ -273,10 +274,19 @@ def tickets_booked():
         kw = request.args.get('keyword')
         account_id = current_user.id
         invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
+        total_invoices = len(invoices)  # Tổng số hóa đơn
+        per_page = 5  # Số lượng hóa đơn muốn hiển thị trên mỗi trang
+        page = request.args.get('page', 1, type=int)
+        num_pages = ceil(total_invoices / per_page)  # Tính số trang
+        start_index = (page - 1) * per_page
+        end_index = min(start_index + per_page, total_invoices)
+        invoices_on_page = invoices[start_index:end_index]
 
-        return render_template('customer/listofticket/tickets_booked.html', categories=categories, path=path, invoices=invoices)
+        return render_template('customer/listofticket/tickets_booked.html', categories=categories, path=path,
+                               invoices=invoices_on_page, page=page, num_pages=num_pages)
     else:
         return redirect('/')
+
 
 @app.route('/tickets-booked/tickets-booked-details/<int:invoice_id>')
 def tickets_booked_details(invoice_id):
@@ -293,15 +303,44 @@ def tickets_booked_details(invoice_id):
         payment_status = invoice.paymentStatus
 
         return render_template('customer/listofticket/tickets_booked_details.html', categories=categories, path=path,
-                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers, total_amount=total_amount, payment_status=payment_status)
+                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers,
+                               total_amount=total_amount, payment_status=payment_status, invoice_id=invoice_id)
     else:
         return redirect('/')
 
-@app.route('/login')
-def login():
-    path = request.path
+
+@app.route('/cancel-invoice/<int:invoice_id>', methods=['GET', 'POST'])
+def cancel_invoice_route(invoice_id):
+    dao.cancel_invoice(invoice_id)
+    return redirect('/tickets-booked')
+
+
+# code cho phần admin
+
+
+@app.route('/login-admin', methods=['post'])
+def admin_login():
+    username = request.form['username']
+    password = request.form['pswd']
+
+    user = dao.auth_user_admin(username=username,
+                               password=password)
+    if user == 'login_failed':
+        return render_template('customer/index.html', error_code=user)
+    else:
+        login_user(user=user)
+    return redirect('/admin')
+
+
+@app.context_processor
+def common_atstr():
     categories = dao.load_categories()
-    return render_template('login.html', categories=categories, path=path)
+    return {
+        'categories': categories
+    }
+
+
+# code cho phần employee
 
 
 if __name__ == '__main__':

@@ -369,3 +369,7 @@ button:hover .arrow:before {
     justify-content: center;
     align-items: center;
 }
+.disabled-button {
+    pointer-events: none;
+    opacity: 0.5;
+}

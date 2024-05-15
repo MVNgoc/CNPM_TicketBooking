@@ -30,16 +30,7 @@ def auth_user_customer(username, password):
     if user:
         return user
     else:
-        return 'login_failed' #code này chỉ dành cho trang customer, không dùng được cho trang admin
-
-
-def auth_user_admin(username, password):
-    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Admin').first()
-    if user:
-        return user
-    else:
-        return 'login_failed'
+        return 'login_failed'  # code này chỉ dành cho trang customer, không dùng được cho trang admin
 
 
 def get_user_by_username(id):
@@ -126,6 +117,7 @@ def load_current_user():
 
 
 def add_customer(list_info_user, quantity):
+    list_customer_id = []
     try:
         for i in range(int(quantity)):
             customer = Customer(customerName=list_info_user['customerName'][i], gender=list_info_user['sex'][i],
@@ -133,14 +125,15 @@ def add_customer(list_info_user, quantity):
                                 idNumber=list_info_user['idNumber'][i],
                                 phoneNumber=list_info_user['phoneNumber'][i])
             db.session.add(customer)
-
+            db.session.flush()  # Đảm bảo ID của khách hàng được tạo ra trước khi commit
+            list_customer_id.append(customer.customerID)
         db.session.commit()
 
     except IntegrityError as e:
         db.session.rollback()
         return 'add_customer_false'
 
-    return customer
+    return list_customer_id
 
 
 def add_invoice(paymentAmount, transferImage):
@@ -155,10 +148,43 @@ def add_invoice(paymentAmount, transferImage):
     return invoice
 
 
-def add_ticket(invoiceID, customerID):
-    account_id = current_user.id
-    ticket = Ticket(invoiceID=int(invoiceID), customerID=int(customerID), accountID=int(account_id))
+def cancel_invoice(invoice_id):
+    try:
+        invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
+        if invoice:
+            invoice.paymentStatus = 'Cancelled'
+            db.session.commit()
+            return True
+        return False
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error cancelling invoice: {e}")
+        return False
 
+
+def add_ticket(invoiceID, customerID, flightSelectInfo, type_ticket):
+    account_id = current_user.id
+    try:
+        for i in customerID:
+            ticket = Ticket(invoiceID=int(invoiceID), customerID=int(i), accountID=int(account_id),
+                            flightID=flightSelectInfo['flightID'], classID=flightSelectInfo['classID'],
+                            priceID=flightSelectInfo['priceID'])
+            db.session.add(ticket)
+
+            if type_ticket == 'two-way':
+                ticket_return = Ticket(invoiceID=int(invoiceID), customerID=int(i), accountID=int(account_id),
+                                       flightID=flightSelectInfo['flightReturnID'],
+                                       classID=flightSelectInfo['classReturnID'],
+                                       priceID=flightSelectInfo['priceReturnID'])
+                db.session.add(ticket_return)
+
+        db.session.commit()
+
+    except IntegrityError as e:
+        db.session.rollback()
+        return 'add_ticket_failed'
+
+    return 'add_ticket_success'
 
 
 def load_invoice(invoice_id):
@@ -175,3 +201,15 @@ def load_customers(invoice_id):
     ticket_customer_ids = [ticket.customerID for ticket in Ticket.query.filter_by(invoiceID=invoice_id).all()]
     customers = Customer.query.filter(Customer.customerID.in_(ticket_customer_ids)).all()
     return customers
+
+
+# code cho phần admin
+def auth_user_admin(username, password):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Admin').first()
+    if user:
+        return user
+    else:
+        return 'login_failed'
+
+# code cho phần employee

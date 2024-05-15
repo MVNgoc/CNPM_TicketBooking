@@ -47,11 +47,17 @@
         </tbody>
     </table>
     <ul class="pagination justify-content-center">
-        <li class="page-item disabled" style="font-weight: 700;"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item" style="font-weight: 700;"><a class="page-link" href="#">Next</a></li>
+        {% if page > 1 %}
+        <li class="page-item"><a class="page-link" href="?page={{ page - 1 }}">Previous</a></li>
+        {% endif %}
+        {% for p in range(1, num_pages + 1) %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+                <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+            </li>
+        {% endfor %}
+        {% if page < num_pages %}
+        <li class="page-item"><a class="page-link" href="?page={{ page + 1 }}">Next</a></li>
+        {% endif %}
     </ul>
     {% else %}
     <h3 class="modal-title mt-3" id="popupFormModalLabel2" style="font-weight: 700;">Không tìm thấy mã hóa đơn</h3>
