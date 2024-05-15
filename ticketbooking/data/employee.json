@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Trang chủ",
+    "link": "/employee",
+    "sub_link_1": "",
+    "sub_link_2": "",
+    "sub_link_3": ""
+  },
+  {
+    "id": 2,
+    "name": "Tra cứu chuyến bay",
+    "link": "/employee/flight-lookup",
+    "sub_link_1": "/employee/flight-lookup/select-flight",
+    "sub_link_2": "/employee/flight-lookup/passengers",
+    "sub_link_3": "/employee/flight-lookup/pay-ticket"
+  },
+  {
+    "id": 3,
+    "name": "Danh sách vé đã bán",
+    "link": "/employee/tickets-booked",
+    "sub_link_1": "/employee/tickets-booked-details",
+    "sub_link_2": "",
+    "sub_link_3": ""
+  },
+  {
+    "id": 4,
+    "name": "Duyệt vé chuyến bay",
+    "link": "/employee/approve-ticket",
+    "sub_link_1": "",
+    "sub_link_2": "",
+    "sub_link_3": ""
+  },
+  {
+    "id": 5,
+    "name": "Thêm chuyến bay",
+    "link": "/employee/add-flight",
+    "sub_link_1": "",
+    "sub_link_2": "",
+    "sub_link_3": ""
+  }
+]
