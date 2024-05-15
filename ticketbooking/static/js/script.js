@@ -226,16 +226,16 @@ window.onload = function() {
     }
 
     // JS hiện form popup thông báo Thanh toán đang chờ duyệt
-//    if(payment_status == 'success') {
-//        var myModal = new bootstrap.Modal(document.getElementById('popupFormModal1'), {
-//            keyboard: false
-//        });
-//        myModal.show();
-//    }
     if(payment_status == 'success') {
-        alert(payment_status)
+        var myModal = new bootstrap.Modal(document.getElementById('popupForm2'), {
+            keyboard: false
+        });
+        myModal.show();
     }
-    else {
-        alert(payment_status)
+    else if(payment_status == 'failure') {
+        var myModal = new bootstrap.Modal(document.getElementById('popupForm3'), {
+            keyboard: false
+        });
+        myModal.show();
     }
 };
