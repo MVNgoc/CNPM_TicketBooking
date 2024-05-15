@@ -8,6 +8,7 @@ import cloudinary.uploader
 from admin import admin
 
 
+# Luồng register, login, logout cho customer
 @app.route('/')
 def index():
     path = request.path
@@ -52,11 +53,13 @@ def logout():
     return redirect('/')
 
 
-@app.route('/flight-lookup')
+# Luồng tra cứu vé
+@app.route('/flight-lookup')  # Load data lên trang
 def flight_lookup():
     path = request.path
     categories = dao.load_categories()
     list_airports = dao.load_list_of_airports()
+
     booking_allowed = dao.load_booking_time()
     authen = dao.load_current_user()
 
@@ -71,11 +74,12 @@ def flight_lookup():
         return redirect('/')
 
 
-@app.route('/flight-lookup/select-flight')
+@app.route('/flight-lookup/select-flight') # Load trang chọn vé
 def select_flight():
     path = request.path
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
+
     authen = dao.load_current_user()
 
     if authen == 'true':
@@ -85,7 +89,7 @@ def select_flight():
         return redirect('/')
 
 
-@app.route('/flight-lookup/select-flight', methods=['post'])
+@app.route('/flight-lookup/select-flight', methods=['post'])  # Lấy thông tin user tra cứu, tra cứu dưới db
 def process_select_flight():
     path = request.path
     categories = dao.load_categories()
@@ -154,7 +158,7 @@ def process_select_flight():
                            return_flight_list_format=return_flight_list_format)
 
 
-@app.route('/flight-lookup/passengers', methods=['post'])
+@app.route('/flight-lookup/passengers', methods=['post'])  # Lấy thông tin thông tin khách nhập vào, lưu vào session
 def process_passengers():
     path = request.path
     categories = dao.load_categories()
@@ -221,7 +225,7 @@ def pay_ticket():
         return redirect('/')
 
 
-@app.route('/flight-lookup/pay-ticket', methods=['post'])
+@app.route('/flight-lookup/pay-ticket', methods=['post'])  # Lưu danh sách các customer vào bảng customer
 def process_pay_ticket():
     path = request.path
     categories = dao.load_categories()
@@ -239,17 +243,17 @@ def process_pay_ticket():
         'birthdate': birthdate,
         'idNumber': idNumber,
         'phoneNumber': phoneNumber,
-    }
+    }  # Lấy thông tin các passenger từ session
 
     return render_template('customer/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
                            bookticketstep=bookticketstep)
 
 
-@app.route('/flight-lookup/pay-ticket-upload', methods=['post'])
+@app.route('/flight-lookup/pay-ticket-upload', methods=['post'])  # Lưu invoice mới vào bảng invoice
 def process_pay_ticket_upload():
     image = request.files['image']
     res = cloudinary.uploader.upload(image)
-    url_image = res['secure_url']
+    url_image = res['secure_url']  # Lấy hình, đẩy hình lên cloud, lấy link hình sau khi được upload trên cloud
 
     if url_image:
         customer_id = dao.add_customer(session['passengers'], session['flight_info']['quantity'])

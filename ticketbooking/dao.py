@@ -24,7 +24,8 @@ def load_list_of_ticket_step():
         return json.load(f)
 
 
-def auth_user_customer(username, password):
+# Luồng login, register
+def auth_user_customer(username, password):  # Login
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Customer').first()
     if user:
@@ -37,7 +38,7 @@ def get_user_by_username(id):
     return Account.query.filter_by(id=id).first()
 
 
-def register_user(user_name, password):
+def register_user(user_name, password):  # Register
     try:
         if Account.query.filter_by(userName=user_name).first() is not None:
             return 'account_already_exists'
@@ -58,32 +59,23 @@ def register_user(user_name, password):
         return 'create_account_false'
 
 
-def load_list_of_ticket(account_id=None, kw=None):
+def load_current_user():  # Đè authen cho mỗi trang
     if current_user.is_authenticated:
-        # Lấy mã hóa đơn theo user_id
-        account_id = current_user.id
-        query = Invoice.query.filter_by(accountID=account_id)
+        return 'true'
     else:
-        query = Invoice.query
-
-    if kw:
-        query = query.filter(Invoice.invoiceID.contains(kw))
-
-    # Sắp xếp theo thời gian tạo, từ mới nhất đến cũ nhất
-    query = query.order_by(desc(Invoice.paymentTime))
-
-    return query.all()
+        return 'false'
 
 
-def load_list_of_airports():
+# Xử lý trang flight lookup
+def load_list_of_airports():  # Lấy danh sách sân bay
     return Airport.query.all()
 
 
-def load_route_of_airports(departure_point, destination):
+def load_route_of_airports(departure_point, destination):  # Lấy danh sách route
     return Route.query.filter_by(departureAirportID=departure_point, arrivalAirportID=destination).first()
 
 
-def load_flight_of_airports(routeID, time):
+def load_flight_of_airports(routeID, time):  # Lấy danh sách chuyến bay
     # Lấy thời gian hiện tại
     current_time = datetime.now(timezone.utc)
     # Xác định thời điểm cách đây 12 tiếng
@@ -94,11 +86,11 @@ def load_flight_of_airports(routeID, time):
         Flight.departureTime >= twelve_hours_later).all()
 
 
-def get_price_ticket(flightID):
+def get_price_ticket(flightID):  # Lấy giá vé theo từng chuyến bay
     return Price.query.filter_by(flightID=flightID).all()
 
 
-def load_booking_time():
+def load_booking_time():  # Lấy thời gian đặt vé
     current_time = datetime.now().time()
     start_time = SystemRule.query.first().ticketBookingTime_Start
     end_time = SystemRule.query.first().ticketBookingTime_End
@@ -109,17 +101,11 @@ def load_booking_time():
         return 'booking_time_false'
 
 
-def load_current_user():
-    if current_user.is_authenticated:
-        return 'true'
-    else:
-        return 'false'
-
-
+# Luồng xử lý thêm data xuống database
 def add_customer(list_info_user, quantity):
-    list_customer_id = []
+    list_customer_id = []  # Lấy ra danh sách khách hàng được nhập từ form
     try:
-        for i in range(int(quantity)):
+        for i in range(int(quantity)):  # Bắt đầu từ 0 đến số lượng nhập vào
             customer = Customer(customerName=list_info_user['customerName'][i], gender=list_info_user['sex'][i],
                                 birthDate=datetime.strptime(list_info_user['birthdate'][i], '%m/%d/%Y'),
                                 idNumber=list_info_user['idNumber'][i],
@@ -148,30 +134,16 @@ def add_invoice(paymentAmount, transferImage):
     return invoice
 
 
-def cancel_invoice(invoice_id):
-    try:
-        invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
-        if invoice:
-            invoice.paymentStatus = 'Cancelled'
-            db.session.commit()
-            return True
-        return False
-    except Exception as e:
-        db.session.rollback()
-        print(f"Error cancelling invoice: {e}")
-        return False
-
-
 def add_ticket(invoiceID, customerID, flightSelectInfo, type_ticket):
     account_id = current_user.id
     try:
-        for i in customerID:
+        for i in customerID:  # Bao nhiêu khách hàng thì bấy nhiêu vé
             ticket = Ticket(invoiceID=int(invoiceID), customerID=int(i), accountID=int(account_id),
                             flightID=flightSelectInfo['flightID'], classID=flightSelectInfo['classID'],
-                            priceID=flightSelectInfo['priceID'])
+                            priceID=flightSelectInfo['priceID'])  # Case một chiều
             db.session.add(ticket)
 
-            if type_ticket == 'two-way':
+            if type_ticket == 'two-way':  # Case khứ hồi
                 ticket_return = Ticket(invoiceID=int(invoiceID), customerID=int(i), accountID=int(account_id),
                                        flightID=flightSelectInfo['flightReturnID'],
                                        classID=flightSelectInfo['classReturnID'],
@@ -187,7 +159,25 @@ def add_ticket(invoiceID, customerID, flightSelectInfo, type_ticket):
     return 'add_ticket_success'
 
 
-def load_invoice(invoice_id):
+# Luồng danh sách vé
+def load_list_of_ticket(account_id=None, kw=None):  # Hiển thị danh sách vé
+    if current_user.is_authenticated:
+        # Lấy mã hóa đơn theo user_id
+        account_id = current_user.id
+        query = Invoice.query.filter_by(accountID=account_id)
+    else:
+        query = Invoice.query
+
+    if kw:
+        query = query.filter(Invoice.invoiceID.contains(kw))
+
+    # Sắp xếp theo thời gian tạo, từ mới nhất đến cũ nhất
+    query = query.order_by(desc(Invoice.paymentTime))
+
+    return query.all()
+
+
+def load_invoice(invoice_id):  # Hiển thị chi tiết vé
     invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
     return invoice
 
@@ -201,6 +191,20 @@ def load_customers(invoice_id):
     ticket_customer_ids = [ticket.customerID for ticket in Ticket.query.filter_by(invoiceID=invoice_id).all()]
     customers = Customer.query.filter(Customer.customerID.in_(ticket_customer_ids)).all()
     return customers
+
+
+def cancel_invoice(invoice_id):
+    try:
+        invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
+        if invoice:
+            invoice.paymentStatus = 'Cancelled'
+            db.session.commit()
+            return True
+        return False
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error cancelling invoice: {e}")
+        return False
 
 
 # code cho phần admin
