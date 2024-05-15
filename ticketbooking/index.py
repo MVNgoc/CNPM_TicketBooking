@@ -74,7 +74,7 @@ def flight_lookup():
         return redirect('/')
 
 
-@app.route('/flight-lookup/select-flight') # Load trang chọn vé
+@app.route('/flight-lookup/select-flight')  # Load trang chọn vé
 def select_flight():
     path = request.path
     categories = dao.load_categories()
@@ -100,12 +100,14 @@ def process_select_flight():
     date_of_department = request.form.get('date_of_department')
     quantity = request.form.get('quantity')
     type_ticket = request.form.get('type_ticket')
+    # Tạo mảng để lưu danh sách vé
     flight_list_format = []
     return_flight_list_format = []
-
+    # Lấy danh sách route tương ứng
     route = dao.load_route_of_airports(departure_point[0], destination[0])
     return_route = dao.load_route_of_airports(destination[0], departure_point[0])
 
+    # Lấy danh sách các vé
     if type_ticket == 'two-way':
         returnDate = request.form['returnDate']
         if return_route:
@@ -131,7 +133,7 @@ def process_select_flight():
         flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
         for flight in flight_list:
             price_ticket = dao.get_price_ticket(flight.flightID)
-            flight_list_format.append(
+            flight_list_format.append(  # Thêm ticket lần lượt vào cuối danh sách
                 {
                     'flightID': flight.flightID,
                     'routeID': flight.routeID,
@@ -144,9 +146,9 @@ def process_select_flight():
                     'price': price_ticket
                 })
     else:
-        flight_list_format = []
+        flight_list_format = []  # Trả ra rỗng
 
-    session['flight_info'] = {
+    session['flight_info'] = {  # Lưu vào session
         'departure_point': departure_point,
         'destination': destination,
         'type_ticket': type_ticket,
@@ -164,9 +166,9 @@ def process_passengers():
     categories = dao.load_categories()
     bookticketstep = dao.load_book_ticket_step()
 
-    quantity = int(session['flight_info']['quantity'])
+    quantity = int(session['flight_info']['quantity'])  # Lấy số lượng khách từ session
 
-    if request.form.get('ticket_price'):
+    if request.form.get('ticket_price'):  # Lấy giá tiền từ footer
         ticket_price = request.form.get('ticket_price')
     else:
         ticket_price = 0
@@ -181,7 +183,7 @@ def process_passengers():
     else:
         total_ticket_price = 0
 
-    session['ticket_price_info'] = {
+    session['ticket_price_info'] = {  # Lưu vào session
         'ticket_price': float(ticket_price) or 0,
         'ticket_price_return': float(ticket_price_return) or 0,
         'total_ticket_price': float(total_ticket_price) or 0,
@@ -196,7 +198,7 @@ def process_passengers():
     priceReturnID = request.form.get('priceReturnID')
     classReturnID = request.form.get('classReturnID')
 
-    session['flight_select_info'] = {
+    session['flight_select_info'] = {  # Lưu vào session
         'flightID': flightID,
         'priceID': priceID,
         'classID': classID,
@@ -216,7 +218,7 @@ def pay_ticket():
     bookticketstep = dao.load_book_ticket_step()
     authen = dao.load_current_user()
 
-    payment_status = request.args.get('payment')
+    payment_status = request.args.get('payment')  # Hiện popup
 
     if authen == 'true':
         return render_template('customer/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
@@ -249,7 +251,7 @@ def process_pay_ticket():
                            bookticketstep=bookticketstep)
 
 
-@app.route('/flight-lookup/pay-ticket-upload', methods=['post'])  # Lưu invoice mới vào bảng invoice
+@app.route('/flight-lookup/pay-ticket-upload', methods=['post'])  # Lưu invoice, ticket vào database
 def process_pay_ticket_upload():
     image = request.files['image']
     res = cloudinary.uploader.upload(image)
