@@ -1,0 +1,135 @@
+{% extends 'employee/layout/base.html' %}
+
+{% block title %}Tra cứu chuyến bay{% endblock %}
+
+{% block content %}
+
+
+<div class="session-style container d-flex justify-content-between align-items-center">
+    <img src="../static/images/flight_lookup_banner.png"
+         alt="flight_lookup_banner" style="height: 720px;">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card p-4 shadow"
+             style="width: 800px; margin-top: 40px; margin-bottom: 40px;">
+            <h2 class="text-center p-3">Tra cứu chuyến bay</h2>
+            <nav>
+                <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                            type="button" role="tab" aria-controls="nav-home" aria-selected="true">Một chiều
+                    </button>
+                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                            type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Khứ hồi
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content p-3 border bg-light" id="nav-tabContent">
+                {% if error_code == 'booking_time_false' %}
+                <div style="padding: 20px; text-align: center;">
+                    <p class="text-danger" style="font-weight: 700;">
+                        Đã hết thời gian đặt vé, xin quý khách vui lòng quay lại sau!
+                    </p>
+                </div>
+                {% else %}
+                <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <form method="post" action="/employee/flight-lookup/select-flight">
+                        <input class="form-control" style="display: none;" value="one-way" name="type_ticket"
+                        >
+                        <div class="mb-3 mt-3 was-validated" style="width = 800px;">
+                            <label for="departure_point" class="form-label">Điểm đi</label>
+                            <input class="form-control"
+                                   list="departure_point_list_one_way" name="departure_point"
+                                   id="departure_point_one_way" required>
+                            <datalist id="departure_point_list_one_way">
+                                {% for a in list_airports %}
+                                <option value="{{ a.airportID }} - {{ a.locationCity }}" label="{{ a.airportName }}">
+                                    {% endfor %}
+                            </datalist>
+                        </div>
+                        <div class="mb-3 was-validated">
+                            <label for="destination" class="form-label">Điểm đến</label>
+                            <input class="form-control" list="destination_list_one_way" name="destination"
+                                   id="destination_one_way" required>
+                            <datalist id="destination_list_one_way">
+                                {% for a in list_airports %}
+                                <option value="{{ a.airportID }} - {{ a.locationCity }}" label="{{ a.airportName }}">
+                                    {% endfor %}
+                            </datalist>
+                        </div>
+                        <div class="mb-3 was-validated">
+                            <label for="Date_of_department" class="form-label">Ngày đi</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="Date_of_department"
+                                       name="date_of_department" required>
+                            </div>
+                        </div>
+                        <div class="mb-3 was-validated">
+                            <label for="quantity_one_way" class="form-label">Số lượng</label>
+                            <input class="form-control" style="width: 50%;" name="quantity" id="quantity_one_way"
+                                   type="number" min="1" max="5" required>
+<!--                            <div class="error-feedback mt-2">Vui lòng chọn tối đa 5 người.</div>-->
+                        </div>
+                        <button type="submit"
+                                class="btn btn-success {{ 'disabled' if error_code == 'booking_time_false' }}"
+                                style="border-radius: 10px; font-weight: 600;">
+                            Tìm kiếm
+                        </button>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <form method="post" action="/employee/flight-lookup/select-flight">
+                        <input class="form-control" style="display: none;" value="two-way" name="type_ticket"
+                        >
+                        <div class="mb-3 mt-3 was-validated">
+                            <label for="departure_point" class="form-label">Điểm đi</label>
+                            <input class="form-control" list="departure_point_list" name="departure_point"
+                                   id="departure_point" required>
+                            <datalist id="departure_point_list">
+                                {% for a in list_airports %}
+                                <option value="{{ a.airportID }} - {{ a.locationCity }}" label="{{ a.airportName }}">
+                                    {% endfor %}
+                            </datalist>
+                        </div>
+                        <div class="mb-3 was-validated">
+                            <label for="destination" class="form-label">Điểm đến</label>
+                            <input class="form-control" list="destination_list" name="destination"
+                                   id="destination" required>
+                            <datalist id="destination_list">
+                                {% for a in list_airports %}
+                                <option value="{{ a.airportID }} - {{ a.locationCity }}" label="{{ a.airportName }}">
+                                    {% endfor %}
+                            </datalist>
+                        </div>
+                        <div class="mb-3 was-validated">
+                            <label for="departureDate" class="form-label">Ngày đi</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="departureDate" name="date_of_department"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="mb-3 was-validated">
+                            <label for="returnDate" class="form-label">Ngày về</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="returnDate" name="returnDate" required>
+                            </div>
+                        </div>
+                        <div class="mb-3 was-validated">
+                            <label for="quantity" class="form-label">Số lượng</label>
+                            <input class="form-control" style="width: 50%;" name="quantity" id="quantity" type="number"
+                                   min="1" max="5" required>
+<!--                            <div class="error-feedback mt-2">Vui lòng chọn tối đa 5 người.</div>-->
+                        </div>
+                        <button type="submit"
+                                class="btn btn-success {{ 'disabled' if error_code == 'booking_time_false' }}"
+                                style="border-radius: 10px; font-weight: 600;" data-bs-toggle="modal"
+                                data-bs-target="#popupFormModal">Tìm kiếm
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer type="text/javascript"></script>
+
+</div>
+{% endblock %}

@@ -27,12 +27,11 @@ def load_list_of_ticket_step():
 # Luồng login, register
 def auth_user_customer(username, password):  # Login
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    user = Account.query.filter_by(userName=username.strip(), password=password, userRole='Customer').first()
-    if user:
+    user = Account.query.filter_by(userName=username.strip(), password=password).first()
+    if user and (user.userRole == 'Customer' or user.userRole == 'Employee'):
         return user
     else:
-        return 'login_failed'  # code này chỉ dành cho trang customer, không dùng được cho trang admin
-
+        return 'login_failed'
 
 def get_user_by_username(id):
     return Account.query.filter_by(id=id).first()
@@ -217,3 +216,27 @@ def auth_user_admin(username, password):
         return 'login_failed'
 
 # code cho phần employee
+def load_employee():
+    with open('%s/data/employee.json' % app.root_path, encoding='utf-8') as f:
+        return json.load(f)
+
+def load_selling_time():
+    current_time = datetime.now().time()
+    start_time = SystemRule.query.first().ticketSaleTime_Start
+    end_time = SystemRule.query.first().ticketSaleTime_End
+
+    if start_time <= current_time <= end_time:
+        return 'selling_time_true'
+    else:
+        return 'selling_time_false'
+
+def add_invoice_employee(paymentAmount):
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    account_id = current_user.id
+    invoice = Invoice(accountID=int(account_id), paymentAmount=float(paymentAmount), paymentStatus='Paid',
+                      paymentMethod='Cash', transferImage=None,
+                      paymentTime=current_time)
+
+    db.session.add(invoice)
+    db.session.commit()
+    return invoice

@@ -1,0 +1,67 @@
+{% extends 'employee/layout/base.html' %}
+
+{% block title %}Vé đã đặt{% endblock %}
+
+{% block content %}
+
+<div class="session-style container me-auto">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item active">Danh sách vé đã đặt</li>
+    </ul>
+    <form class="d-flex" action="/employee/tickets-booked">
+        <input class="form-control me-2" name="keyword" style="width: 250px;" type="text" placeholder="Tìm mã hóa đơn">
+        <button class="btn btn-primary" style="font-weight: 700;" type="submit">Tìm kiếm</button>
+    </form>
+    {% if invoices %}
+    <table id="data-table" class=" table table-hover table-primary table-striped mt-3 shadow was-validated px-2">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Số thứ tự</th>
+            <th scope="col">Mã hóa đơn</th>
+            <th scope="col">Ngày đặt</th>
+            <th scope="col">Tổng tiền</th>
+            <th scope="col">Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+        <tr>
+            <th>{{ loop.index }}</th>
+            <td><a href="/employee/tickets-booked/tickets-booked-details/{{ invoice.invoiceID }}">{{ invoice.invoiceID }}</a>
+            </td>
+
+            <td>{{ invoice.paymentTime }}</td>
+            <td>{{ "{:,.0f}".format(invoice.paymentAmount) }}</td>
+            <td>
+                <button class="btn
+                {% if invoice.paymentStatus == 'Pending' %} btn-warning
+                {% elif invoice.paymentStatus == 'Paid' %} btn-success
+                {% elif invoice.paymentStatus == 'Cancelled' %} btn-danger
+                {% endif %}" style="font-weight: 700; width: 100px;">
+                    <a href="/tickets-booked/tickets-booked-details" style="text-decoration: none; color: white;">{{
+                        invoice.paymentStatus }}</a>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <ul class="pagination justify-content-center">
+        {% if page > 1 %}
+        <li class="page-item"><a class="page-link" href="?page={{ page - 1 }}">Previous</a></li>
+        {% endif %}
+        {% for p in range(1, num_pages + 1) %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+                <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+            </li>
+        {% endfor %}
+        {% if page < num_pages %}
+        <li class="page-item"><a class="page-link" href="?page={{ page + 1 }}">Next</a></li>
+        {% endif %}
+    </ul>
+    {% else %}
+    <h3 class="modal-title mt-3" id="popupFormModalLabel2" style="font-weight: 700;">Không tìm thấy mã hóa đơn</h3>
+    {% endif %}
+
+</div>
+{% endblock %}

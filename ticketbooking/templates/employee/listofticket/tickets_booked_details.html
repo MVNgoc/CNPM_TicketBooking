@@ -1,0 +1,99 @@
+{% extends 'employee/layout/base.html' %}
+
+{% block title %}Chi tiết vé đã đặt{% endblock %}
+
+{% block content %}
+<div class="session-style container">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/employee/tickets-booked" style="text-decoration: none; color: white;">Danh
+            sách vé
+            đã đặt</a></li>
+        <li class="breadcrumb-item active">Chi tiết vé đã đặt</li>
+    </ul>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Thông tin khách hàng</h2>
+                    {% if customers %}
+                    {% for customer in customers %}
+                    <div class="tab-content p-3 border bg-light mb-3" id="nav-tabContent1{{ loop.index }}">
+                        <h5 class="card-title">Khách hàng {{ loop.index }}</h5>
+                        <p class="card-text" style="font-weight: 700;">Họ và tên: {{ customer.customerName }}</p>
+                        <p class="card-text" style="font-weight: 700;">Giới tính: {{ customer.gender }}</p>
+                        <p class="card-text" style="font-weight: 700;">CCCD/CMND: {{ customer.idNumber }}</p>
+                        <p class="card-text" style="font-weight: 700;">Ngày sinh: {{ customer.birthDate }}</p>
+                        <p class="card-text" style="font-weight: 700;">Số điện thoại: {{ customer.phoneNumber }}</p>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p>Không có khách hàng nào.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Thông tin vé</h2>
+                    {% if tickets %}
+                    {% for ticket in tickets %}
+                    <div class="tab-content p-3 border bg-light mb-3" id="nav-tabContent2{{ loop.index }}">
+                        <h5 class="card-title">Vé {{ loop.index }}</h5>
+                        <p class="card-text" style="font-weight: 700;">Mã vé: {{ ticket.ticketID }}</p>
+                        <p class="card-text" style="font-weight: 700;">Điểm đi: {{
+                            ticket.flight.route.departureAirportID }}</p>
+                        <p class="card-text" style="font-weight: 700;">Điểm đến: {{ ticket.flight.route.arrivalAirportID
+                            }}</p>
+                        <p class="card-text" style="font-weight: 700;">Thời gian bay: {{ ticket.flight.departureTime }}
+                            - {{ ticket.flight.arrivalTime }}</p>
+                        <p class="card-text" style="font-weight: 700;">Hạng ghế: {{ ticket.seat_class.className }}</p>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p>Không có vé nào.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" style="width: 100%; position: fixed; bottom: 0; left: 0; z-index: 999; border-radius: 0;">
+        <div class="card-body d-flex justify-content-between">
+            <div>
+                <p style="font-weight: 700; display: inline-block; margin-right: 20px;">Tổng tiền: {{ total_amount
+                    }}</p>
+                <p style="font-weight: 700; display: inline-block;">Trạng thái: {{ payment_status }}</p>
+            </div>
+            <div>
+                <button id="cancelButton_nv" data-id="{{ invoice_id }}" type="button" class="btn btn-danger"
+                        data-bs-toggle="modal" data-bs-target="#confirmCancelModal_nv">
+                    Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận Hủy -->
+    <div id="paymentStatus_nv" data-payment-status="{{ payment_status }}"></div>
+    <div class="modal fade" id="confirmCancelModal_nv" tabindex="-1" aria-labelledby="confirmCancelLabel_nv"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmCancelLabel_nv">Xác nhận hủy</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn hủy hóa đơn này không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button id="confirmCancel_nv" type="button" class="btn btn-danger">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer type="text/javascript"></script>
+</div>
+{% endblock %}

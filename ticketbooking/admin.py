@@ -1,7 +1,7 @@
 from wtforms.fields.simple import StringField
 from wtforms.validators import InputRequired
 
-from ticketbooking.models import Flight, Route, Account, Employee
+from ticketbooking.models import Flight, Route, Account, Employee, SystemRule
 from ticketbooking import db, app
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
@@ -53,9 +53,9 @@ class AccountView(ModelView):
     column_filters = ['userRole']
     can_view_details = True
     column_labels={
-        'userName':'Tên Người dùng',
+        'userName':'Tên người dùng',
         'password':'Mật Khẩu',
-        'userRole':'Người Dùng'
+        'userRole':'Quyền'
      }
 
     def is_accessible(self):
@@ -75,9 +75,24 @@ class EmployeeView(ModelView):
         'employeeID': 'Mã Nhân Viên',
         'employeeName': 'Tên Nhân Viên',
         'birthDate': 'Ngày sinh',
-        'employeeRole': 'Chức năng'
+        'employeeRole': 'Vị trí'
     }
-
+class RuleView(ModelView):
+    column_searchable_list = ['numAirports', 'minFlightTime', 'maxIntermediatedAirports', 'minStopoverTime',
+                              'maxStopoverTime', 'ticketSaleTime_Start', 'ticketBookingTime_Start', 'ticketSaleTime_End'
+        , 'ticketBookingTime_End']
+    can_view_details = True
+    column_labels = {
+        'numAirports': 'Số lượng sân bay',
+        'minFlightTime': 'Thời gian bay tối thiểu',
+        'maxIntermediatedAirports': 'Số lượng sân bay trung gian tối đa',
+        'minStopoverTime': 'Thời gian dừng tối thiểu',
+        'maxStopoverTime': 'Thời gian dừng tối đa',
+        'ticketSaleTime_Start': 'Thời gian bắt đầu bán vé',
+        'ticketBookingTime_Start': 'Thời gian bắt đầu đặt vé',
+        'ticketSaleTime_End': 'Thời gian kết thúc bán vé',
+        'ticketBookingTime_End': 'Thời gian kết thúc đặt vé'
+    }
 
 class StatsView(BaseView):
     @expose('/')
@@ -88,6 +103,7 @@ class StatsView(BaseView):
 admin = Admin (app=app, name='Quản Lý Chuyến Bay',template_mode='bootstrap4')
 admin.add_view(FlightView(Flight,db.session, name='Chuyến Bay'))
 admin.add_view(RouteView(Route,db.session, name='Tuyến Bay'))
-admin.add_view(AccountView(Account,db.session, name ='Tài Khoản'))
-admin.add_view(EmployeeView(Employee,db.session, name = 'Nhân Viên'))
+admin.add_view(AccountView(Account,db.session, name='Tài Khoản'))
+admin.add_view(EmployeeView(Employee,db.session, name ='Nhân Viên'))
+admin.add_view(RuleView(SystemRule,db.session, name='Quy định hệ thống'))
 admin.add_view(StatsView(name='Thống Kê'))

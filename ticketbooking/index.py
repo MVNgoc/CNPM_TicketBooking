@@ -25,8 +25,10 @@ def process_login():
         return render_template('customer/index.html', error_code=u)
     else:
         login_user(user=u)
-        return redirect('/')
-
+        if u.userRole == 'Customer':
+            return redirect('/')
+        elif u.userRole == 'Employee':
+            return redirect('/employee')
 
 @app.route('/register', methods=['post'])
 def process_register():
@@ -347,6 +349,245 @@ def common_atstr():
 
 
 # code cho phần employee
+@app.route('/employee')
+def employee_index():
+    path = request.path
+    categories = dao.load_employee()
+    return render_template('employee/index.html', categories=categories, path=path)
+
+
+@app.route('/employee/flight-lookup')
+def employee_flight_lookup():
+    path = request.path
+    categories = dao.load_employee()
+    list_airports = dao.load_list_of_airports()
+    selling_allowed = dao.load_selling_time()
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        if selling_allowed == 'selling_time_true':
+            return render_template('employee/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+                                   list_airports=list_airports, selling_allowed=selling_allowed)
+        if selling_allowed == 'selling_time_false':
+            return render_template('employee/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+                                   error_code=selling_allowed)
+    else:
+        return redirect('/employee')
+
+@app.route('/employee/flight-lookup/select-flight') # Load trang chọn vé
+def employee_select_flight():
+    path = request.path
+    categories = dao.load_employee()
+    bookticketstep = dao.load_book_ticket_step()
+
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        return render_template('employee/flightlookuplayout/select_flight.html', categories=categories, path=path,
+                               bookticketstep=bookticketstep)
+    else:
+        return redirect('/employee')
+
+@app.route('/employee/flight-lookup/select-flight', methods=['post'])
+def employee_process_select_flight():
+    path = request.path
+    categories = dao.load_employee()
+    bookticketstep = dao.load_book_ticket_step()
+
+    departure_point = request.form.get('departure_point').split('-')
+    destination = request.form.get('destination').split('-')
+    date_of_department = request.form.get('date_of_department')
+    quantity = request.form.get('quantity')
+    type_ticket = request.form.get('type_ticket')
+    flight_list_format = []
+    return_flight_list_format = []
+
+    route = dao.load_route_of_airports(departure_point[0], destination[0])
+    return_route = dao.load_route_of_airports(destination[0], departure_point[0])
+
+    if type_ticket == 'two-way':
+        returnDate = request.form['returnDate']
+        if return_route:
+            return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)
+            for flight in return_flight_list:
+                price_ticket = dao.get_price_ticket(flight.flightID)
+                return_flight_list_format.append(
+                    {
+                        'flightID': flight.flightID,
+                        'routeID': flight.routeID,
+                        'departureTime': flight.departureTime,
+                        'arrivalTime': flight.arrivalTime,
+                        'numOf1stClassSeat': flight.numOf1stClassSeat,
+                        'numOf2ndClassSeat': flight.numOf2ndClassSeat,
+                        'flightStatus': flight.flightStatus,
+                        'availableSeats': flight.availableSeats,
+                        'price': price_ticket
+                    })
+        else:
+            return_flight_list_format = []
+
+    if route:
+        flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
+        for flight in flight_list:
+            price_ticket = dao.get_price_ticket(flight.flightID)
+            flight_list_format.append(
+                {
+                    'flightID': flight.flightID,
+                    'routeID': flight.routeID,
+                    'departureTime': flight.departureTime,
+                    'arrivalTime': flight.arrivalTime,
+                    'numOf1stClassSeat': flight.numOf1stClassSeat,
+                    'numOf2ndClassSeat': flight.numOf2ndClassSeat,
+                    'flightStatus': flight.flightStatus,
+                    'availableSeats': flight.availableSeats,
+                    'price': price_ticket
+                })
+    else:
+        flight_list_format = []
+
+    session['flight_info'] = {
+        'departure_point': departure_point,
+        'destination': destination,
+        'type_ticket': type_ticket,
+        'quantity': int(quantity),
+    }
+
+    return render_template('employee/flightlookuplayout/select_flight.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep, flight_list_format=flight_list_format,
+                           return_flight_list_format=return_flight_list_format)
+
+@app.route('/employee/flight-lookup/passengers', methods=['post'])
+def employee_process_passengers():
+    path = request.path
+    categories = dao.load_employee()
+    bookticketstep = dao.load_book_ticket_step()
+
+    quantity = int(session['flight_info']['quantity'])
+
+    if request.form.get('ticket_price'):
+        ticket_price = request.form.get('ticket_price')
+    else:
+        ticket_price = 0
+
+    if request.form.get('ticket_price_return'):
+        ticket_price_return = request.form.get('ticket_price_return')
+    else:
+        ticket_price_return = 0
+
+    if request.form.get('total_ticket_price'):
+        total_ticket_price = request.form.get('total_ticket_price')
+    else:
+        total_ticket_price = 0
+
+    session['ticket_price_info'] = {
+        'ticket_price': float(ticket_price) or 0,
+        'ticket_price_return': float(ticket_price_return) or 0,
+        'total_ticket_price': float(total_ticket_price) or 0,
+    }
+
+    # Lấy data vé đã chọn
+    flightID = request.form.get('flightID')
+    priceID = request.form.get('priceID')
+    classID = request.form.get('classID')
+
+    flightReturnID = request.form.get('flightReturnID')
+    priceReturnID = request.form.get('priceReturnID')
+    classReturnID = request.form.get('classReturnID')
+
+    session['flight_select_info'] = {
+        'flightID': flightID,
+        'priceID': priceID,
+        'classID': classID,
+        'flightReturnID': flightReturnID,
+        'priceReturnID': priceReturnID,
+        'classReturnID': classReturnID,
+    }
+
+    return render_template('employee/flightlookuplayout/passengers.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep, quantity=quantity)
+
+@app.route('/employee/flight-lookup/pay-ticket')
+def employee_pay_ticket():
+    path = request.path
+    categories = dao.load_employee()
+    bookticketstep = dao.load_book_ticket_step()
+    authen = dao.load_current_user()
+
+    payment_status = request.args.get('payment')
+
+    if authen == 'true':
+        return render_template('employee/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+                               bookticketstep=bookticketstep, payment_status=payment_status)
+    else:
+        return redirect('/employee')
+
+
+@app.route('/employee/flight-lookup/pay-ticket', methods=['post'])  # Lưu danh sách các customer vào bảng customer
+def employee_process_pay_ticket():
+    path = request.path
+    categories = dao.load_employee()
+    bookticketstep = dao.load_book_ticket_step()
+
+    customer_id = dao.add_customer(session['passengers'], session['flight_info']['quantity'])
+    invoice_id = dao.add_invoice_employee(session['ticket_price_info']['total_ticket_price']).invoiceID
+    add_ticket = dao.add_ticket(invoice_id, customer_id, session['flight_select_info'],
+                                    session['flight_info']['type_ticket'])
+
+    if add_ticket == 'add_ticket_success':
+        return redirect('/employee/flight-lookup')
+    else:
+        return redirect('/employee/flight-lookup/pay-ticket')
+
+@app.route('/employee/tickets-booked')
+def employee_tickets_booked():
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        path = request.path
+        categories = dao.load_employee()
+        kw = request.args.get('keyword')
+        account_id = current_user.id
+        invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
+        total_invoices = len(invoices)  # Tổng số hóa đơn
+        per_page = 5  # Số lượng hóa đơn muốn hiển thị trên mỗi trang
+        page = request.args.get('page', 1, type=int)
+        num_pages = ceil(total_invoices / per_page)  # Tính số trang
+        start_index = (page - 1) * per_page
+        end_index = min(start_index + per_page, total_invoices)
+        invoices_on_page = invoices[start_index:end_index]
+
+        return render_template('employee/listofticket/tickets_booked.html', categories=categories, path=path,
+                               invoices=invoices_on_page, page=page, num_pages=num_pages)
+    else:
+        return redirect('/employee')
+
+
+@app.route('/employee/tickets-booked/tickets-booked-details/<int:invoice_id>')
+def employee_tickets_booked_details(invoice_id):
+    path = request.path
+    categories = dao.load_employee()
+    listofticketstep = dao.load_list_of_ticket_step()
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        invoice = dao.load_invoice(invoice_id)
+        tickets = dao.load_tickets(invoice_id)
+        customers = dao.load_customers(invoice_id)
+        total_amount = invoice.paymentAmount
+        payment_status = invoice.paymentStatus
+
+        return render_template('employee/listofticket/tickets_booked_details.html', categories=categories, path=path,
+                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers,
+                               total_amount=total_amount, payment_status=payment_status, invoice_id=invoice_id)
+    else:
+        return redirect('/employee')
+
+
+@app.route('/employee/cancel-invoice/<int:invoice_id>', methods=['GET', 'POST'])
+def employee_cancel_invoice_route(invoice_id):
+    dao.cancel_invoice(invoice_id)
+    return redirect('/employee/tickets-booked')
+
 
 
 if __name__ == '__main__':

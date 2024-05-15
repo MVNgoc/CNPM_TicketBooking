@@ -1,0 +1,226 @@
+{% extends 'employee/layout/base.html' %}
+
+{% block title %}Thanh toán{% endblock %}
+
+{% block content %}
+<form method="post" action="/employee/flight-lookup/pay-ticket" enctype="multipart/form-data">
+    <div class="session-style">
+        <div class="" style="background:linear-gradient(28.91deg, #F9A51A 2.24%, #FBB612 31.03%, #FBF300 97.21%)">
+            <div class="container py-3">
+                <div class="d-flex justify-content-between">
+                    <div style="display: flex; font-size: 18px; font-weight: 700; max-height: 27px; gap: 2px">
+                        <p>
+                            {% if session['flight_info']['type_ticket'] == 'one-way' %}
+                            CHUYẾN BAY MỘT CHIỀU
+                            {% else %}
+                            CHUYẾN BAY KHỨ HỒI
+                            {% endif %}
+                        </p>
+                        <p>|</p>
+                        <p>{{ session['flight_info']['quantity'] }} Người (Chuyến đi)</p>
+                    </div>
+
+                    {% if session['flight_info']['type_ticket'] == 'two-way' %}
+                    <div style="display: flex; font-size: 18px; font-weight: 700; max-height: 27px; gap: 2px">
+                        <p>CHUYẾN BAY KHỨ HỒI</p>
+                        <p>|</p>
+                        <p>{{ session['flight_info']['quantity'] }} Người (Chuyến về)</p>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-between mt-1">
+                    <div class="mt-2 d-flex gap-5" style="font-size: 18px; font-weight: 300; line-height: 24px;">
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://www.vietjetair.com/static/media/departure-icon.25d3557e.svg" alt=""
+                                     style="height: fit-content;">
+                                <div>
+                                    Điềm khởi hành
+                                </div>
+                                <div class="active">
+                                    {{ session['flight_info']['departure_point'][1] }} ( {{
+                                    session['flight_info']['departure_point'][0] }} )
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://www.vietjetair.com/static/media/arrival-icon.a05c5d78.svg" alt=""
+                                     style="height: fit-content;">
+                                <div>
+                                    Điềm đến
+                                </div>
+                                <div class="active">
+                                    {{ session['flight_info']['destination'][1] }} ( {{
+                                    session['flight_info']['destination'][0] }} )
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if session['flight_info']['type_ticket'] == 'two-way' %}
+                    <div class="mt-2 d-flex gap-5" style="font-size: 18px; font-weight: 300; line-height: 24px;">
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://www.vietjetair.com/static/media/departure-icon.25d3557e.svg" alt=""
+                                     style="height: fit-content;">
+                                <div>
+                                    Điềm khởi hành
+                                </div>
+                                <div class="active">
+                                    {{ session['flight_info']['destination'][1] }} ( {{
+                                    session['flight_info']['destination'][0] }} )
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://www.vietjetair.com/static/media/arrival-icon.a05c5d78.svg" alt=""
+                                     style="height: fit-content;">
+                                <div>
+                                    Điềm đến
+                                </div>
+                                <div class="active">
+                                    {{ session['flight_info']['departure_point'][1] }} ( {{
+                                    session['flight_info']['departure_point'][0] }} )
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-center align-items-center mt-4">
+                    {% for b in bookticketstep %}
+                    <div class="step-box">
+                        <div class="dot_border {{'dot_border_active' if b.link_step_1==path or b.link_step_2==path or b.link_step_3==path }}">
+                            <div class="dot_step {{'dot_step_active' if b.link_step_1==path or b.link_step_2==path or b.link_step_3==path }}">
+
+                            </div>
+                        </div>
+                        <div>
+                            {{ b.name }}
+                        </div>
+                    </div>
+                    <div class="dot_line {{'dot_line_active' if b.link_step_1==path or b.link_step_2==path or b.link_step_3==path }}"></div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="total_price_box">
+            <div class="mb-4">
+                <div class="select_flight_header">
+                    <p>THÔNG TIN CHUYẾN BAY
+                        {% if session['flight_info']['type_ticket'] == 'two-way' %}
+                        KHỨ HỒI
+                        {% else %}
+                        MỘT CHIỀU
+                        {% endif %}
+                    </p>
+                    <div class="collapse_button" id="collapseButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" id="iconUp"
+                             class="bi bi-caret-down hidden" viewBox="0 0 16 16">
+                            <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" id="iconDown"
+                             class="bi bi-caret-down" viewBox="0 0 16 16">
+                            <path d="M3.204 5h9.592L8 10.481zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="flightInfo">
+                    <div style="background: linear-gradient(90deg, rgba(201,239,255,1) 40%, rgba(255,251,179,1) 100%);">
+                        <div class="d-flex container">
+                            <div style="width: 50%;">
+                                <div class="select_flight_info" style="padding-right: 10px; background: #C9EFFF;">
+                                    <p>Chuyến đi</p>
+                                </div>
+                            </div>
+                            {% if session['flight_info']['type_ticket'] == 'two-way' %}
+                            <div style="width: 50%;">
+                                <div class="select_flight_info"
+                                     style="padding-left: 10px; background: #FFFBB3; text-align: end;">
+                                    <p>Chuyến về</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="d-flex container"
+                         style="padding: 14px 0px; font-size: 16px; font-weight: 700; line-height: 21px;">
+                        <div style="width: 50%; padding-right: 10px;">
+                            <div class="d-flex align-items-center gap-3">
+                                <p>{{ session['flight_info']['departure_point'][1] }} ( {{
+                                    session['flight_info']['departure_point'][0] }} )</p>
+                                <img src="https://www.vietjetair.com/static/media/thai-vietjet.535af1a2.svg" alt="">
+                                <p>{{ session['flight_info']['destination'][1] }} ( {{
+                                    session['flight_info']['destination'][0] }} )</p>
+                            </div>
+                            <div class="ticket-price-box">
+                                <p>Giá vé</p>
+                                <div class="d-flex gap-2" style="font-weight: 700">
+                                    <p>{{ "{:,.0f}".format(session['ticket_price_info']['ticket_price']) }}</p>
+                                    <p>VND</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if session['flight_info']['type_ticket'] == 'two-way' %}
+                        <div style="width: 50%; padding-left: 10px; display: flex; flex-direction: column; align-items: end;">
+                            <div class="d-flex align-items-center gap-3">
+                                <p>{{ session['flight_info']['destination'][1] }} ( {{
+                                    session['flight_info']['destination'][0] }} )</p>
+                                <img src="https://www.vietjetair.com/static/media/thai-vietjet.535af1a2.svg" alt="">
+                                <p>{{ session['flight_info']['departure_point'][1] }} ( {{
+                                    session['flight_info']['departure_point'][0]}} )</p>
+                            </div>
+                            <div class="ticket-price-box">
+                                <div class="d-flex gap-2" style="font-weight: 700">
+                                    <p id="return_ticket_price" name="ticket_price_return">{{
+                                        "{:,.0f}".format(session['ticket_price_info']['ticket_price_return']) }}</p>
+                                    <p>VND</p>
+                                </div>
+                                <p>Giá vé</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="container d-flex justify-content-between align-items-center" style="height: 100%;">
+                <a href="/employee/flight-lookup/passengers" type="submit" class="btn btn-secondary"
+                   style="width: 150px; font-weight: 700;">Quay lại
+                </a>
+                <p style="font-size: 16px; font-weight: 500; line-height: 22px;">Tổng tiền: <span type="text"
+                                                                                                  style="font-size: 24px; font-weight: 700;">{{ "{:,.0f}".format(session['ticket_price_info']['total_ticket_price']) }} VND</span>
+                </p>
+                <button type="button" class="btn btn-success" tabindex="-1" style="width: 150px; font-weight: 700;"
+                        data-bs-toggle="modal" data-bs-target="#popupForm">Đồng ý
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="popupForm" tabindex="-1" aria-labelledby="popupFormModal"
+         aria-hidden="true">
+        <div class="modal-dialog d-flex align-items-center" style="height: 100%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title text-center" id="popupFormModalLabel" style="font-weight: 700;">
+                        Quý khách xác nhận đặt vé?</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal"
+                                style="width: 150px; font-weight: 700;">Đóng
+                        </button>
+                        <button type="submit" class="btn btn-success"
+                                style="width: 150px; font-weight: 700;">Đồng ý
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

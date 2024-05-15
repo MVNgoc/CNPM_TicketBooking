@@ -202,7 +202,7 @@ window.onload = function() {
             classReturn_id.value = classReturnID
         };
     }
-
+    // Hủy hóa đơn
     var paymentStatusElement = document.getElementById('paymentStatus');
     if(paymentStatusElement) {
         var paymentStatus = paymentStatusElement.dataset.paymentStatus;
@@ -224,6 +224,28 @@ window.onload = function() {
             window.location.href = `/cancel-invoice/${invoiceId}`;
         });
     }
+    // Hủy hóa đơn nhân viên
+var paymentStatusElement_nv = document.getElementById('paymentStatus_nv');
+if(paymentStatusElement_nv) {
+    var paymentStatus_nv = paymentStatusElement_nv.dataset.paymentStatus_nv;
+
+    var confirmCancel_nv = document.getElementById('confirmCancel_nv');
+    var cancelButton_nv = document.getElementById('cancelButton_nv');
+
+    if (confirmCancel_nv && paymentStatus_nv === "Cancelled") {
+        cancelButton_nv.classList.add('disabled-button'); // Thêm lớp CSS để vô hiệu hóa nút
+    }
+}
+
+// Nếu không phải trạng thái "cancelled", thì thực hiện các hành động khi nhấp vào nút hủy
+if (confirmCancel_nv && paymentStatus_nv !== "Cancelled") {
+    confirmCancel_nv.addEventListener('click', function() {
+        var invoiceId_nv = cancelButton_nv.getAttribute('data-id');
+
+        // Chuyển hướng đến trang /employee/cancel-invoice/.. nếu hủy hóa đơn thành công
+        window.location.href = `/employee/cancel-invoice/${invoiceId_nv}`;
+    });
+}
 
     // JS hiện form popup thông báo Thanh toán đang chờ duyệt
 //    if(payment_status == 'success') {
