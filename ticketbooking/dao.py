@@ -247,3 +247,21 @@ def add_flight_employee(flightID, routeID, departureTime, arrivalTime, numFirstC
                     availableSeats=total_Seat)
     db.session.add(flight)
     db.session.commit()
+
+def load_pending_bank_transfer_tickets():
+    invoices = Invoice.query.filter_by(paymentMethod='BankTransfer',
+                                      paymentStatus='Pending').all()
+    return invoices
+
+def approve_invoice(invoice_id):
+    try:
+        invoice = Invoice.query.filter_by(invoiceID=invoice_id).first()
+        if invoice:
+            invoice.paymentStatus = 'Paid'
+            db.session.commit()
+            return True
+        return False
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error cancelling invoice: {e}")
+        return False

@@ -247,6 +247,18 @@ if (confirmCancel_nv && paymentStatus_nv !== "Cancelled") {
     });
 }
 
+var cancelInvoiceButton = document.getElementById('cancelInvoiceButton');
+cancelInvoiceButton.addEventListener('click', function() {
+            var invoiceId = cancelInvoiceButton.getAttribute('data-id');
+            window.location.href = `/employee/approve-invoice/cancel-invoice/${invoiceId}`;
+        });
+
+var acceptInvoiceButton = document.getElementById('acceptInvoiceButton');
+acceptInvoiceButton.addEventListener('click', function() {
+            var invoiceId = acceptInvoiceButton.getAttribute('data-id');
+            window.location.href = `/employee/approve-invoice/confirm-invoice/${invoiceId}`;
+        });
+
 // Nút Lưu chuyến bay
 var submitFlightButton = document.getElementById('submitFlight')
 submitFlightButton.addEventListener('click', function() {

@@ -25,8 +25,8 @@
   },
   {
     "id": 4,
-    "name": "Duyệt vé chuyến bay",
-    "link": "/employee/approve-ticket",
+    "name": "Duyệt hóa đơn",
+    "link": "/employee/approve-invoice",
     "sub_link_1": "",
     "sub_link_2": "",
     "sub_link_3": ""

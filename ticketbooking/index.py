@@ -522,7 +522,7 @@ def employee_pay_ticket():
         return redirect('/employee')
 
 
-@app.route('/employee/flight-lookup/pay-ticket', methods=['post'])  # Lưu danh sách các customer vào bảng customer
+@app.route('/employee/flight-lookup/pay-ticket', methods=['post'])
 def employee_process_pay_ticket():
     path = request.path
     categories = dao.load_employee()
@@ -606,6 +606,32 @@ def employee_add_flight():
         path = request.path
         categories = dao.load_employee()
         return render_template('employee/addflight/add-flight.html', categories=categories, path=path)
+
+@app.route('/employee/approve-invoice')
+def employee_approve_invoice():
+    authen = dao.load_current_user()
+
+    if authen == 'true':
+        path = request.path
+        categories = dao.load_employee()
+        invoices = dao.load_pending_bank_transfer_tickets()
+
+        return render_template('employee/approveinvoice/approve_invoice.html', categories=categories, path=path,
+                               invoices=invoices)
+    else:
+        return redirect('/employee')
+
+
+@app.route('/employee/approve-invoice/cancel-invoice/<int:invoice_id>')
+def employee_cancel_invoice(invoice_id):
+    dao.cancel_invoice(invoice_id)
+    return redirect('/employee/approve-invoice')
+
+
+@app.route('/employee/approve-invoice/confirm-invoice/<int:invoice_id>')
+def employee_confirm_approve_invoice(invoice_id):
+    dao.approve_invoice(invoice_id)
+    return redirect('/employee/approve-invoice')
 
 if __name__ == '__main__':
     with app.app_context():
