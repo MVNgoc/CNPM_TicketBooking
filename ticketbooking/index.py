@@ -170,7 +170,7 @@ def process_passengers():
 
     quantity = int(session['flight_info']['quantity'])  # Lấy số lượng khách từ session
 
-    if request.form.get('ticket_price'):  # Lấy giá tiền từ footer
+    if request.form.get('ticket_price'):  # Lấy giá tiền từ footer * quantity
         ticket_price = float(request.form.get('ticket_price')) * quantity
     else:
         ticket_price = 0
@@ -465,18 +465,18 @@ def employee_process_passengers():
 
     quantity = int(session['flight_info']['quantity'])
 
-    if request.form.get('ticket_price'):
-        ticket_price = request.form.get('ticket_price')
+    if request.form.get('ticket_price'):  # Lấy giá tiền từ footer
+        ticket_price = float(request.form.get('ticket_price')) * quantity
     else:
         ticket_price = 0
 
     if request.form.get('ticket_price_return'):
-        ticket_price_return = request.form.get('ticket_price_return')
+        ticket_price_return = float(request.form.get('ticket_price_return')) * quantity
     else:
         ticket_price_return = 0
 
     if request.form.get('total_ticket_price'):
-        total_ticket_price = request.form.get('total_ticket_price')
+        total_ticket_price = float(request.form.get('total_ticket_price')) * quantity
     else:
         total_ticket_price = 0
 
