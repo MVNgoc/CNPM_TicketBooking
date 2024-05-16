@@ -28,6 +28,10 @@ class FlightView(ModelView):
         form_class.routeID = StringField('Mã tuyến bay',validators=[InputRequired()])
         return form_class
 
+    def is_accessible(self):
+        if current_user.is_authenticated and current_user.userRole == 'Admin':
+            return True
+        return False
 
 class RouteView(ModelView):
     def scaffold_form(self):
@@ -36,6 +40,11 @@ class RouteView(ModelView):
         form_class.departureAirportID = StringField('Sân bay đi',validators=[InputRequired()])
         form_class.arrivalAirportID = StringField('Sân bay đến',validators=[InputRequired()])
         return form_class
+
+    def is_accessible(self):
+        if current_user.is_authenticated and current_user.userRole == 'Admin':
+            return True
+        return False
 
     column_display_pk = True
     column_filters = ['routeName']
@@ -48,6 +57,12 @@ class AccountView(ModelView):
         form_class= super(AccountView, self).scaffold_form()
         form_class.userName = StringField('Tên người dùng',validators=[InputRequired()])
         return form_class
+
+    def is_accessible(self):
+        if current_user.is_authenticated and current_user.userRole == 'Admin':
+            return True
+        return False
+
     column_display_pk = True
     column_searchable_list = ['userName','userRole']
     column_filters = ['userRole']
@@ -58,15 +73,17 @@ class AccountView(ModelView):
         'userRole':'Quyền'
      }
 
-    def is_accessible(self):
-        if current_user.is_authenticated and current_user.userRole in ['Admin', 'Employee']:
-            return True
-        return False
 class EmployeeView(ModelView):
     def scaffold_form(self):
         form_class= super(EmployeeView, self).scaffold_form()
         form_class.employeeID = StringField('Mã nhân viên',validators=[InputRequired()])
         return form_class
+
+    def is_accessible(self):
+        if current_user.is_authenticated and current_user.userRole == 'Admin':
+            return True
+        return False
+
     column_display_pk = True
     column_searchable_list = ['employeeID','employeeName','employeeRole']
     column_filters = ['employeeRole']
@@ -78,6 +95,12 @@ class EmployeeView(ModelView):
         'employeeRole': 'Vị trí'
     }
 class RuleView(ModelView):
+
+    def is_accessible(self):
+        if current_user.is_authenticated and current_user.userRole == 'Admin':
+            return True
+        return False
+
     column_searchable_list = ['numAirports', 'minFlightTime', 'maxIntermediatedAirports', 'minStopoverTime',
                               'maxStopoverTime', 'ticketSaleTime_Start', 'ticketBookingTime_Start', 'ticketSaleTime_End'
         , 'ticketBookingTime_End']
@@ -95,9 +118,14 @@ class RuleView(ModelView):
     }
 
 class StatsView(BaseView):
+    def is_accessible(self):
+        if current_user.is_authenticated and current_user.userRole == 'Admin':
+            return True
+        return False
     @expose('/')
     def index(self):
         return self.render('admin/stats.html')
+
 
 
 admin = Admin (app=app, name='Quản Lý Chuyến Bay',template_mode='bootstrap4')

@@ -246,6 +246,16 @@ def add_invoice_employee(paymentAmount):
     return invoice
 
 
+def load_flight_of_airports_employee(routeID, time):  # Lấy danh sách chuyến bay
+    # Lấy thời gian hiện tại
+    current_time = datetime.now(timezone.utc)
+    # Xác định thời điểm cách đây 4 tiếng
+    twelve_hours_later = current_time + timedelta(hours=4)
+
+    return Flight.query.filter_by(routeID=routeID).filter(
+        cast(Flight.departureTime, Date) == time,
+        Flight.departureTime >= twelve_hours_later).all()
+
 def add_flight_employee(flightID, routeID, departureTime, arrivalTime, numFirstClassSeat, numSecondClassSeat):
     total_Seat= numFirstClassSeat + numSecondClassSeat
     flight = Flight(flightID=flightID, routeID=routeID, departureTime=departureTime,arrivalTime=arrivalTime,

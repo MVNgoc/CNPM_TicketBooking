@@ -1,4 +1,5 @@
 import datetime
+from functools import wraps
 from math import ceil
 
 from flask import Flask, session, jsonify, url_for, render_template, request, redirect
@@ -347,48 +348,47 @@ def common_atstr():
 
 
 # code cho phần employee
+def employee_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.userRole != 'Employee':
+            return redirect('/')
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/employee')
+@employee_required
 def employee_index():
     path = request.path
     categories = dao.load_employee()
     return render_template('employee/index.html', categories=categories, path=path)
 
-
 @app.route('/employee/flight-lookup')
+@employee_required
 def employee_flight_lookup():
     path = request.path
     categories = dao.load_employee()
     list_airports = dao.load_list_of_airports()
     selling_allowed = dao.load_selling_time()
-    authen = dao.load_current_user()
 
-    if authen == 'true':
-        if selling_allowed == 'selling_time_true':
-            return render_template('employee/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
-                                   list_airports=list_airports, selling_allowed=selling_allowed)
-        if selling_allowed == 'selling_time_false':
-            return render_template('employee/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
-                                   error_code=selling_allowed)
+    if selling_allowed == 'selling_time_true':
+        return render_template('employee/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+                               list_airports=list_airports, selling_allowed=selling_allowed)
     else:
-        return redirect('/employee')
+        return render_template('employee/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
+                               error_code=selling_allowed)
 
-
-@app.route('/employee/flight-lookup/select-flight') # Load trang chọn vé
+@app.route('/employee/flight-lookup/select-flight')
+@employee_required
 def employee_select_flight():
     path = request.path
     categories = dao.load_employee()
     bookticketstep = dao.load_book_ticket_step()
-
-    authen = dao.load_current_user()
-
-    if authen == 'true':
-        return render_template('employee/flightlookuplayout/select_flight.html', categories=categories, path=path,
-                               bookticketstep=bookticketstep)
-    else:
-        return redirect('/employee')
-
+    return render_template('employee/flightlookuplayout/select_flight.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep)
 
 @app.route('/employee/flight-lookup/select-flight', methods=['post'])
+@employee_required
 def employee_process_select_flight():
     path = request.path
     categories = dao.load_employee()
@@ -408,7 +408,7 @@ def employee_process_select_flight():
     if type_ticket == 'two-way':
         returnDate = request.form['returnDate']
         if return_route:
-            return_flight_list = dao.load_flight_of_airports(return_route.routeID, returnDate)
+            return_flight_list = dao.load_flight_of_airports_employee(return_route.routeID, returnDate)
             for flight in return_flight_list:
                 price_ticket = dao.get_price_ticket(flight.flightID)
                 return_flight_list_format.append(
@@ -427,7 +427,7 @@ def employee_process_select_flight():
             return_flight_list_format = []
 
     if route:
-        flight_list = dao.load_flight_of_airports(route.routeID, date_of_department)
+        flight_list = dao.load_flight_of_airports_employee(route.routeID, date_of_department)
         for flight in flight_list:
             price_ticket = dao.get_price_ticket(flight.flightID)
             flight_list_format.append(
@@ -456,8 +456,8 @@ def employee_process_select_flight():
                            bookticketstep=bookticketstep, flight_list_format=flight_list_format,
                            return_flight_list_format=return_flight_list_format)
 
-
 @app.route('/employee/flight-lookup/passengers', methods=['post'])
+@employee_required
 def employee_process_passengers():
     path = request.path
     categories = dao.load_employee()
@@ -507,24 +507,19 @@ def employee_process_passengers():
     return render_template('employee/flightlookuplayout/passengers.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, quantity=quantity)
 
-
 @app.route('/employee/flight-lookup/pay-ticket')
+@employee_required
 def employee_pay_ticket():
     path = request.path
     categories = dao.load_employee()
     bookticketstep = dao.load_book_ticket_step()
-    authen = dao.load_current_user()
-
     payment_status = request.args.get('payment')
 
-    if authen == 'true':
-        return render_template('employee/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
-                               bookticketstep=bookticketstep, payment_status=payment_status)
-    else:
-        return redirect('/employee')
-
+    return render_template('employee/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
+                           bookticketstep=bookticketstep, payment_status=payment_status)
 
 @app.route('/employee/flight-lookup/pay-ticket', methods=['post'])
+@employee_required
 def employee_process_pay_ticket():
     path = request.path
     categories = dao.load_employee()
@@ -540,59 +535,49 @@ def employee_process_pay_ticket():
     else:
         return redirect('/employee/flight-lookup/pay-ticket')
 
-
 @app.route('/employee/tickets-booked')
+@employee_required
 def employee_tickets_booked():
-    authen = dao.load_current_user()
+    path = request.path
+    categories = dao.load_employee()
+    kw = request.args.get('keyword')
+    account_id = current_user.id
+    invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
+    total_invoices = len(invoices)  # Tổng số hóa đơn
+    per_page = 5  # Số lượng hóa đơn muốn hiển thị trên mỗi trang
+    page = request.args.get('page', 1, type=int)
+    num_pages = ceil(total_invoices / per_page)  # Tính số trang
+    start_index = (page - 1) * per_page
+    end_index = min(start_index + per_page, total_invoices)
+    invoices_on_page = invoices[start_index:end_index]
 
-    if authen == 'true':
-        path = request.path
-        categories = dao.load_employee()
-        kw = request.args.get('keyword')
-        account_id = current_user.id
-        invoices = dao.load_list_of_ticket(account_id=account_id, kw=kw)
-        total_invoices = len(invoices)  # Tổng số hóa đơn
-        per_page = 5  # Số lượng hóa đơn muốn hiển thị trên mỗi trang
-        page = request.args.get('page', 1, type=int)
-        num_pages = ceil(total_invoices / per_page)  # Tính số trang
-        start_index = (page - 1) * per_page
-        end_index = min(start_index + per_page, total_invoices)
-        invoices_on_page = invoices[start_index:end_index]
-
-        return render_template('employee/listofticket/tickets_booked.html', categories=categories, path=path,
-                               invoices=invoices_on_page, page=page, num_pages=num_pages)
-    else:
-        return redirect('/employee')
-
+    return render_template('employee/listofticket/tickets_booked.html', categories=categories, path=path,
+                           invoices=invoices_on_page, page=page, num_pages=num_pages)
 
 @app.route('/employee/tickets-booked/tickets-booked-details/<int:invoice_id>')
+@employee_required
 def employee_tickets_booked_details(invoice_id):
     path = request.path
     categories = dao.load_employee()
     listofticketstep = dao.load_list_of_ticket_step()
-    authen = dao.load_current_user()
+    invoice = dao.load_invoice(invoice_id)
+    tickets = dao.load_tickets(invoice_id)
+    customers = dao.load_customers(invoice_id)
+    total_amount = invoice.paymentAmount
+    payment_status = invoice.paymentStatus
 
-    if authen == 'true':
-        invoice = dao.load_invoice(invoice_id)
-        tickets = dao.load_tickets(invoice_id)
-        customers = dao.load_customers(invoice_id)
-        total_amount = invoice.paymentAmount
-        payment_status = invoice.paymentStatus
-
-        return render_template('employee/listofticket/tickets_booked_details.html', categories=categories, path=path,
-                               listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers,
-                               total_amount=total_amount, payment_status=payment_status, invoice_id=invoice_id)
-    else:
-        return redirect('/employee')
-
+    return render_template('employee/listofticket/tickets_booked_details.html', categories=categories, path=path,
+                           listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers,
+                           total_amount=total_amount, payment_status=payment_status, invoice_id=invoice_id)
 
 @app.route('/employee/cancel-invoice/<int:invoice_id>', methods=['GET', 'POST'])
+@employee_required
 def employee_cancel_invoice_route(invoice_id):
     dao.cancel_invoice(invoice_id)
     return redirect('/employee/tickets-booked')
 
-
 @app.route('/employee/add-flight', methods=['GET', 'POST'])
+@employee_required
 def employee_add_flight():
     if request.method == 'POST':
         flightID = request.form.get('flightCode')
@@ -605,35 +590,29 @@ def employee_add_flight():
         dao.add_flight_employee(flightID, routeID, departureTime, arrivalTime, numFirstClassSeat, numSecondClassSeat)
 
         return redirect('/employee')
-
     else:
         path = request.path
         categories = dao.load_employee()
         return render_template('employee/addflight/add-flight.html', categories=categories, path=path)
 
-
 @app.route('/employee/approve-invoice')
+@employee_required
 def employee_approve_invoice():
-    authen = dao.load_current_user()
+    path = request.path
+    categories = dao.load_employee()
+    invoices = dao.load_pending_bank_transfer_tickets()
 
-    if authen == 'true':
-        path = request.path
-        categories = dao.load_employee()
-        invoices = dao.load_pending_bank_transfer_tickets()
-
-        return render_template('employee/approveinvoice/approve_invoice.html', categories=categories, path=path,
-                               invoices=invoices)
-    else:
-        return redirect('/employee')
-
+    return render_template('employee/approveinvoice/approve_invoice.html', categories=categories, path=path,
+                           invoices=invoices)
 
 @app.route('/employee/approve-invoice/cancel-invoice/<int:invoice_id>')
+@employee_required
 def employee_cancel_invoice(invoice_id):
     dao.cancel_invoice(invoice_id)
     return redirect('/employee/approve-invoice')
 
-
 @app.route('/employee/approve-invoice/confirm-invoice/<int:invoice_id>')
+@employee_required
 def employee_confirm_approve_invoice(invoice_id):
     dao.approve_invoice(invoice_id)
     return redirect('/employee/approve-invoice')
