@@ -55,11 +55,10 @@
 
     {% for s in stats %}
     labels.push('{{ s[1] }}')
-    data.push('{{ s[3] }}')
-
-    let r = parseInt(Math.random() * 255)
-    let g = parseInt(Math.random() * 255)
-    let b = parseInt(Math.random() * 255)
+data.push(parseFloat('{{ s[3] }}'));
+    r = parseInt(Math.random() * 255)
+    g = parseInt(Math.random() * 255)
+    b = parseInt(Math.random() * 255)
     colors.push(`rgba(${r}, ${g}, ${b}, 0.2)`)
     borderColors.push(`rgba(${r}, ${g}, ${b}, 1)`)
     {% endfor %}
