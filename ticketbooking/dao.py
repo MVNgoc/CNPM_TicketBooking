@@ -33,6 +33,7 @@ def auth_user_customer(username, password):  # Login
     else:
         return 'login_failed'
 
+
 def get_user_by_username(id):
     return Account.query.filter_by(id=id).first()
 
@@ -215,10 +216,12 @@ def auth_user_admin(username, password):
     else:
         return 'login_failed'
 
+
 # code cho phần employee
 def load_employee():
     with open('%s/data/employee.json' % app.root_path, encoding='utf-8') as f:
         return json.load(f)
+
 
 def load_selling_time():
     current_time = datetime.now().time()
@@ -230,6 +233,7 @@ def load_selling_time():
     else:
         return 'selling_time_false'
 
+
 def add_invoice_employee(paymentAmount):
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     account_id = current_user.id
@@ -240,6 +244,8 @@ def add_invoice_employee(paymentAmount):
     db.session.add(invoice)
     db.session.commit()
     return invoice
+
+
 def add_flight_employee(flightID, routeID, departureTime, arrivalTime, numFirstClassSeat, numSecondClassSeat):
     total_Seat= numFirstClassSeat + numSecondClassSeat
     flight = Flight(flightID=flightID, routeID=routeID, departureTime=departureTime,arrivalTime=arrivalTime,
@@ -248,10 +254,12 @@ def add_flight_employee(flightID, routeID, departureTime, arrivalTime, numFirstC
     db.session.add(flight)
     db.session.commit()
 
+
 def load_pending_bank_transfer_tickets():
     invoices = Invoice.query.filter_by(paymentMethod='BankTransfer',
                                       paymentStatus='Pending').all()
     return invoices
+
 
 def approve_invoice(invoice_id):
     try:

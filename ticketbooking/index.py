@@ -171,17 +171,17 @@ def process_passengers():
     quantity = int(session['flight_info']['quantity'])  # Lấy số lượng khách từ session
 
     if request.form.get('ticket_price'):  # Lấy giá tiền từ footer
-        ticket_price = request.form.get('ticket_price')
+        ticket_price = float(request.form.get('ticket_price')) * quantity
     else:
         ticket_price = 0
 
     if request.form.get('ticket_price_return'):
-        ticket_price_return = request.form.get('ticket_price_return')
+        ticket_price_return = float(request.form.get('ticket_price_return')) * quantity
     else:
         ticket_price_return = 0
 
     if request.form.get('total_ticket_price'):
-        total_ticket_price = request.form.get('total_ticket_price')
+        total_ticket_price = float(request.form.get('total_ticket_price')) * quantity
     else:
         total_ticket_price = 0
 
@@ -324,8 +324,6 @@ def cancel_invoice_route(invoice_id):
 
 
 # code cho phần admin
-
-
 @app.route('/login-admin', methods=['post'])
 def admin_login():
     username = request.form['username']
@@ -374,6 +372,7 @@ def employee_flight_lookup():
     else:
         return redirect('/employee')
 
+
 @app.route('/employee/flight-lookup/select-flight') # Load trang chọn vé
 def employee_select_flight():
     path = request.path
@@ -387,6 +386,7 @@ def employee_select_flight():
                                bookticketstep=bookticketstep)
     else:
         return redirect('/employee')
+
 
 @app.route('/employee/flight-lookup/select-flight', methods=['post'])
 def employee_process_select_flight():
@@ -456,6 +456,7 @@ def employee_process_select_flight():
                            bookticketstep=bookticketstep, flight_list_format=flight_list_format,
                            return_flight_list_format=return_flight_list_format)
 
+
 @app.route('/employee/flight-lookup/passengers', methods=['post'])
 def employee_process_passengers():
     path = request.path
@@ -506,6 +507,7 @@ def employee_process_passengers():
     return render_template('employee/flightlookuplayout/passengers.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, quantity=quantity)
 
+
 @app.route('/employee/flight-lookup/pay-ticket')
 def employee_pay_ticket():
     path = request.path
@@ -537,6 +539,7 @@ def employee_process_pay_ticket():
         return redirect('/employee/flight-lookup')
     else:
         return redirect('/employee/flight-lookup/pay-ticket')
+
 
 @app.route('/employee/tickets-booked')
 def employee_tickets_booked():
@@ -588,6 +591,7 @@ def employee_cancel_invoice_route(invoice_id):
     dao.cancel_invoice(invoice_id)
     return redirect('/employee/tickets-booked')
 
+
 @app.route('/employee/add-flight', methods=['GET', 'POST'])
 def employee_add_flight():
     if request.method == 'POST':
@@ -606,6 +610,7 @@ def employee_add_flight():
         path = request.path
         categories = dao.load_employee()
         return render_template('employee/addflight/add-flight.html', categories=categories, path=path)
+
 
 @app.route('/employee/approve-invoice')
 def employee_approve_invoice():
@@ -632,6 +637,7 @@ def employee_cancel_invoice(invoice_id):
 def employee_confirm_approve_invoice(invoice_id):
     dao.approve_invoice(invoice_id)
     return redirect('/employee/approve-invoice')
+
 
 if __name__ == '__main__':
     with app.app_context():
