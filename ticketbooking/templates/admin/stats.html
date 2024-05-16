@@ -1,5 +1,124 @@
-{% extends 'admin/master.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BÁO CÁO DOANH THU</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+        .report-table, .chart-container {
+            width: 45%;
+        }
+        .report-table h2, .chart-container h2 {
+            text-align: center;
+            text-transform: uppercase;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h1>THỐNG KÊ DOANH THU</h1>
 
-{% block body %}
-<h1 class="text-center text-success">THỐNG KÊ VÀ BÁO CÁO</h1>
-{% endblock %}
+<form method="GET" action="{{ url_for('statsview.index') }}" style="text-align: center; margin-bottom: 20px;">
+    <label for="month">Chọn tháng:</label>
+    <input type="month" id="month" name="reportMonth" required>
+    <button type="submit">Xem</button>
+</form>
+
+<div class="container">
+    <div class="report-table">
+        <h2>BÁO CÁO DOANH THU THEO TUYẾN BAY</h2>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Số thứ tự</th>
+                <th>Tuyến bay</th>
+                <th>Lượt bay</th>
+                <th>Doanh thu</th>
+                <th>Tỉ lệ %</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for s in stats %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s[1] }}</td>
+                <td>{{ s[2] }}</td>
+                <td>{{ s[3] }}</td>
+                <td>{{ (s[3] / total_revenue * 100) | round(2) }}%</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3"></td>
+                <td>Tổng doanh thu:</td>
+                <td>{{ total_revenue }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="chart-container">
+        <h2>BIỂU ĐỒ DOANH THU</h2>
+        <canvas id="revenueChart"></canvas>
+    </div>
+</div>
+
+<script>
+    let labels = []
+    let data = []
+    let colors = []
+    let borderColors = []
+
+    {% for s in stats %}
+    labels.push('{{ s[1] }}')
+    data.push('{{ s[3] }}')
+
+    let r = parseInt(Math.random() * 255)
+    let g = parseInt(Math.random() * 255)
+    let b = parseInt(Math.random() * 255)
+    colors.push(`rgba(${r}, ${g}, ${b}, 0.2)`)
+    borderColors.push(`rgba(${r}, ${g}, ${b}, 1)`)
+    {% endfor %}
+
+    window.onload = function() {
+        const ctx = document.getElementById('revenueChart').getContext('2d')
+        const myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: data,
+                    backgroundColor: colors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    }
+</script>
+</body>
+</html>

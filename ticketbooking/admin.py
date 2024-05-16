@@ -1,11 +1,16 @@
+from datetime import datetime
+
+from flask import request, redirect
+from sqlalchemy.sql.functions import now
 from wtforms.fields.simple import StringField
 from wtforms.validators import InputRequired
 
 from ticketbooking.models import Flight, Route, Account, Employee, SystemRule
-from ticketbooking import db, app
+from ticketbooking import db, app, dao
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
-from flask_login import current_user
+from flask_login import current_user, logout_user
+
 
 class FlightView(ModelView):
     column_display_pk = True
@@ -122,11 +127,31 @@ class StatsView(BaseView):
         if current_user.is_authenticated and current_user.userRole == 'Admin':
             return True
         return False
+
+    @expose('/')
+    def index(self, cls=None):
+        reportMonth = request.args.get('reportMonth')
+        if reportMonth:
+            year, month = map(int, reportMonth.split('-'))
+        else:
+            now = datetime.now()
+            year = now.year
+            month = now.month
+
+        stats = dao.get_revenue_data_by_month(month=month, year=year)
+        total_revenue = sum(s[3] for s in stats)
+
+        return self.render('admin/stats.html', stats=stats, total_revenue=total_revenue)
+
+class LogoutView(BaseView):
     @expose('/')
     def index(self):
-        return self.render('admin/stats.html')
-
-
+        logout_user()
+        return redirect('/')
+    def is_accessible(self):
+        if current_user.is_authenticated and current_user.userRole == 'Admin':
+            return True
+        return False
 
 admin = Admin (app=app, name='Quản Lý Chuyến Bay',template_mode='bootstrap4')
 admin.add_view(FlightView(Flight,db.session, name='Chuyến Bay'))
@@ -135,3 +160,4 @@ admin.add_view(AccountView(Account,db.session, name='Tài Khoản'))
 admin.add_view(EmployeeView(Employee,db.session, name ='Nhân Viên'))
 admin.add_view(RuleView(SystemRule,db.session, name='Quy định hệ thống'))
 admin.add_view(StatsView(name='Thống Kê'))
+admin.add_view(LogoutView(name='Đăng Xuất'))

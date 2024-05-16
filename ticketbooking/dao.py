@@ -3,7 +3,7 @@ from ticketbooking import app, db
 from ticketbooking.models import Account, Invoice, Airport, Route, Flight, Price, SystemRule, Ticket, Customer
 import hashlib
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import cast, Date
+from sqlalchemy import cast, Date, func, extract
 from flask_login import current_user
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import desc
@@ -216,6 +216,23 @@ def auth_user_admin(username, password):
     else:
         return 'login_failed'
 
+
+def get_revenue_data_by_month(month, year):
+    revenue_data = db.session.query(
+        Route.routeID,
+        Route.routeName,
+        func.count(Flight.flightID).label('num_of_flights'),
+        func.sum(Invoice.paymentAmount).label('total_revenue')
+    ).join(Flight, Route.routeID == Flight.routeID
+           ).join(Ticket, Ticket.flightID == Flight.flightID
+                  ).join(Invoice, Invoice.invoiceID == Ticket.invoiceID
+                         ).filter(
+        extract('year', Invoice.paymentTime) == year,
+        extract('month', Invoice.paymentTime) == month,
+        Invoice.paymentStatus == 'Paid'
+    ).group_by(Route.routeID, Route.routeName).all()
+
+    return revenue_data
 
 # code cho phần employee
 def load_employee():
