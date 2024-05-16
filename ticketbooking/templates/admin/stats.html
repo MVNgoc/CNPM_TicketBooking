@@ -1,44 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BÁO CÁO DOANH THU</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            text-align: center;
-        }
-        .container {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-start;
-            margin-top: 20px;
-        }
-        .report-table, .chart-container {
-            width: 45%;
-        }
-        .report-table h2, .chart-container h2 {
-            text-align: center;
-            text-transform: uppercase;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-<h1>THỐNG KÊ DOANH THU</h1>
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<h1 class="text-center text-success">THỐNG KÊ VÀ BÁO CÁO</h1>
 
 <form method="GET" action="{{ url_for('statsview.index') }}" style="text-align: center; margin-bottom: 20px;">
     <label for="month">Chọn tháng:</label>
@@ -47,8 +10,8 @@
 </form>
 
 <div class="container">
-    <div class="report-table">
-        <h2>BÁO CÁO DOANH THU THEO TUYẾN BAY</h2>
+    <div class="report-table" style="float: left; width: 50%;">
+        <h2 class="text-center text-uppercase">Bảng báo cáo</h2>
         <table border="1">
             <thead>
             <tr>
@@ -77,12 +40,13 @@
             </tbody>
         </table>
     </div>
-    <div class="chart-container">
-        <h2>BIỂU ĐỒ DOANH THU</h2>
+    <div class="chart-container" style="float: right; width: 50%;">
+        <h2 class="text-center text-uppercase">Biểu đồ tròn</h2>
         <canvas id="revenueChart"></canvas>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     let labels = []
     let data = []
@@ -120,5 +84,4 @@
         });
     }
 </script>
-</body>
-</html>
+{% endblock %}
