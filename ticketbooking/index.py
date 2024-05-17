@@ -31,6 +31,7 @@ def process_login():
         elif u.userRole == 'Employee':
             return redirect('/employee')
 
+
 @app.route('/register', methods=['post'])
 def process_register():
     username = request.form.get('username')
@@ -356,12 +357,14 @@ def employee_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 @app.route('/employee')
 @employee_required
 def employee_index():
     path = request.path
     categories = dao.load_employee()
     return render_template('employee/index.html', categories=categories, path=path)
+
 
 @app.route('/employee/flight-lookup')
 @employee_required
@@ -378,6 +381,7 @@ def employee_flight_lookup():
         return render_template('employee/flightlookuplayout/flight_lookup.html', categories=categories, path=path,
                                error_code=selling_allowed)
 
+
 @app.route('/employee/flight-lookup/select-flight')
 @employee_required
 def employee_select_flight():
@@ -386,6 +390,7 @@ def employee_select_flight():
     bookticketstep = dao.load_book_ticket_step()
     return render_template('employee/flightlookuplayout/select_flight.html', categories=categories, path=path,
                            bookticketstep=bookticketstep)
+
 
 @app.route('/employee/flight-lookup/select-flight', methods=['post'])
 @employee_required
@@ -456,6 +461,7 @@ def employee_process_select_flight():
                            bookticketstep=bookticketstep, flight_list_format=flight_list_format,
                            return_flight_list_format=return_flight_list_format)
 
+
 @app.route('/employee/flight-lookup/passengers', methods=['post'])
 @employee_required
 def employee_process_passengers():
@@ -507,6 +513,7 @@ def employee_process_passengers():
     return render_template('employee/flightlookuplayout/passengers.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, quantity=quantity)
 
+
 @app.route('/employee/flight-lookup/pay-ticket')
 @employee_required
 def employee_pay_ticket():
@@ -517,6 +524,7 @@ def employee_pay_ticket():
 
     return render_template('employee/flightlookuplayout/pay_ticket.html', categories=categories, path=path,
                            bookticketstep=bookticketstep, payment_status=payment_status)
+
 
 @app.route('/employee/flight-lookup/pay-ticket', methods=['post'])
 @employee_required
@@ -534,6 +542,7 @@ def employee_process_pay_ticket():
         return redirect('/employee/flight-lookup')
     else:
         return redirect('/employee/flight-lookup/pay-ticket')
+
 
 @app.route('/employee/tickets-booked')
 @employee_required
@@ -554,6 +563,7 @@ def employee_tickets_booked():
     return render_template('employee/listofticket/tickets_booked.html', categories=categories, path=path,
                            invoices=invoices_on_page, page=page, num_pages=num_pages)
 
+
 @app.route('/employee/tickets-booked/tickets-booked-details/<int:invoice_id>')
 @employee_required
 def employee_tickets_booked_details(invoice_id):
@@ -570,11 +580,13 @@ def employee_tickets_booked_details(invoice_id):
                            listofticketstep=listofticketstep, invoice=invoice, tickets=tickets, customers=customers,
                            total_amount=total_amount, payment_status=payment_status, invoice_id=invoice_id)
 
+
 @app.route('/employee/cancel-invoice/<int:invoice_id>', methods=['GET', 'POST'])
 @employee_required
 def employee_cancel_invoice_route(invoice_id):
     dao.cancel_invoice(invoice_id)
     return redirect('/employee/tickets-booked')
+
 
 @app.route('/employee/add-flight', methods=['GET', 'POST'])
 @employee_required
@@ -595,6 +607,7 @@ def employee_add_flight():
         categories = dao.load_employee()
         return render_template('employee/addflight/add-flight.html', categories=categories, path=path)
 
+
 @app.route('/employee/approve-invoice')
 @employee_required
 def employee_approve_invoice():
@@ -605,11 +618,13 @@ def employee_approve_invoice():
     return render_template('employee/approveinvoice/approve_invoice.html', categories=categories, path=path,
                            invoices=invoices)
 
+
 @app.route('/employee/approve-invoice/cancel-invoice/<int:invoice_id>')
 @employee_required
 def employee_cancel_invoice(invoice_id):
     dao.cancel_invoice(invoice_id)
     return redirect('/employee/approve-invoice')
+
 
 @app.route('/employee/approve-invoice/confirm-invoice/<int:invoice_id>')
 @employee_required

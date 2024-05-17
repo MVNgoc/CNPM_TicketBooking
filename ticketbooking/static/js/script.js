@@ -224,6 +224,7 @@ window.onload = function() {
             window.location.href = `/cancel-invoice/${invoiceId}`;
         });
     }
+
     // Hủy hóa đơn nhân viên
 var paymentStatusElement_nv = document.getElementById('paymentStatus_nv');
 if(paymentStatusElement_nv) {
